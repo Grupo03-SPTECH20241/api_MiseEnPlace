@@ -37,6 +37,15 @@ public class DadoController {
         return ResponseEntity.status(200).body(listaDados);
     }
 
+    @GetMapping("/{index}")
+    public ResponseEntity<Dado> getComIndex(@PathVariable int index){
+        if (indiceExiste(index)) {
+            return ResponseEntity.status(200).body(listaDados.get(index));
+
+        }
+        return ResponseEntity.status(400).build();
+    }
+
     @PutMapping("/{index}")
     public ResponseEntity<String> atualizar(@RequestBody Dado dado, @PathVariable int index) {
         if(indiceExiste(index)){
