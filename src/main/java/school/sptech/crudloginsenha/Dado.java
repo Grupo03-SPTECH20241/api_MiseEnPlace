@@ -14,7 +14,6 @@ import java.util.Arrays;
 public class Dado {
     private String login;
     private String senha;
-     @JsonIgnore
     private byte[] senhaCifrada;
 
     public String getLogin() {
