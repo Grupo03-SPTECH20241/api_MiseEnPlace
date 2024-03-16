@@ -142,6 +142,8 @@ public class DadoController{
         listaDadosCadastrados.forEach(dado -> {
                     DadoResumoDTO dadoAtual = new DadoResumoDTO();
                     dadoAtual.setLogin(dado.getLogin());
+                    dadoAtual.setNome(dado.getNome());
+                    dadoAtual.setTelefone(dado.getTelefone());
                     dadoAtual.setSenha(Base64.getEncoder().encodeToString(dado.getSenhaCifrada()));
                     listaDadosDTO.add(dadoAtual);
                 }
