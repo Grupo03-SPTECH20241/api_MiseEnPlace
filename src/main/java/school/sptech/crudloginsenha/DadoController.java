@@ -3,6 +3,7 @@ package school.sptech.crudloginsenha;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.annotation.Retention;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -82,6 +83,26 @@ public class DadoController{
                 j = j-1;
             }
             v[j+1] = x;
+        }
+        return ResponseEntity.status(200).body(v);
+    }
+
+    @GetMapping("/getOrdenadoSelection")
+    public ResponseEntity<DadoResumoDTO[]> ordenarSelection(){
+        if(listaDadosCadastrados.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+        dadosToDadosDTO();
+        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+
+        for (int i = 0; i < v.length; i++) {
+            for (int j = i+ 1; j < v.length; j++) {
+                if(v[j].getLogin().compareTo(v[i].getLogin()) < 0){
+                    DadoResumoDTO aux = v[j];
+                    v[j] = v[i];
+                    v[i] = aux;
+                }
+            }
         }
         return ResponseEntity.status(200).body(v);
     }
