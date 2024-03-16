@@ -43,14 +43,11 @@ public class DadoController {
     }
 
     @PutMapping("/{index}")
-    public ResponseEntity<String> atualizar(@RequestBody Dado dado, @PathVariable int index) {
+    public ResponseEntity<DadoResumoDTO> atualizar(@RequestBody Dado dado, @PathVariable int index) {
         if (indiceExiste(index)) {
-            if (!usuarioCadastrado(dado)) {
-                listaDadosCadastrados.add(dado);
-                return ResponseEntity.status(200).build();
-            } else {
-                return ResponseEntity.status(400).body("Usuário já cadastrado!");
-            }
+            listaDadosCadastrados.set(index,dado);
+            dadosToDadosDTO();
+            return ResponseEntity.status(200).body(listaDadosDTO.get(index));
         }
         return ResponseEntity.status(404).build();
     }
