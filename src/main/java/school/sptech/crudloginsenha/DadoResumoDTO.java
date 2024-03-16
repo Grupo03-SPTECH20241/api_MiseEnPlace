@@ -6,13 +6,13 @@ public class DadoResumoDTO {
     private String login;
     private String senha;
     private String nome;
-    private int telefone;
+    private String telefone;
 
-    public int getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(int telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 

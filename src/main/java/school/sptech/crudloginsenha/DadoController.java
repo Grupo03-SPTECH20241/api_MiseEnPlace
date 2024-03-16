@@ -18,6 +18,8 @@ public class DadoController{
 
     @PostMapping
     public ResponseEntity<String> cadastrar(@RequestBody Dado dado) {
+
+
         if (!usuarioCadastrado(dado)) {
             listaDadosCadastrados.add(dado);
             return ResponseEntity.status(201).body("Usuário cadastrado com sucesso!");
@@ -63,7 +65,7 @@ public class DadoController{
         return ResponseEntity.status(404).build();
     }
 
-    @GetMapping("/getOrdenadoInsertion")
+    @GetMapping("/get-ordenado-login")
     public ResponseEntity<DadoResumoDTO[]> ordenarInsertion(){
         if (listaDadosCadastrados.isEmpty()) {
             return ResponseEntity.status(204).build();
@@ -84,7 +86,7 @@ public class DadoController{
         return ResponseEntity.status(200).body(v);
     }
 
-    @GetMapping("/getOrdenadoSelection")
+    @GetMapping("/get-ordenado-nome")
     public ResponseEntity<DadoResumoDTO[]> ordenarSelection(){
         if(listaDadosCadastrados.isEmpty()){
             return ResponseEntity.status(204).build();
@@ -94,7 +96,7 @@ public class DadoController{
 
         for (int i = 0; i < v.length; i++) {
             for (int j = i+ 1; j < v.length; j++) {
-                if(v[j].getLogin().compareTo(v[i].getLogin()) < 0){
+                if(v[j].getNome().compareTo(v[i].getNome()) < 0){
                     DadoResumoDTO aux = v[j];
                     v[j] = v[i];
                     v[i] = aux;
@@ -104,17 +106,17 @@ public class DadoController{
         return ResponseEntity.status(200).body(v);
     }
 
-    @GetMapping("/getOrdenadoBubble")
+    @GetMapping("/get-ordenado-telefone")
     public ResponseEntity<DadoResumoDTO[]> ordenarBubble(){
         if(listaDadosCadastrados.isEmpty()){
             return ResponseEntity.status(204).build();
         }
         dadosToDadosDTO();
-        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[listaDadosDTO.size()]);
 
         for (int i = 0; i < v.length; i++) {
             for (int j = 1; j < v.length - 1; j++) {
-                if(v[j-1].getLogin().compareTo(v[i].getLogin()) > 0){
+                if(v[j-1].getTelefone().compareTo(v[i].getTelefone()) > 0){
                     DadoResumoDTO aux = v[j - 1];
                     v[j -1] = v[i];
                     v[i] = aux;
