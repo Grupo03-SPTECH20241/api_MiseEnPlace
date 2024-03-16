@@ -4,12 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
 @RestController
 @RequestMapping("/dados")
-public class DadoController {
+public class DadoController{
     //singleton
     public List<Dado> listaDadosCadastrados = new ArrayList<>();
     public List<DadoResumoDTO> listaDadosDTO = new ArrayList<>();
@@ -64,6 +65,27 @@ public class DadoController {
         return ResponseEntity.status(404).build();
     }
 
+    @GetMapping("/getOrdenadoInsertion")
+    public ResponseEntity<DadoResumoDTO[]> ordenarInsertion(){
+        if (listaDadosCadastrados.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
+        dadosToDadosDTO();
+        int j;
+        DadoResumoDTO x;
+        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+        for (int i = 1; i < v.length; i++) {
+            x = v[i];
+            j = i -1;
+            while (j >= 0 && v[j].getLogin().compareTo(x.getLogin()) > 0){
+                v[j+1] = v[j];
+                j = j-1;
+            }
+            v[j+1] = x;
+        }
+        return ResponseEntity.status(200).body(v);
+    }
+
 
     private boolean indiceExiste(int index) {
         return index >= 0 && index < listaDadosCadastrados.size();
@@ -88,4 +110,5 @@ public class DadoController {
                 }
         );
     }
+
 }
