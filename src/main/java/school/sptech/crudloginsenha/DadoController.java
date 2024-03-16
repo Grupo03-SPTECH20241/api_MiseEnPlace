@@ -107,6 +107,25 @@ public class DadoController{
         return ResponseEntity.status(200).body(v);
     }
 
+    @GetMapping("/getOrdenadoBubble")
+    public ResponseEntity<DadoResumoDTO[]> ordenarBubble(){
+        if(listaDadosCadastrados.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+        dadosToDadosDTO();
+        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+
+        for (int i = 0; i < v.length; i++) {
+            for (int j = 1; j < v.length - 1; j++) {
+                if(v[j-1].getLogin().compareTo(v[i].getLogin()) > 0){
+                    DadoResumoDTO aux = v[j - 1];
+                    v[j -1] = v[i];
+                    v[i] = aux;
+                }
+            }
+        }
+        return ResponseEntity.status(200).body(v);
+    }
 
     private boolean indiceExiste(int index) {
         return index >= 0 && index < listaDadosCadastrados.size();
