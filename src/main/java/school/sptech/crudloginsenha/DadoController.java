@@ -19,12 +19,18 @@ public class DadoController{
     @PostMapping
     public ResponseEntity<String> cadastrar(@RequestBody Dado dado) {
 
-
+        if(!emailCorreto(dado.getLogin())){
+            return ResponseEntity.status(400).body("Email inválido");
+        }
         if (!usuarioCadastrado(dado)) {
             listaDadosCadastrados.add(dado);
             return ResponseEntity.status(201).body("Usuário cadastrado com sucesso!");
         }
         return ResponseEntity.status(409).body("Usuário já cadastrado");
+    }
+
+    private boolean emailCorreto(String email){
+        return email.contains("@");
     }
 
     @GetMapping
