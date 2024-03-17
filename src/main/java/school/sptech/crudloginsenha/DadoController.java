@@ -22,12 +22,20 @@ public class DadoController{
         if(!emailCorreto(dado.getLogin())){
             return ResponseEntity.status(400).body("Email inválido");
         }
+        if(!telefoneCorreto(dado.getTelefone())){
+            return ResponseEntity.status(400).body("Telefone Invalido(Precisa ter 11 caracteres)");
+        }
         if (!usuarioCadastrado(dado)) {
             listaDadosCadastrados.add(dado);
             return ResponseEntity.status(201).body("Usuário cadastrado com sucesso!");
         }
         return ResponseEntity.status(409).body("Usuário já cadastrado");
     }
+
+    private boolean telefoneCorreto(String telefone){
+        return telefone.length() == 11;
+    }
+
 
     private boolean emailCorreto(String email){
         return email.contains("@");
