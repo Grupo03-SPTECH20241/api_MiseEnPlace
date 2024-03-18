@@ -126,10 +126,10 @@ public class DadoController{
             return ResponseEntity.status(204).build();
         }
         dadosToDadosDTO();
-        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[listaDadosDTO.size()]);
+        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
 
         for (int i = 0; i < v.length; i++) {
-            for (int j = 1; j < v.length - 1; j++) {
+            for (int j = 1; j < v.length; j++) {
                 if(v[j-1].getTelefone().compareTo(v[i].getTelefone()) > 0){
                     DadoResumoDTO aux = v[j - 1];
                     v[j -1] = v[i];
