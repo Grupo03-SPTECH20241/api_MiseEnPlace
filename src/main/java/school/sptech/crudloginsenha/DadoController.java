@@ -18,11 +18,27 @@ public class DadoController{
 
     @PostMapping
     public ResponseEntity<String> cadastrar(@RequestBody Dado dado) {
+
+        if(!emailCorreto(dado.getLogin())){
+            return ResponseEntity.status(400).body("Email inválido");
+        }
+        if(!telefoneCorreto(dado.getTelefone())){
+            return ResponseEntity.status(400).body("Telefone Invalido(Precisa ter 11 caracteres)");
+        }
         if (!usuarioCadastrado(dado)) {
             listaDadosCadastrados.add(dado);
             return ResponseEntity.status(201).body("Usuário cadastrado com sucesso!");
         }
         return ResponseEntity.status(409).body("Usuário já cadastrado");
+    }
+
+    private boolean telefoneCorreto(String telefone){
+        return telefone.length() == 11;
+    }
+
+
+    private boolean emailCorreto(String email){
+        return email.contains("@");
     }
 
     @GetMapping
@@ -45,14 +61,11 @@ public class DadoController{
     }
 
     @PutMapping("/{index}")
-    public ResponseEntity<String> atualizar(@RequestBody Dado dado, @PathVariable int index) {
+    public ResponseEntity<DadoResumoDTO> atualizar(@RequestBody Dado dado, @PathVariable int index) {
         if (indiceExiste(index)) {
-            if (!usuarioCadastrado(dado)) {
-                listaDadosCadastrados.add(dado);
-                return ResponseEntity.status(200).build();
-            } else {
-                return ResponseEntity.status(400).body("Usuário já cadastrado!");
-            }
+            listaDadosCadastrados.set(index,dado);
+            dadosToDadosDTO();
+            return ResponseEntity.status(200).body(listaDadosDTO.get(index));
         }
         return ResponseEntity.status(404).build();
     }
@@ -66,7 +79,7 @@ public class DadoController{
         return ResponseEntity.status(404).build();
     }
 
-    @GetMapping("/getOrdenadoInsertion")
+    @GetMapping("/get-ordenado-login")
     public ResponseEntity<DadoResumoDTO[]> ordenarInsertion(){
         if (listaDadosCadastrados.isEmpty()) {
             return ResponseEntity.status(204).build();
@@ -87,7 +100,7 @@ public class DadoController{
         return ResponseEntity.status(200).body(v);
     }
 
-    @GetMapping("/getOrdenadoSelection")
+    @GetMapping("/get-ordenado-nome")
     public ResponseEntity<DadoResumoDTO[]> ordenarSelection(){
         if(listaDadosCadastrados.isEmpty()){
             return ResponseEntity.status(204).build();
@@ -97,7 +110,7 @@ public class DadoController{
 
         for (int i = 0; i < v.length; i++) {
             for (int j = i+ 1; j < v.length; j++) {
-                if(v[j].getLogin().compareTo(v[i].getLogin()) < 0){
+                if(v[j].getNome().compareTo(v[i].getNome()) < 0){
                     DadoResumoDTO aux = v[j];
                     v[j] = v[i];
                     v[i] = aux;
@@ -107,17 +120,17 @@ public class DadoController{
         return ResponseEntity.status(200).body(v);
     }
 
-    @GetMapping("/getOrdenadoBubble")
+    @GetMapping("/get-ordenado-telefone")
     public ResponseEntity<DadoResumoDTO[]> ordenarBubble(){
         if(listaDadosCadastrados.isEmpty()){
             return ResponseEntity.status(204).build();
         }
         dadosToDadosDTO();
-        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[listaDadosDTO.size()]);
 
         for (int i = 0; i < v.length; i++) {
             for (int j = 1; j < v.length - 1; j++) {
-                if(v[j-1].getLogin().compareTo(v[i].getLogin()) > 0){
+                if(v[j-1].getTelefone().compareTo(v[i].getTelefone()) > 0){
                     DadoResumoDTO aux = v[j - 1];
                     v[j -1] = v[i];
                     v[i] = aux;
@@ -145,6 +158,8 @@ public class DadoController{
         listaDadosCadastrados.forEach(dado -> {
                     DadoResumoDTO dadoAtual = new DadoResumoDTO();
                     dadoAtual.setLogin(dado.getLogin());
+                    dadoAtual.setNome(dado.getNome());
+                    dadoAtual.setTelefone(dado.getTelefone());
                     dadoAtual.setSenha(Base64.getEncoder().encodeToString(dado.getSenhaCifrada()));
                     listaDadosDTO.add(dadoAtual);
                 }

@@ -14,6 +14,17 @@ import java.util.Arrays;
 public class Dado {
     private String login;
     private String senha;
+    private String nome;
+    private String telefone;
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
     private byte[] senhaCifrada;
 
     public String getLogin() {
@@ -27,6 +38,16 @@ public class Dado {
     public String getSenha() {
         return senha;
     }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+
 
     public void setSenha(String senha) throws Exception {
         SecretKey chaveSimetrica = geraChave();
@@ -43,6 +64,7 @@ public class Dado {
     public void setSenhaCifrada(byte[] senhaCifrada) {
         this.senhaCifrada = senhaCifrada;
     }
+
 
     public static SecretKey geraChave() throws NoSuchAlgorithmException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
