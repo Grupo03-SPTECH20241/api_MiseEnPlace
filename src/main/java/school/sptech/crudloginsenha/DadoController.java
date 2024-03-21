@@ -88,10 +88,11 @@ public class DadoController{
         int j;
         DadoResumoDTO x;
         DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+        
         for (int i = 1; i < v.length; i++) {
             x = v[i];
             j = i -1;
-            while (j >= 0 && v[j].getLogin().compareTo(x.getLogin()) > 0){
+            while (j >= 0 && v[j].getLogin().compareToIgnoreCase(x.getLogin()) > 0){
                 v[j+1] = v[j];
                 j = j-1;
             }
@@ -126,10 +127,10 @@ public class DadoController{
             return ResponseEntity.status(204).build();
         }
         dadosToDadosDTO();
-        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[listaDadosDTO.size()]);
+        DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
 
         for (int i = 0; i < v.length; i++) {
-            for (int j = 1; j < v.length - 1; j++) {
+            for (int j = 1; j < v.length; j++) {
                 if(v[j-1].getTelefone().compareTo(v[i].getTelefone()) > 0){
                     DadoResumoDTO aux = v[j - 1];
                     v[j -1] = v[i];
