@@ -88,10 +88,11 @@ public class DadoController{
         int j;
         DadoResumoDTO x;
         DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+        
         for (int i = 1; i < v.length; i++) {
             x = v[i];
             j = i -1;
-            while (j >= 0 && v[j].getLogin().compareTo(x.getLogin()) > 0){
+            while (j >= 0 && v[j].getLogin().compareToIgnoreCase(x.getLogin()) > 0){
                 v[j+1] = v[j];
                 j = j-1;
             }
