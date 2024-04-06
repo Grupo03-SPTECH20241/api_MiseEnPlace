@@ -40,4 +40,10 @@ public class DadoResumoDTO {
         this.nome = nome;
     }
 
+    @Override
+    public String toString() {
+        return "DadoResumoDTO{" +
+                "login='" + login + '\'' +
+                '}';
+    }
 }
