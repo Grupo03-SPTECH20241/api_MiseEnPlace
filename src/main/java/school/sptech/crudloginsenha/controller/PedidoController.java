@@ -50,15 +50,11 @@ public class PedidoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Pedido>> buscarTodosOsPedidos(){
+    public ResponseEntity<List<PedidoListagemDTO>> buscarTodosOsPedidos(){
         List<Pedido> pedidos = pedidoRepository.findAll();
         if (pedidos.isEmpty()) return ResponseEntity.status(204).build();
-        return ResponseEntity.status(200).body(pedidos);
-    }
-
-    @GetMapping("/testar")
-    public ResponseEntity<String> teste(){
-        return ResponseEntity.status(200).body("fununciou!");
+        List<PedidoListagemDTO> listagemDTOS = PedidoMapper.toDto(pedidos);
+        return ResponseEntity.status(200).body(listagemDTOS);
     }
 
 }

@@ -4,6 +4,7 @@ import school.sptech.crudloginsenha.entity.Pedido;
 import school.sptech.crudloginsenha.entity.Produto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PedidoMapper {
     public static Pedido toEntity(PedidoCriacaoDTO pedidoCriacaoDTO){
@@ -25,5 +26,15 @@ public class PedidoMapper {
         listagemDTO.setDataEntrega(entity.getDataEntrega());
         listagemDTO.setValorTotal(listagemDTO.getValorTotal());
         return listagemDTO;
+    }
+
+    public static List<PedidoListagemDTO> toDto(List<Pedido> entities){
+        if (entities.isEmpty()) return null;
+        List<PedidoListagemDTO> listagemDTOS = new ArrayList<>();
+
+        for (Pedido entity : entities){
+            listagemDTOS.add(PedidoMapper.toDto(entity));
+        }
+        return listagemDTOS;
     }
 }

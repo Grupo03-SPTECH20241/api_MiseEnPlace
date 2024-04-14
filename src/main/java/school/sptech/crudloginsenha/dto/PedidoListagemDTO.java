@@ -45,12 +45,11 @@ public class PedidoListagemDTO {
     }
 
     public double getValorTotal() {
-        double valorTotalDoPedido = 0.0;
-
-        for (Produto itemAtualDoPedido : produtos){
-            valorTotalDoPedido = itemAtualDoPedido.getPreco();
+        double valorTotal = 0.0;
+        for (Produto produto : this.produtos){
+            valorTotal += produto.getPreco();
         }
-        return valorTotalDoPedido;
+        return valorTotal;
     }
 
     public void setValorTotal(double valorTotal) {
