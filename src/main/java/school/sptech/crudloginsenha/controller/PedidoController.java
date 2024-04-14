@@ -68,4 +68,14 @@ public class PedidoController {
         return ResponseEntity.status(200).body(pedidoListagemDTO);
     }
 
+    @DeleteMapping("/deletar-por-id/{id}")
+    public ResponseEntity<String> deletarPedidoPorId(
+            @PathVariable int id
+    ){
+        Optional<Pedido> pedidoBuscado = pedidoRepository.findById(id);
+        if (pedidoBuscado.isEmpty()) return ResponseEntity.status(404).build();
+        pedidoRepository.delete(pedidoBuscado.get());
+        return ResponseEntity.status(204).build();
+    }
+
 }
