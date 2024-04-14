@@ -49,12 +49,23 @@ public class PedidoController {
         return ResponseEntity.status(200).body(pedidoListagemDTO);
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<List<PedidoListagemDTO>> buscarTodosOsPedidos(){
         List<Pedido> pedidos = pedidoRepository.findAll();
         if (pedidos.isEmpty()) return ResponseEntity.status(204).build();
         List<PedidoListagemDTO> listagemDTOS = PedidoMapper.toDto(pedidos);
         return ResponseEntity.status(200).body(listagemDTOS);
+    }
+
+    @GetMapping("/listar-por-id/{id}")
+    public ResponseEntity<PedidoListagemDTO> buscarPedidoPorId(
+            @PathVariable int id
+    ){
+        Optional<Pedido> pedidoBuscado = pedidoRepository.findById(id);
+        if (pedidoBuscado.isEmpty()) return ResponseEntity.status(404).build();
+
+        PedidoListagemDTO pedidoListagemDTO = PedidoMapper.toDto(pedidoBuscado.get());
+        return ResponseEntity.status(200).body(pedidoListagemDTO);
     }
 
 }
