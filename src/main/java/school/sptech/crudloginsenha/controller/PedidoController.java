@@ -8,6 +8,7 @@ import school.sptech.crudloginsenha.dto.*;
 import school.sptech.crudloginsenha.entity.Pedido;
 import school.sptech.crudloginsenha.entity.Produto;
 import school.sptech.crudloginsenha.repository.PedidoRepository;
+import school.sptech.crudloginsenha.repository.ProdutoRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,20 +18,16 @@ import java.util.Optional;
 public class PedidoController {
     @Autowired
     private PedidoRepository pedidoRepository;
-
-    @PostMapping("/cadastrar-pedido")
-    public ResponseEntity<PedidoListagemDTO> cadastrarPedido(
-            @RequestBody @Valid PedidoCriacaoDTO pedidoDTO
-    ) {
-        return ResponseEntity.status(200).build();
-        /*
-        if (pedidoDTO == null) return null;
-        Pedido pedido = PedidoMapper.toEntity(pedidoDTO);
-        pedidoRepository.save(pedido);
-
-        PedidoListagemDTO pedidoListagemDTO = PedidoMapper.toDto(pedido);
-        return ResponseEntity.status(200).body(pedidoListagemDTO);
-         */
+    @Autowired
+    private ProdutoRepository produtoRepository;
+    @PostMapping("/cadastrar-novo-pedido")
+    public ResponseEntity<PedidoListagemDTO> cadastrar(
+            @RequestBody PedidoCriacaoDTO pedidoCriacaoDTO
+    ){
+        if (pedidoCriacaoDTO == null) return null;
+        Pedido entity = PedidoMapper.toEntity(pedidoCriacaoDTO);
+        pedidoRepository.save(entity);
+        return ResponseEntity.status(200).body(PedidoMapper.toDto(entity));
     }
 
     @PostMapping("/adicionar-produto/{id}")
@@ -40,9 +37,13 @@ public class PedidoController {
     ){
         Optional<Pedido> pedido = pedidoRepository.findById(id);
         if (pedido.isEmpty()) return ResponseEntity.status(404).build();
+        pedido.get().setId(id);
 
         Produto produto = ProdutoMapper.toEntity(produtoDTO);
+        produtoRepository.save(produto);
+
         pedido.get().adicionarProduto(produto);
+        pedidoRepository.save(pedido.get());
 
         PedidoListagemDTO pedidoListagemDTO = PedidoMapper.toDto(pedido.get());
         return ResponseEntity.status(200).body(pedidoListagemDTO);
@@ -60,13 +61,4 @@ public class PedidoController {
         return ResponseEntity.status(200).body("fununciou!");
     }
 
-    @PostMapping("/cadastrar-novo-pedido")
-    public ResponseEntity<String> cadastrar(
-            @RequestBody PedidoCriacaoDTO pedidoCriacaoDTO
-    ){
-        if (pedidoCriacaoDTO == null) return null;
-        Pedido entity = PedidoMapper.toEntity(pedidoCriacaoDTO);
-        pedidoRepository.save(entity);
-        return ResponseEntity.status(200).body("yeey!");
-    }
 }
