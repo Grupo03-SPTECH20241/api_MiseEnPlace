@@ -69,7 +69,7 @@ public class PedidoController {
     }
 
     @DeleteMapping("/deletar-por-id/{id}")
-    public ResponseEntity<String> deletarPedidoPorId(
+    public ResponseEntity<PedidoListagemDTO> deletarPedidoPorId(
             @PathVariable int id
     ){
         Optional<Pedido> pedidoBuscado = pedidoRepository.findById(id);
@@ -78,4 +78,29 @@ public class PedidoController {
         return ResponseEntity.status(204).build();
     }
 
+    @DeleteMapping("deletar-produto-por-id/{idPedido}/{idProduto}")
+    public ResponseEntity<PedidoListagemDTO> deletarItemDoPedidoPorId(
+            @PathVariable int idPedido,
+            @PathVariable int idProduto
+    ){
+        Optional<Pedido> pedidoBuscado = pedidoRepository.findById(idPedido);
+        Optional<Produto> produtoBuscado = produtoRepository.findById(idProduto);
+
+        if (pedidoBuscado.isEmpty()) return ResponseEntity.status(404).build();
+        if (produtoBuscado.isEmpty()) return ResponseEntity.status(404).build();
+
+        List<Produto> itensDoPedido = pedidoBuscado.get().getProdutos();
+
+        for (int i = 0; i < itensDoPedido.size(); i++) {
+            if (itensDoPedido.get(i).getId()==idProduto){
+                itensDoPedido.remove(i);
+                break;
+            }
+        }
+        pedidoBuscado.get().setId(idPedido);
+        pedidoBuscado.get().setProdutos(itensDoPedido);
+        pedidoRepository.save(pedidoBuscado.get());
+        PedidoListagemDTO pedidoListagemDTO = PedidoMapper.toDto(pedidoBuscado.get());
+        return ResponseEntity.status(200).body(pedidoListagemDTO);
+    }
 }
