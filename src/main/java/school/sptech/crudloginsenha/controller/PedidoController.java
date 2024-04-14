@@ -18,16 +18,19 @@ public class PedidoController {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    @PostMapping("/cadastrar")
+    @PostMapping("/cadastrar-pedido")
     public ResponseEntity<PedidoListagemDTO> cadastrarPedido(
             @RequestBody @Valid PedidoCriacaoDTO pedidoDTO
     ) {
+        return ResponseEntity.status(200).build();
+        /*
         if (pedidoDTO == null) return null;
         Pedido pedido = PedidoMapper.toEntity(pedidoDTO);
         pedidoRepository.save(pedido);
 
         PedidoListagemDTO pedidoListagemDTO = PedidoMapper.toDto(pedido);
         return ResponseEntity.status(200).body(pedidoListagemDTO);
+         */
     }
 
     @PostMapping("/adicionar-produto/{id}")
@@ -55,5 +58,15 @@ public class PedidoController {
     @GetMapping("/testar")
     public ResponseEntity<String> teste(){
         return ResponseEntity.status(200).body("fununciou!");
+    }
+
+    @PostMapping("/cadastrar-novo-pedido")
+    public ResponseEntity<String> cadastrar(
+            @RequestBody PedidoCriacaoDTO pedidoCriacaoDTO
+    ){
+        if (pedidoCriacaoDTO == null) return null;
+        Pedido entity = PedidoMapper.toEntity(pedidoCriacaoDTO);
+        pedidoRepository.save(entity);
+        return ResponseEntity.status(200).body("yeey!");
     }
 }
