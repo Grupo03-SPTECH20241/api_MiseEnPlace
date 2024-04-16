@@ -2,6 +2,9 @@ package school.sptech.crudloginsenha;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.crudloginsenha.dto.DadoResumoDTO;
+import school.sptech.crudloginsenha.entity.Dado;
+
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
