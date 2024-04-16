@@ -1,4 +1,4 @@
-package school.sptech.crudloginsenha;
+package school.sptech.crudloginsenha.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
