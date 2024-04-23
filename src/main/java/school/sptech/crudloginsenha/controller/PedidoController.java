@@ -1,5 +1,8 @@
 package school.sptech.crudloginsenha.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +23,25 @@ public class PedidoController {
     private PedidoRepository pedidoRepository;
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Devolve o pedido, a lista de produtos e o produto cadastrado no momento"),
+            @ApiResponse(responseCode = "400", description = "Pedido cadastrado está vazio", content = @Content),
+    })
     @PostMapping("/cadastrar-novo-pedido")
     public ResponseEntity<PedidoListagemDTO> cadastrar(
             @RequestBody PedidoCriacaoDTO pedidoCriacaoDTO
     ){
-        if (pedidoCriacaoDTO == null) return null;
+        if (pedidoCriacaoDTO == null) return ResponseEntity.status(400).build();
         Pedido entity = PedidoMapper.toEntity(pedidoCriacaoDTO);
         pedidoRepository.save(entity);
         return ResponseEntity.status(200).body(PedidoMapper.toDto(entity));
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto cadastrado com sucesso!"),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado com o id informado!", content = @Content),
+    })
     @PostMapping("/adicionar-produto/{id}")
     public ResponseEntity<PedidoListagemDTO> adicionarProdutoNoPedidoPorId(
             @RequestBody @Valid ProdutoCriacaoDTO produtoDTO,
@@ -49,6 +61,10 @@ public class PedidoController {
         return ResponseEntity.status(200).body(pedidoListagemDTO);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso!"),
+            @ApiResponse(responseCode = "204", description = "Não há pedidos cadastrados", content = @Content),
+    })
     @GetMapping("/listar")
     public ResponseEntity<List<PedidoListagemDTO>> buscarTodosOsPedidos(){
         List<Pedido> pedidos = pedidoRepository.findAll();
@@ -57,6 +73,10 @@ public class PedidoController {
         return ResponseEntity.status(200).body(listagemDTOS);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedido listado com sucesso!"),
+            @ApiResponse(responseCode = "404", description = "Pedido com o id indicado está vazio", content = @Content),
+    })
     @GetMapping("/listar-por-id/{id}")
     public ResponseEntity<PedidoListagemDTO> buscarPedidoPorId(
             @PathVariable int id
@@ -68,6 +88,10 @@ public class PedidoController {
         return ResponseEntity.status(200).body(pedidoListagemDTO);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Pedido deletado com sucesso!"),
+            @ApiResponse(responseCode = "404", description = "Pedido com o id indicado está vazio", content = @Content),
+    })
     @DeleteMapping("/deletar-por-id/{id}")
     public ResponseEntity<PedidoListagemDTO> deletarPedidoPorId(
             @PathVariable int id
@@ -78,6 +102,10 @@ public class PedidoController {
         return ResponseEntity.status(204).build();
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto deletado com sucesso!"),
+            @ApiResponse(responseCode = "404", description = "Pedido ou produto fornecidos não encontrado", content = @Content)
+    })
     @DeleteMapping("deletar-produto-por-id/{idPedido}/{idProduto}")
     public ResponseEntity<PedidoListagemDTO> deletarItemDoPedidoPorId(
             @PathVariable int idPedido,
@@ -104,6 +132,9 @@ public class PedidoController {
         return ResponseEntity.status(200).body(pedidoListagemDTO);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna o indice do nome do cliente!"),
+    })
     @GetMapping("/pesquisa-binaria-cliente")
     public ResponseEntity<Pedido> iniciarPesquisaBinariaCliente(
             @RequestParam String nomeCliente

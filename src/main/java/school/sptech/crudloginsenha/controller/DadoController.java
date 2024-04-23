@@ -1,4 +1,4 @@
-package school.sptech.crudloginsenha;
+package school.sptech.crudloginsenha.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

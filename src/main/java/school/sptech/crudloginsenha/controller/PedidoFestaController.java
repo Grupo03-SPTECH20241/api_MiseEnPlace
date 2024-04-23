@@ -2,6 +2,9 @@ package school.sptech.crudloginsenha.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +29,9 @@ public class PedidoFestaController {
     @Autowired
     ProdutoRepository produtoRepository;
 
-    RestTemplate restTemplate = new RestTemplate();
-    ObjectMapper objectMapper = new ObjectMapper();
-
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna o Pedido Festa cadastrado!")
+    })
     @PostMapping
     public ResponseEntity<PedidoFestaListagemDTO> criarPedidoFesta(
             @RequestBody @Valid PedidoFestaCriacaoDTO pedidoFestaCriacaoDTO
@@ -42,6 +45,10 @@ public class PedidoFestaController {
         return ResponseEntity.ok(pedidoFestaListagemDTO);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto cadastrado com sucesso!"),
+            @ApiResponse(responseCode = "404", description = "Produto fornecido esta vazio!", content = @Content)
+    })
     @PostMapping("/adicionar-produto/{id}")
     public ResponseEntity<PedidoFestaListagemDTO> adicionarProduto(
             @RequestBody @Valid ProdutoCriacaoDTO produtoDTO,
@@ -61,6 +68,9 @@ public class PedidoFestaController {
         return ResponseEntity.status(200).body(pedidoFestaListagemDTO);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso!")
+    })
     @GetMapping
     public ResponseEntity<List<PedidoFestaListagemDTO>> listar() {
         List<PedidoFesta> pedidoFestas = pedidoFestaRepository.findAll();
@@ -70,6 +80,10 @@ public class PedidoFestaController {
         return ResponseEntity.ok(pedidoFestaListagemDTOS);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Pedido Festa deletado com sucesso!", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Pedido festa não encontrado com o id fornecido!", content = @Content)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarPorId(@PathVariable Integer id) {
         Optional<PedidoFesta> pedidoFesta = pedidoFestaRepository.findById(id);
