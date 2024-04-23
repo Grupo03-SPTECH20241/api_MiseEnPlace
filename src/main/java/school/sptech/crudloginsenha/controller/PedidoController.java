@@ -103,4 +103,79 @@ public class PedidoController {
         PedidoListagemDTO pedidoListagemDTO = PedidoMapper.toDto(pedidoBuscado.get());
         return ResponseEntity.status(200).body(pedidoListagemDTO);
     }
+
+    @GetMapping("/pesquisa-binaria-cliente")
+    public ResponseEntity<Pedido> iniciarPesquisaBinariaCliente(
+            @RequestParam String nomeCliente
+    ) {
+        Pedido[] pedidos = this.getVectorPedido();
+        Pedido[] pedidosOrganizados = this.quicksortPedidosCliente(pedidos, 0, pedidos.length);
+        return this.pesquisaBinariaCliente(pedidosOrganizados, nomeCliente);
+    }
+
+    public Pedido[] quicksortPedidosCliente(
+            Pedido[] v,
+            int indInicio,
+            int indFim
+    ) {
+        int i, j;
+        String pivo;
+
+        i = indInicio;
+        j = indFim - 1;
+        pivo = v[(indInicio + indFim) / 2].getCliente();
+
+        while (i <= j) {
+            while (i < indFim && v[i].getCliente().compareTo(pivo) < 0) {
+                i = i + 1;
+            }
+            while (j > indInicio && v[j].getCliente().compareTo(pivo) > 0) {
+                j = j - 1;
+            }
+            if (i <= j) {
+                Pedido temp = v[i];
+                v[i] = v[j];
+                v[j] = temp;
+                i = i + 1;
+                j = j - 1;
+            }
+        }
+
+        if (indInicio < j) {
+            quicksortPedidosCliente(v, indInicio, j);
+        }
+        if (i < indFim) {
+            quicksortPedidosCliente(v, i, indFim);
+        }
+
+        return v;
+    }
+
+    public ResponseEntity<Pedido> pesquisaBinariaCliente(Pedido[] v, String nomeCliente) {
+        int indInicio = 0;
+        int indFim = v.length;
+        while (indInicio <= indFim) {
+            int indMeio = (indInicio + indFim) / 2;
+            if (nomeCliente.equals(v[indMeio].getCliente())) {
+                return ResponseEntity.ok(v[indMeio]);
+            } else if (nomeCliente.compareTo(v[indMeio].getCliente()) > 0) {
+                indInicio = indMeio + 1;
+            } else {
+                indFim = indMeio - 1;
+            }
+        }
+
+        return ResponseEntity.noContent().build();
+    }
+
+    public Pedido[] getVectorPedido() {
+        Pedido[] pedidos = new Pedido[pedidoRepository.findAll().size()];
+
+        for (int i = 0; i < pedidos.length; i++) {
+            Optional<Pedido> pedido = pedidoRepository.findById(i + 1);
+            pedidos[i] = pedido.get();
+        }
+
+        return pedidos;
+    }
 }
