@@ -18,7 +18,6 @@ public class DadoController{
 
     @PostMapping
     public ResponseEntity<String> cadastrar(@RequestBody Dado dado) {
-
         if(!emailCorreto(dado.getLogin())){
             return ResponseEntity.status(400).body("Email inválido");
         }
@@ -30,6 +29,27 @@ public class DadoController{
             return ResponseEntity.status(201).body("Usuário cadastrado com sucesso!");
         }
         return ResponseEntity.status(409).body("Usuário já cadastrado");
+    }
+
+    @PostMapping("/lista")
+    public ResponseEntity<String> cadastrarLista(@RequestBody List<Dado> dados) {
+        if (dados.isEmpty()) {
+            return ResponseEntity.status(400).body("Lista de cadastro vazia");
+        }
+        for (int i = 0; i < dados.size(); i++) {
+            if(!emailCorreto(dados.get(i).getLogin())){
+                return ResponseEntity.status(400).body("Email inválido");
+            }
+            if(!telefoneCorreto(dados.get(i).getTelefone())){
+                return ResponseEntity.status(400).body("Telefone Invalido(Precisa ter 11 caracteres)");
+            }
+            if (!usuarioCadastrado(dados.get(i))) {
+                listaDadosCadastrados.add(dados.get(i));
+            } else {
+                return ResponseEntity.status(409).body("Usuário já cadastrado");
+            }
+        }
+        return ResponseEntity.status(204).body("Usuários cadastrados");
     }
 
     private boolean telefoneCorreto(String telefone){
@@ -88,10 +108,11 @@ public class DadoController{
         int j;
         DadoResumoDTO x;
         DadoResumoDTO[] v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+        
         for (int i = 1; i < v.length; i++) {
             x = v[i];
             j = i -1;
-            while (j >= 0 && v[j].getLogin().compareTo(x.getLogin()) > 0){
+            while (j >= 0 && v[j].getLogin().compareToIgnoreCase(x.getLogin()) > 0){
                 v[j+1] = v[j];
                 j = j-1;
             }
@@ -136,6 +157,157 @@ public class DadoController{
                     v[i] = aux;
                 }
             }
+        }
+        return ResponseEntity.status(200).body(v);
+    }
+
+    @GetMapping("/get-login-quicksort")
+    public ResponseEntity<DadoResumoDTO[]> loginQuickSort() {
+        DadoResumoDTO[] v = new DadoResumoDTO[0];
+        return ordenarLoginQuicksort(v, 0, v.length);
+    }
+
+    public ResponseEntity<DadoResumoDTO[]> ordenarLoginQuicksort(
+            DadoResumoDTO[] v,
+            int indInicio,
+            int indFim
+    ) {
+        if (v.length == 0) {
+            dadosToDadosDTO();
+            v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+            indInicio = 0;
+            indFim = v.length;
+            if (v.length == 0) {
+                return ResponseEntity.status(204).body(v);
+            }
+        }
+        int i, j;
+        String pivo;
+
+        i = indInicio;
+        j = indFim - 1;
+        pivo = v[(indInicio + indFim) / 2].getLogin();
+
+        while (i <= j) {
+            while (i < indFim && v[i].getLogin().compareTo(pivo) < 0) {
+                i = i + 1;
+            }
+            while (j > indInicio && v[j].getLogin().compareTo(pivo) > 0) {
+                j = j - 1;
+            }
+            if (i <= j) {
+                DadoResumoDTO temp = v[i];
+                v[i] = v[j];
+                v[j] = temp;
+                i = i + 1;
+                j = j - 1;
+            }
+        }
+
+        if (indInicio < j) {
+            ordenarLoginQuicksort(v, indInicio, j);
+        }
+        if (i < indFim) {
+            ordenarLoginQuicksort(v, i, indFim);
+        }
+
+        return ResponseEntity.status(200).body(v);
+    }
+
+    @GetMapping("/get-nome-quicksort")
+    public ResponseEntity<DadoResumoDTO[]> nomeQuicksort() {
+        DadoResumoDTO[] v = new DadoResumoDTO[0];
+        return ordenarNomeQuicksort(v, 0, v.length);
+    }
+
+    public ResponseEntity<DadoResumoDTO[]> ordenarNomeQuicksort(
+            DadoResumoDTO[] v,
+            int indInicio,
+            int indFim
+    ) {
+        if (v.length == 0) {
+            dadosToDadosDTO();
+            v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+            indInicio = 0;
+            indFim = v.length;
+            if (v.length == 0) {
+                return ResponseEntity.status(204).body(v);
+            }
+        }
+        int i, j;
+        String pivo;
+        i = indInicio;
+        j = indFim - 1;
+        pivo = v[(indInicio + indFim) / 2].getNome();
+        while (i <= j) {
+            while (i < indFim && v[i].getNome().compareTo(pivo) < 0) {
+                i = i + 1;
+            }
+            while (j > indInicio && v[j].getNome().compareTo(pivo) > 0) {
+                j = j - 1;
+            }
+            if (i <= j) {
+                DadoResumoDTO temp = v[i];
+                v[i] = v[j];
+                v[j] = temp;
+                i = i + 1;
+                j = j - 1;
+            }
+        }
+        if (indInicio < j) {
+            ordenarNomeQuicksort(v, indInicio, j);
+        }
+        if (i < indFim) {
+            ordenarNomeQuicksort(v, i, indFim);
+        }
+        return ResponseEntity.status(200).body(v);
+    }
+
+    @GetMapping("/get-telefone-quicksort")
+    public ResponseEntity<DadoResumoDTO[]> telefoneQuicksort() {
+        DadoResumoDTO[] v = new DadoResumoDTO[0];
+        return ordenarTelefoneQuicksort(v, 0, v.length);
+    }
+
+    public ResponseEntity<DadoResumoDTO[]> ordenarTelefoneQuicksort(
+            DadoResumoDTO[] v,
+            int indInicio,
+            int indFim
+    ) {
+        if (v.length == 0) {
+            dadosToDadosDTO();
+            v = listaDadosDTO.toArray(new DadoResumoDTO[0]);
+            indInicio = 0;
+            indFim = v.length;
+            if (v.length == 0) {
+                return ResponseEntity.status(204).body(v);
+            }
+        }
+        int i, j;
+        String pivo;
+        i = indInicio;
+        j = indFim - 1;
+        pivo = v[(indInicio + indFim) / 2].getTelefone();
+        while (i <= j) {
+            while (i < indFim && v[i].getTelefone().compareTo(pivo) < 0) {
+                i = i + 1;
+            }
+            while (j > indInicio && v[j].getTelefone().compareTo(pivo) > 0) {
+                j = j - 1;
+            }
+            if (i <= j) {
+                DadoResumoDTO temp = v[i];
+                v[i] = v[j];
+                v[j] = temp;
+                i = i + 1;
+                j = j - 1;
+            }
+        }
+        if (indInicio < j) {
+            ordenarNomeQuicksort(v, indInicio, j);
+        }
+        if (i < indFim) {
+            ordenarNomeQuicksort(v, i, indFim);
         }
         return ResponseEntity.status(200).body(v);
     }
