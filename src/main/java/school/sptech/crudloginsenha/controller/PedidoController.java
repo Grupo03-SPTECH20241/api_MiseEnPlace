@@ -87,7 +87,7 @@ public class PedidoController {
         pedidoRepository.delete(pedidoBuscado.get());
         return ResponseEntity.status(204).build();
     }
-    /*
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorna o indice do nome do cliente!"),
     })
@@ -165,5 +165,4 @@ public class PedidoController {
 
         return pedidos;
     }
-    */
 }

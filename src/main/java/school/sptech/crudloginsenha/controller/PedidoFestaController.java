@@ -24,7 +24,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/pedidos-festa")
 public class PedidoFestaController {
-    /*
+
     @Autowired
     PedidoFestaRepository pedidoFestaRepository;
 
@@ -37,7 +37,7 @@ public class PedidoFestaController {
     @PostMapping
     public ResponseEntity<PedidoFestaListagemDTO> criarPedidoFesta(
             @RequestBody @Valid PedidoFestaCriacaoDTO pedidoFestaCriacaoDTO
-            ) throws JsonProcessingException {
+    ) throws JsonProcessingException {
         PedidoFesta pedidoFesta = PedidoFestaMapper.toEntity(pedidoFestaCriacaoDTO);
 
         PedidoFesta pedidoFestaSalvo = pedidoFestaRepository.save(pedidoFesta);
@@ -93,5 +93,4 @@ public class PedidoFestaController {
         pedidoFestaRepository.delete(pedidoFesta.get());
         return ResponseEntity.status(204).build();
     }
-    */
 }

@@ -19,6 +19,18 @@ public class ProdutoMapper {
         return entity;
     }
 
+    public static Produto toEntity(ProdutoCriacaoDTO produtoCriacaoDTO){
+        if (produtoCriacaoDTO == null) return null;
+        Produto entity = new Produto();
+
+        entity.setId(null);
+        entity.setNome(produtoCriacaoDTO.getNome());
+        entity.setPreco(produtoCriacaoDTO.getPreco());
+        entity.setQuantidadeEstoque(produtoCriacaoDTO.getQuantidadeEstoque());
+        entity.setPedido(null);
+        return entity;
+    }
+
     public static ProdutoListagemDTO toListagemDto(Produto produto){
         if (produto == null) return null;
 
