@@ -1,4 +1,4 @@
-package school.sptech.crudloginsenha.dto;
+package school.sptech.crudloginsenha.dto.produto;
 
 import jakarta.validation.constraints.*;
 
@@ -12,6 +12,9 @@ public class ProdutoCriacaoDTO {
     @NotNull
     @PositiveOrZero
     private int quantidadeEstoque;
+    @NotNull
+    @Positive
+    private Integer pedidoId;
 
     public String getNome() {
         return nome;
@@ -37,4 +40,11 @@ public class ProdutoCriacaoDTO {
         this.quantidadeEstoque = quantidadeEstoque;
     }
 
+    public Integer getPedidoId() {
+        return pedidoId;
+    }
+
+    public void setPedidoId(Integer pedidoId) {
+        this.pedidoId = pedidoId;
+    }
 }

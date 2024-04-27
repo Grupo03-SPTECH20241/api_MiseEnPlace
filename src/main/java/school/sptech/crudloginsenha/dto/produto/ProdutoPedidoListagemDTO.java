@@ -1,16 +1,19 @@
-package school.sptech.crudloginsenha.dto;
+package school.sptech.crudloginsenha.dto.produto;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
-public class PedidoCriacaoDTO {
-    @Size(min = 3, max = 100)
+public class ProdutoPedidoListagemDTO {
+    private Integer id;
     private String cliente;
-    @NotBlank
-    @FutureOrPresent
     private LocalDate dataEntrega;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getCliente() {
         return cliente;
@@ -27,5 +30,4 @@ public class PedidoCriacaoDTO {
     public void setDataEntrega(LocalDate dataEntrega) {
         this.dataEntrega = dataEntrega;
     }
-
 }

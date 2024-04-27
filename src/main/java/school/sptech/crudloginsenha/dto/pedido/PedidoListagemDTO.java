@@ -1,4 +1,4 @@
-package school.sptech.crudloginsenha.dto;
+package school.sptech.crudloginsenha.dto.pedido;
 
 import school.sptech.crudloginsenha.entity.Produto;
 
@@ -8,9 +8,8 @@ import java.util.List;
 public class PedidoListagemDTO {
     private int id;
     private String cliente;
-    private List<Produto> produtos;
     private LocalDate dataEntrega;
-    private double valorTotal;
+    private List<PedidoProdutoListagemDTO> produtos;
 
     public int getId() {
         return id;
@@ -28,14 +27,6 @@ public class PedidoListagemDTO {
         this.cliente = cliente;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
-
     public LocalDate getDataEntrega() {
         return dataEntrega;
     }
@@ -44,16 +35,11 @@ public class PedidoListagemDTO {
         this.dataEntrega = dataEntrega;
     }
 
-    public double getValorTotal() {
-        double valorTotal = 0.0;
-        for (Produto produto : this.produtos){
-            valorTotal += produto.getPreco();
-        }
-        return valorTotal;
+    public List<PedidoProdutoListagemDTO> getProdutos() {
+        return produtos;
     }
 
-    public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
+    public void setProdutos(List<PedidoProdutoListagemDTO> produtos) {
+        this.produtos = produtos;
     }
-
 }
