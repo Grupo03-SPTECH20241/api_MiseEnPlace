@@ -1,21 +1,16 @@
-package school.sptech.crudloginsenha.dto;
+package school.sptech.crudloginsenha.dto.pedido;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import java.time.LocalDate;
 
-public class PedidoFestaCriacaoDTO {
+public class PedidoCriacaoDTO {
     @Size(min = 3, max = 100)
     private String cliente;
-    @NotNull
+    @NotBlank
     @FutureOrPresent
     private LocalDate dataEntrega;
-    @NotNull
-    @Size(min = 8)
-    private String cep;
 
     public String getCliente() {
         return cliente;
@@ -33,11 +28,4 @@ public class PedidoFestaCriacaoDTO {
         this.dataEntrega = dataEntrega;
     }
 
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
 }
