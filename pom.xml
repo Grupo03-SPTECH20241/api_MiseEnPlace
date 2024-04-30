@@ -85,6 +85,11 @@
 			<version>0.11.1</version>
 		</dependency>
 		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.2</version> <!-- Replace with the appropriate version -->
+		</dependency>
+		<dependency>
 			<groupId>school.sptech</groupId>
 			<artifactId>crud-login-senha</artifactId>
 			<version>0.0.1-SNAPSHOT</version>

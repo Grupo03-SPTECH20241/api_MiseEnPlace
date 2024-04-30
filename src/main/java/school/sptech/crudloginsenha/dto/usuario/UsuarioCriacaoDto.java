@@ -4,10 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
@@ -25,8 +22,8 @@ public class UsuarioCriacaoDto {
     private String numeroTelefone;
     @Size(min = 14, max = 14)
     private String CPF;
-    @PositiveOrZero
-    private char administrador;
+    @NotNull
+    private Character administrador;
     @Nullable
     private Integer fkGestor;
     @Positive
