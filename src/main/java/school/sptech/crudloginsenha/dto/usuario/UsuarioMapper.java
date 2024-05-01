@@ -13,12 +13,7 @@ public class UsuarioMapper {
         entity.setNome(dto.getNome());
         entity.setEmail(dto.getEmail());
         entity.setSenha(dto.getSenha());
-        entity.setDataNascimento(dto.getDataNascimento());
-        entity.setNumeroTelefone(dto.getNumeroTelefone());
-        entity.setCPF(dto.getCPF());
-        entity.setAdministrador(dto.getAdministrador());
-        entity.setFkGestor(dto.getFkGestor());
-        entity.setClienteIdCliente(dto.getClienteIdCliente());
+        entity.setLogado(dto.getLogado());
 
         return entity;
     }
@@ -28,13 +23,7 @@ public class UsuarioMapper {
 
         dto.setNome(entity.getNome());
         dto.setEmail(entity.getEmail());
-        dto.setDataNascimento(entity.getDataNascimento());
-        dto.setNumeroTelefone(entity.getNumeroTelefone());
-        dto.setCPF(entity.getCPF());
-        dto.setAdministrador(entity.getAdministrador());
-        dto.setFkGestor(entity.getFkGestor());
-        dto.setClienteIdCliente(entity.getClienteIdCliente());
-
+        dto.setLogado(entity.getLogado());
         return dto;
 
     }

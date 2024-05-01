@@ -96,12 +96,6 @@ public class UsuarioController {
         usuarioAchado.get().setIdUsuario(id);
         usuarioAchado.get().setNome(usuarioAtualizacao.getNome());
         usuarioAchado.get().setEmail(usuarioAtualizacao.getEmail());
-        usuarioAchado.get().setDataNascimento(usuarioAtualizacao.getDataNascimento());
-        usuarioAchado.get().setNumeroTelefone(usuarioAtualizacao.getNumeroTelefone());
-        usuarioAchado.get().setCPF(usuarioAtualizacao.getCPF());
-        usuarioAchado.get().setAdministrador(usuarioAtualizacao.getAdministrador());
-        usuarioAchado.get().setFkGestor(usuarioAtualizacao.getFkGestor());
-        usuarioAchado.get().setClienteIdCliente(usuarioAtualizacao.getClienteIdCliente());
 
         Usuario usuarioSalvo = usuarioRepository.save(usuarioAchado.get());
         return ResponseEntity.ok(UsuarioMapper.toDto(usuarioSalvo));
@@ -129,7 +123,30 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<UsuarioTokenDto> login(@RequestBody UsuarioLoginDto usuarioLoginDto){
         UsuarioTokenDto usuarioToken = this.usuarioService.autenticar(usuarioLoginDto);
+        if (!usuarioToken.getToken().isBlank()){
+            Optional<Usuario> usuario = usuarioRepository.findByEmail(usuarioToken.getEmail());
+            if (usuario.isEmpty()){
+                return ResponseEntity.noContent().build();
+            }else{
+                usuario.get().setLogado(1);
+                usuarioRepository.save(usuario.get());
+            }
+        }
         return ResponseEntity.status(200).body(usuarioToken);
+    }
+
+    @PatchMapping("/logoff")
+    public ResponseEntity<String> logoff(@RequestParam int id){
+        Optional<Usuario> usuarioAchado = usuarioRepository.findById(id);
+        if (usuarioAchado.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        usuarioAchado.get().setIdUsuario(id);
+        usuarioAchado.get().setLogado(0);
+        usuarioRepository.save(usuarioAchado.get());
+
+        return ResponseEntity.ok("Usuario deslogado com sucesso!");
     }
 
 
