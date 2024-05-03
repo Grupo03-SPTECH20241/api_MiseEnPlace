@@ -44,6 +44,11 @@ public class UsuarioController {
         if(usuarioCriacao == null){
             return ResponseEntity.badRequest().build();
         }
+
+        if(usuarioRepository.existsByEmail(usuarioCriacao.getEmail())){
+            return ResponseEntity.status(409).build();
+        }
+
         String senhaCriptografada = passwordEncoder.encode(usuarioCriacao.getSenha());
         usuarioCriacao.setSenha(senhaCriptografada);
 
