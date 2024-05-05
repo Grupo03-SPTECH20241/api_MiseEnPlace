@@ -156,11 +156,12 @@ public class PedidoController {
     }
 
     public Pedido[] getVectorPedido() {
+        List<Pedido> pedidosList = pedidoRepository.findAll();
         Pedido[] pedidos = new Pedido[pedidoRepository.findAll().size()];
 
-        for (int i = 0; i < pedidos.length; i++) {
+        for (int i = 0; i < pedidosList.size(); i++) {
             Optional<Pedido> pedido = pedidoRepository.findById(i + 1);
-            pedidos[i] = pedido.get();
+            pedidos[i] = pedidosList.get(i);
         }
 
         return pedidos;
