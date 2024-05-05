@@ -128,8 +128,8 @@ public class PedidoController {
             }
         }
 
-        if (indInicio < j) {
-            quicksortPedidosCliente(v, indInicio, j);
+        if (indInicio < j + 1) {
+            quicksortPedidosCliente(v, indInicio, j + 1);
         }
         if (i < indFim) {
             quicksortPedidosCliente(v, i, indFim);

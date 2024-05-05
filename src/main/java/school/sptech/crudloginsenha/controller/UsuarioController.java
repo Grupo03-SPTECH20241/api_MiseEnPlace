@@ -200,8 +200,6 @@ public class UsuarioController {
         j = indFim - 1;
         pivo = v[(indInicio + j) / 2].getNome();
 
-        System.out.println(pivo);
-
         while(i <= j) {
             while (i < indFim && v[i].getNome().compareTo(pivo) < 0) {
                 i = i + 1;
@@ -218,10 +216,8 @@ public class UsuarioController {
             }
         }
 
-        System.out.println(Arrays.toString(v));
-
-        if (indInicio < j) {
-            ordenarNomeQuicksort(v, indInicio, j);
+        if (indInicio < j + 1) {
+            ordenarNomeQuicksort(v, indInicio, j + 1);
         }
         if (i < indFim) {
             ordenarNomeQuicksort(v, i, indFim);
