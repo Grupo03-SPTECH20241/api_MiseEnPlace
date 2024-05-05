@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.crudloginsenha.api.configuration.security.jwt.GerenciadorTokenJwt;
 import school.sptech.crudloginsenha.dto.usuario.*;
+import school.sptech.crudloginsenha.entity.Pedido;
 import school.sptech.crudloginsenha.entity.Usuario;
 import school.sptech.crudloginsenha.repository.UsuarioRepository;
 import school.sptech.crudloginsenha.service.UsuarioService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -154,5 +157,75 @@ public class UsuarioController {
         return ResponseEntity.ok("Usuario deslogado com sucesso!");
     }
 
+    @GetMapping("/quicksort-nome")
+    public ResponseEntity<List<UsuarioListagemDto>> ordernar() {
+        List<Usuario> usuarioList = usuarioRepository.findAll();
 
+        if (usuarioList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        Usuario[] usuarios = new Usuario[usuarioRepository.findAll().size()];
+
+        for (int i = 0; i < usuarioList.size(); i++) {
+            usuarios[i] = usuarioList.get(i);
+        }
+
+        Usuario[] usuariosOrdenados = this.ordenarNomeQuicksort(
+                usuarios,
+                0,
+                usuarios.length
+        );
+
+        List<Usuario> entidadeLista = new ArrayList<>();
+
+        for (int i = 0; i < usuariosOrdenados.length; i++) {
+            entidadeLista.add(usuariosOrdenados[i]);
+        }
+
+        List<UsuarioListagemDto> dtoOrdenado = UsuarioMapper.toDto(entidadeLista);
+
+        return ResponseEntity.ok(dtoOrdenado);
+    }
+
+    public Usuario[] ordenarNomeQuicksort(
+            Usuario[] v,
+            int indInicio,
+            int indFim
+    ) {
+        int i, j;
+        String pivo;
+
+        i = indInicio;
+        j = indFim - 1;
+        pivo = v[(indInicio + j) / 2].getNome();
+
+        System.out.println(pivo);
+
+        while(i <= j) {
+            while (i < indFim && v[i].getNome().compareTo(pivo) < 0) {
+                i = i + 1;
+            }
+            while (j > indInicio && v[j].getNome().compareTo(pivo) > 0) {
+                j = j - 1;
+            }
+            if (i <= j) {
+                Usuario temp = v[i];
+                v[i] = v[j];
+                v[j] = temp;
+                i = i + 1;
+                j = j - 1;
+            }
+        }
+
+        System.out.println(Arrays.toString(v));
+
+        if (indInicio < j) {
+            ordenarNomeQuicksort(v, indInicio, j);
+        }
+        if (i < indFim) {
+            ordenarNomeQuicksort(v, i, indFim);
+        }
+        return v;
+    }
 }
