@@ -1,7 +1,6 @@
 package school.sptech.crudloginsenha.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -9,9 +8,11 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import school.sptech.crudloginsenha.dto.*;
-import school.sptech.crudloginsenha.entity.Pedido;
+import school.sptech.crudloginsenha.dto.pedidofesta.PedidoFestaCriacaoDTO;
+import school.sptech.crudloginsenha.dto.pedidofesta.PedidoFestaListagemDTO;
+import school.sptech.crudloginsenha.dto.pedidofesta.PedidoFestaMapper;
+import school.sptech.crudloginsenha.dto.produto.ProdutoCriacaoDTO;
+import school.sptech.crudloginsenha.dto.produto.ProdutoMapper;
 import school.sptech.crudloginsenha.entity.PedidoFesta;
 import school.sptech.crudloginsenha.entity.Produto;
 import school.sptech.crudloginsenha.repository.PedidoFestaRepository;
@@ -23,6 +24,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/pedidos-festa")
 public class PedidoFestaController {
+
     @Autowired
     PedidoFestaRepository pedidoFestaRepository;
 
@@ -35,7 +37,7 @@ public class PedidoFestaController {
     @PostMapping
     public ResponseEntity<PedidoFestaListagemDTO> criarPedidoFesta(
             @RequestBody @Valid PedidoFestaCriacaoDTO pedidoFestaCriacaoDTO
-            ) throws JsonProcessingException {
+    ) throws JsonProcessingException {
         PedidoFesta pedidoFesta = PedidoFestaMapper.toEntity(pedidoFestaCriacaoDTO);
 
         PedidoFesta pedidoFestaSalvo = pedidoFestaRepository.save(pedidoFesta);

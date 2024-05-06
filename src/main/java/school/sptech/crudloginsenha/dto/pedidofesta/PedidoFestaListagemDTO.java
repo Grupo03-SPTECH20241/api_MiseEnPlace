@@ -1,4 +1,4 @@
-package school.sptech.crudloginsenha.dto;
+package school.sptech.crudloginsenha.dto.pedidofesta;
 
 import school.sptech.crudloginsenha.entity.CEP;
 import school.sptech.crudloginsenha.entity.Produto;

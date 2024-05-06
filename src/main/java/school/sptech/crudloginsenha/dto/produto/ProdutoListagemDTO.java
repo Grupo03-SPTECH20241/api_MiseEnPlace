@@ -1,17 +1,11 @@
-package school.sptech.crudloginsenha.entity;
+package school.sptech.crudloginsenha.dto.produto;
 
-import jakarta.persistence.*;
-
-@Entity
-public class Produto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProdutoListagemDTO {
     private Integer id;
     private String nome;
     private double preco;
     private int quantidadeEstoque;
-    @ManyToOne
-    private Pedido pedido;
+    private ProdutoPedidoListagemDTO pedido;
 
     public Integer getId() {
         return id;
@@ -45,11 +39,11 @@ public class Produto {
         this.quantidadeEstoque = quantidadeEstoque;
     }
 
-    public Pedido getPedido() {
+    public ProdutoPedidoListagemDTO getPedido() {
         return pedido;
     }
 
-    public void setPedido(Pedido pedido) {
+    public void setPedido(ProdutoPedidoListagemDTO pedido) {
         this.pedido = pedido;
     }
 }

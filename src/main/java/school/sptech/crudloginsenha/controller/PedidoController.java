@@ -7,7 +7,11 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.crudloginsenha.dto.*;
+import school.sptech.crudloginsenha.dto.pedido.PedidoCriacaoDTO;
+import school.sptech.crudloginsenha.dto.pedido.PedidoListagemDTO;
+import school.sptech.crudloginsenha.dto.pedido.PedidoMapper;
+import school.sptech.crudloginsenha.dto.produto.ProdutoCriacaoDTO;
+import school.sptech.crudloginsenha.dto.produto.ProdutoMapper;
 import school.sptech.crudloginsenha.entity.Pedido;
 import school.sptech.crudloginsenha.entity.Produto;
 import school.sptech.crudloginsenha.repository.PedidoRepository;
@@ -29,7 +33,7 @@ public class PedidoController {
             @ApiResponse(responseCode = "400", description = "Pedido cadastrado está vazio", content = @Content),
     })
     @PostMapping("/cadastrar-novo-pedido")
-    public ResponseEntity<PedidoListagemDTO> cadastrar(
+    public ResponseEntity<PedidoListagemDTO> cadastrarNovoPedido(
             @RequestBody PedidoCriacaoDTO pedidoCriacaoDTO
     ){
         if (pedidoCriacaoDTO == null) return ResponseEntity.status(400).build();
@@ -39,34 +43,11 @@ public class PedidoController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Produto cadastrado com sucesso!"),
-            @ApiResponse(responseCode = "404", description = "Pedido não encontrado com o id informado!", content = @Content),
-    })
-    @PostMapping("/adicionar-produto/{id}")
-    public ResponseEntity<PedidoListagemDTO> adicionarProdutoNoPedidoPorId(
-            @RequestBody @Valid ProdutoCriacaoDTO produtoDTO,
-            @PathVariable int id
-    ){
-        Optional<Pedido> pedido = pedidoRepository.findById(id);
-        if (pedido.isEmpty()) return ResponseEntity.status(404).build();
-        pedido.get().setId(id);
-
-        Produto produto = ProdutoMapper.toEntity(produtoDTO);
-        produtoRepository.save(produto);
-
-        pedido.get().adicionarProduto(produto);
-        pedidoRepository.save(pedido.get());
-
-        PedidoListagemDTO pedidoListagemDTO = PedidoMapper.toDto(pedido.get());
-        return ResponseEntity.status(200).body(pedidoListagemDTO);
-    }
-
-    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedidos listados com sucesso!"),
             @ApiResponse(responseCode = "204", description = "Não há pedidos cadastrados", content = @Content),
     })
     @GetMapping("/listar")
-    public ResponseEntity<List<PedidoListagemDTO>> buscarTodosOsPedidos(){
+    public ResponseEntity<List<PedidoListagemDTO>> listarTodosOsPedidos(){
         List<Pedido> pedidos = pedidoRepository.findAll();
         if (pedidos.isEmpty()) return ResponseEntity.status(204).build();
         List<PedidoListagemDTO> listagemDTOS = PedidoMapper.toDto(pedidos);
@@ -98,38 +79,13 @@ public class PedidoController {
     ){
         Optional<Pedido> pedidoBuscado = pedidoRepository.findById(id);
         if (pedidoBuscado.isEmpty()) return ResponseEntity.status(404).build();
+
+        for (int i = 0; i < pedidoBuscado.get().getProdutos().size(); i++) {
+            produtoRepository.delete(pedidoBuscado.get().getProdutos().get(i));
+        }
+
         pedidoRepository.delete(pedidoBuscado.get());
         return ResponseEntity.status(204).build();
-    }
-
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Produto deletado com sucesso!"),
-            @ApiResponse(responseCode = "404", description = "Pedido ou produto fornecidos não encontrado", content = @Content)
-    })
-    @DeleteMapping("deletar-produto-por-id/{idPedido}/{idProduto}")
-    public ResponseEntity<PedidoListagemDTO> deletarItemDoPedidoPorId(
-            @PathVariable int idPedido,
-            @PathVariable int idProduto
-    ){
-        Optional<Pedido> pedidoBuscado = pedidoRepository.findById(idPedido);
-        Optional<Produto> produtoBuscado = produtoRepository.findById(idProduto);
-
-        if (pedidoBuscado.isEmpty()) return ResponseEntity.status(404).build();
-        if (produtoBuscado.isEmpty()) return ResponseEntity.status(404).build();
-
-        List<Produto> itensDoPedido = pedidoBuscado.get().getProdutos();
-
-        for (int i = 0; i < itensDoPedido.size(); i++) {
-            if (itensDoPedido.get(i).getId()==idProduto){
-                itensDoPedido.remove(i);
-                break;
-            }
-        }
-        pedidoBuscado.get().setId(idPedido);
-        pedidoBuscado.get().setProdutos(itensDoPedido);
-        pedidoRepository.save(pedidoBuscado.get());
-        PedidoListagemDTO pedidoListagemDTO = PedidoMapper.toDto(pedidoBuscado.get());
-        return ResponseEntity.status(200).body(pedidoListagemDTO);
     }
 
     @ApiResponses(value = {
@@ -172,8 +128,8 @@ public class PedidoController {
             }
         }
 
-        if (indInicio < j) {
-            quicksortPedidosCliente(v, indInicio, j);
+        if (indInicio < j + 1) {
+            quicksortPedidosCliente(v, indInicio, j + 1);
         }
         if (i < indFim) {
             quicksortPedidosCliente(v, i, indFim);
@@ -200,11 +156,12 @@ public class PedidoController {
     }
 
     public Pedido[] getVectorPedido() {
+        List<Pedido> pedidosList = pedidoRepository.findAll();
         Pedido[] pedidos = new Pedido[pedidoRepository.findAll().size()];
 
-        for (int i = 0; i < pedidos.length; i++) {
+        for (int i = 0; i < pedidosList.size(); i++) {
             Optional<Pedido> pedido = pedidoRepository.findById(i + 1);
-            pedidos[i] = pedido.get();
+            pedidos[i] = pedidosList.get(i);
         }
 
         return pedidos;

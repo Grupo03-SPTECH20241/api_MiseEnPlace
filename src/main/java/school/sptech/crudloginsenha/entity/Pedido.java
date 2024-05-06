@@ -11,11 +11,11 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String cliente;
-    @ElementCollection
-    private List<Produto> produtos;
     private LocalDate dataEntrega;
+    @OneToMany(mappedBy = "pedido")
+    private List<Produto> produtos;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -31,17 +31,6 @@ public class Pedido {
         this.cliente = cliente;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
-
-    public void adicionarProduto(Produto novoProduto) {
-        this.produtos.add(novoProduto);
-    }
-
     public LocalDate getDataEntrega() {
         return dataEntrega;
     }
@@ -50,4 +39,11 @@ public class Pedido {
         this.dataEntrega = dataEntrega;
     }
 
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<Produto> produtos) {
+        this.produtos = produtos;
+    }
 }
