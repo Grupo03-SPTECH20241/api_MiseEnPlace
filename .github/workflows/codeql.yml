@@ -89,8 +89,4 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
-<<<<<<< HEAD
         category: "/language:${{matrix.language}}"
-=======
-        category: "/language:${{matrix.language}}"
->>>>>>> 2b84ffb62371d2f3ab4608aa84d1fb0a7fed02b6
