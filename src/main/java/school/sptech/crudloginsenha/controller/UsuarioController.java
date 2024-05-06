@@ -218,10 +218,8 @@ public class UsuarioController {
             }
         }
 
-        System.out.println(Arrays.toString(v));
-
-        if (indInicio < j) {
-            ordenarNomeQuicksort(v, indInicio, j);
+        if (indInicio < j + 1) {
+            ordenarNomeQuicksort(v, indInicio, j + 1);
         }
         if (i < indFim) {
             ordenarNomeQuicksort(v, i, indFim);
