@@ -8,6 +8,7 @@ public class UsuarioCriacaoDto {
 
     @Size(min = 1, max = 45)
     private String nome;
+    @Email
     @Size(min = 1, max = 45)
     private String email;
     @Size(min = 1, max = 45)
