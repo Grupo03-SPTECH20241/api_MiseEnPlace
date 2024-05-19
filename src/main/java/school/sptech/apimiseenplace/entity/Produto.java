@@ -12,6 +12,8 @@ public class Produto {
     private int quantidadeEstoque;
     @ManyToOne
     private Pedido pedido;
+    @ManyToOne
+    private Recheio recheio;
 
     public Integer getId() {
         return id;

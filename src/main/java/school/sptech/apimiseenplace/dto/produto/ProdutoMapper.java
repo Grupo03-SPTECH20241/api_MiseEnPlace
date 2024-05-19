@@ -1,5 +1,6 @@
 package school.sptech.apimiseenplace.dto.produto;
 
+import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoListagemDTO;
 import school.sptech.apimiseenplace.entity.Pedido;
 import school.sptech.apimiseenplace.entity.Produto;
 
@@ -40,9 +41,9 @@ public class ProdutoMapper {
         produtoListagemDTO.setQuantidadeEstoque(produto.getQuantidadeEstoque());
 
         ProdutoPedidoListagemDTO pedidoListagemDTO = new ProdutoPedidoListagemDTO();
-        pedidoListagemDTO.setId(produto.getPedido().getId());
-        pedidoListagemDTO.setCliente(produto.getPedido().getCliente());
-        pedidoListagemDTO.setDataEntrega(produto.getPedido().getDataEntrega());
+        pedidoListagemDTO.setIdProdutoPedido(produto.getPedido().getId());
+//        pedidoListagemDTO.setCliente(produto.getPedido().getCliente());
+//        pedidoListagemDTO.setDataEntrega(produto.getPedido().getDataEntrega());
 
         produtoListagemDTO.setPedido(pedidoListagemDTO);
         return produtoListagemDTO;

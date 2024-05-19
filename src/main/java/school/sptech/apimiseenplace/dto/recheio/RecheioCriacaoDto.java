@@ -8,9 +8,7 @@ import lombok.Data;
 
 @Data
 public class RecheioCriacaoDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idRecheio;
+
     @NotBlank
     @Size(min=11, max = 45)
     private String nome;

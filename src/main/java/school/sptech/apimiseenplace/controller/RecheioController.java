@@ -33,5 +33,16 @@ public class RecheioController {
         return ResponseEntity.ok(RecheioMapper.toDto(recheios));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<RecheioListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid RecheioCriacaoDto dtoAtualizacao){
+        Recheio recheioAtualizado = service.atualizarRecheio(id, dtoAtualizacao);
+
+        if (recheioAtualizado == null){
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(RecheioMapper.toDto(recheioAtualizado));
+    }
+
 
 }

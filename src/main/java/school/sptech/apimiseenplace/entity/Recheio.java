@@ -1,12 +1,11 @@
 package school.sptech.apimiseenplace.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,4 +16,10 @@ public class Recheio {
     private Integer idRecheio;
     private String nome;
     private Double preco;
+
+    @OneToMany(mappedBy = "recheio")
+    private List<Produto> produtos;
+    @OneToMany(mappedBy = "recheio")
+    private List<Personalizacao> personalizacao;
+
 }
