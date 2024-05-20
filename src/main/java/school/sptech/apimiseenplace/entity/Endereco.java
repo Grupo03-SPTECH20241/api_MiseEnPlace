@@ -4,20 +4,18 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
-public class PedidoFesta {
+public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String logradouro;
+    private String complemento;
+    private String cep;
+    private Integer numero;
 
-    @ManyToOne
-    private Endereco endereco;
-
-    @ManyToOne
-    private Pedido pedido;
+    @OneToMany(mappedBy = "endereco")
+    private PedidoFesta pedidoFesta;
 }

@@ -1,49 +1,49 @@
 package school.sptech.apimiseenplace.dto.produto;
 
+import lombok.Data;
+
+@Data
 public class ProdutoListagemDTO {
     private Integer id;
     private String nome;
-    private double preco;
-    private int quantidadeEstoque;
-    private ProdutoPedidoListagemDTO pedido;
+    private Double preco;
+    private String descricao;
+    private String foto;
+    private Integer qtdDisponivel;
+    private RecheioDto recheio;
+    private MassaDto massa;
+    private CoberturaDto cobertura;
+    private UnidadeMedidaDto unidadeMedida;
+    private TipoProdutoDto tipoProduto;
 
-    public Integer getId() {
-        return id;
+    @Data
+    public static class RecheioDto {
+        private Integer id;
+        private String nome;
+        private Double preco;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Data
+    public static class MassaDto {
+        private Integer id;
+        private String nome;
     }
 
-    public String getNome() {
-        return nome;
+    @Data
+    public static class CoberturaDto {
+        private Integer id;
+        private String nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    @Data
+    public static class UnidadeMedidaDto {
+        private Integer id;
+        private String unidadeMedida;
     }
 
-    public double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(double preco) {
-        this.preco = preco;
-    }
-
-    public int getQuantidadeEstoque() {
-        return quantidadeEstoque;
-    }
-
-    public void setQuantidadeEstoque(int quantidadeEstoque) {
-        this.quantidadeEstoque = quantidadeEstoque;
-    }
-
-    public ProdutoPedidoListagemDTO getPedido() {
-        return pedido;
-    }
-
-    public void setPedido(ProdutoPedidoListagemDTO pedido) {
-        this.pedido = pedido;
+    @Data
+    public static class TipoProdutoDto {
+        private Integer id;
+        private String tipo;
     }
 }
