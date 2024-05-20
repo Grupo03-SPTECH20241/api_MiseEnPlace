@@ -44,7 +44,7 @@ public class RecheioService {
     }
 
     public void deletarRecheioPorId(int id){
-        if(repository.existsById(id)) throw new BadRequestException("Recheio");
+        if(!repository.existsById(id)) throw new BadRequestException("Recheio");
 
         repository.deleteById(id);
     }

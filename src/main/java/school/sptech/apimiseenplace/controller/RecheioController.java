@@ -9,8 +9,10 @@ import school.sptech.apimiseenplace.dto.recheio.RecheioCriacaoDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioListagemDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioMapper;
 import school.sptech.apimiseenplace.entity.Recheio;
+import school.sptech.apimiseenplace.service.PersonalizacaoService;
 import school.sptech.apimiseenplace.service.RecheioService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,6 +21,7 @@ import java.util.List;
 public class RecheioController {
 
     private final RecheioService service;
+    private final PersonalizacaoService personalizacaoService;
 
     @PostMapping
     public ResponseEntity<RecheioListagemDto> criar(@RequestBody @Valid RecheioCriacaoDto recheioCriacaoDto){
@@ -42,6 +45,18 @@ public class RecheioController {
         }
 
         return ResponseEntity.ok(RecheioMapper.toDto(recheioAtualizado));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletar(@PathVariable int id){
+
+        List<RecheioListagemDto.PersonalizacaoListagem> listaPersonalizacoes = personalizacaoService.listarWhereIdRecheioEquals(id);
+        for(RecheioListagemDto.PersonalizacaoListagem p : listaPersonalizacoes){
+            personalizacaoService.updateRecheio(null, p.getId());
+        }
+
+        service.deletarRecheioPorId(id);
+        return ResponseEntity.status(204).body("Recheio Deletado com sucesso!");
     }
 
 

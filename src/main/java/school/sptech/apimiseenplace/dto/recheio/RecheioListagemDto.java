@@ -21,6 +21,7 @@ public class RecheioListagemDto {
 
     @Data
     public static class PersonalizacaoListagem {
+        private Integer id;
         private String tema;
         private RecheioSemPersonalizacaoDto recheio;
         private MassaSemPersonalizacaoDto massa;
