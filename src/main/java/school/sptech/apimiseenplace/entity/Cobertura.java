@@ -18,5 +18,8 @@ public class Cobertura {
     private String nome;
 
     @OneToMany(mappedBy = "cobertura")
+    private List<Produto> produtos;
+
+    @OneToMany(mappedBy = "cobertura")
     private List<Personalizacao> personalizacoes;
 }

@@ -52,12 +52,16 @@ public class RecheioController {
     public ResponseEntity<String> deletar(@PathVariable int id){
 
         List<RecheioListagemDto.PersonalizacaoListagem> listaPersonalizacoes = personalizacaoService.listarWhereIdRecheioEquals(id);
-        for(RecheioListagemDto.PersonalizacaoListagem p : listaPersonalizacoes){
-            personalizacaoService.updateRecheio(null, p.getId());
-        }
 
+        if(!listaPersonalizacoes.isEmpty()){
+            for(RecheioListagemDto.PersonalizacaoListagem p : listaPersonalizacoes){
+                personalizacaoService.updateRecheio(null, p.getId());
+            }
         service.deletarRecheioPorId(id);
         return ResponseEntity.status(204).body("Recheio Deletado com sucesso!");
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
 

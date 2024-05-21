@@ -1,57 +1,34 @@
 package school.sptech.apimiseenplace.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer idProduto;
     private String nome;
-    private double preco;
-    private int quantidadeEstoque;
-    @ManyToOne
-    private Pedido pedido;
+    private Double preco;
+    private String descricao;
+    private String foto;
+    private int qtdDisponivel;
+
     @ManyToOne
     private Recheio recheio;
 
-    public Integer getId() {
-        return id;
-    }
+    @ManyToOne
+    private Massa massa;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @ManyToOne
+    private Cobertura cobertura;
 
-    public String getNome() {
-        return nome;
-    }
+    @ManyToOne
+    private UnidadeMedida unidadeMedida;
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(double preco) {
-        this.preco = preco;
-    }
-
-    public int getQuantidadeEstoque() {
-        return quantidadeEstoque;
-    }
-
-    public void setQuantidadeEstoque(int quantidadeEstoque) {
-        this.quantidadeEstoque = quantidadeEstoque;
-    }
-
-    public Pedido getPedido() {
-        return pedido;
-    }
-
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
-    }
+    @ManyToOne
+    private TipoProduto tipoProduto;
 }

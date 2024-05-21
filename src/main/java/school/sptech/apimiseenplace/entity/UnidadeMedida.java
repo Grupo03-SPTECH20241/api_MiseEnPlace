@@ -3,26 +3,19 @@ package school.sptech.apimiseenplace.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.FetchProfile;
 
+import java.awt.color.ProfileDataException;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class Massa {
-
+public class UnidadeMedida {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idMassa;
-    private String nome;
+    private Integer idUnidadeMedida;
+    private String unidadeMedida;
 
-    @OneToMany(mappedBy = "massa")
+    @OneToMany(mappedBy = "unidadeMedida")
     private List<Produto> produtos;
-
-    @OneToMany(mappedBy = "massa")
-    private List<Personalizacao> personalizacoes;
-
-
-
 }
