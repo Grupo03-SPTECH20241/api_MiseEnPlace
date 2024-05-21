@@ -21,6 +21,7 @@ public class RecheioMapper {
         Recheio entity = new Recheio();
         entity.setPreco(dto.getPreco());
         entity.setNome(dto.getNome());
+        entity.setPreco(dto.getPreco());
 
         return entity;
     }
@@ -30,6 +31,7 @@ public class RecheioMapper {
         RecheioSemPersonalizacaoDto dto = new RecheioSemPersonalizacaoDto();
         dto.setIdRecheio(entity.getIdRecheio());
         dto.setNome(entity.getNome());
+        dto.setPreco(entity.getPreco());
         return dto;
     }
 

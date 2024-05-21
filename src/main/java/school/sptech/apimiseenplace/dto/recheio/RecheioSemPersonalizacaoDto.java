@@ -7,5 +7,6 @@ public class RecheioSemPersonalizacaoDto {
 
         private Integer idRecheio;
         private String nome;
+        private Double preco;
 }
 
