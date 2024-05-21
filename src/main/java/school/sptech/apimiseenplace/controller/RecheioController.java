@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.apimiseenplace.dto.recheio.RecheioCriacaoDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioListagemDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioMapper;
+import school.sptech.apimiseenplace.dto.recheio.RecheioSemPersonalizacaoDto;
 import school.sptech.apimiseenplace.entity.Recheio;
 import school.sptech.apimiseenplace.service.PersonalizacaoService;
 import school.sptech.apimiseenplace.service.RecheioService;
@@ -30,10 +31,10 @@ public class RecheioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RecheioListagemDto>> listar(){
+    public ResponseEntity<List<RecheioSemPersonalizacaoDto>> listar(){
         List<Recheio> recheios = service.listarRecheios();
         if (recheios.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(RecheioMapper.toDto(recheios));
+        return ResponseEntity.ok(RecheioMapper.toSemPersonalizacaoDto(recheios));
     }
 
     @PutMapping("/{id}")

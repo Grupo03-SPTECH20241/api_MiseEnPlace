@@ -25,6 +25,18 @@ public class RecheioMapper {
         return entity;
     }
 
+    public static RecheioSemPersonalizacaoDto toSemPersonalizacaoDto(Recheio entity){
+
+        RecheioSemPersonalizacaoDto dto = new RecheioSemPersonalizacaoDto();
+        dto.setIdRecheio(entity.getIdRecheio());
+        dto.setNome(entity.getNome());
+        return dto;
+    }
+
+    public static List<RecheioSemPersonalizacaoDto> toSemPersonalizacaoDto(List<Recheio> entities){
+        return entities.stream().map(RecheioMapper::toSemPersonalizacaoDto).toList();
+    }
+
     public static RecheioListagemDto toDto(Recheio entity){
 
         RecheioListagemDto dto = new RecheioListagemDto();
@@ -37,6 +49,7 @@ public class RecheioMapper {
     }
 
     public static List<RecheioListagemDto.PersonalizacaoListagem> toPersonalizacoesDto(List<Personalizacao> entities){
+        if (entities == null) return null;
         List<RecheioListagemDto.PersonalizacaoListagem> dto = new ArrayList<>();
 
         for (Personalizacao p : entities){
