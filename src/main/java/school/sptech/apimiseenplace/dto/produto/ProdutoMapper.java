@@ -6,18 +6,6 @@ import school.sptech.apimiseenplace.entity.Produto;
 import java.util.List;
 
 public class ProdutoMapper {
-    public static Produto toEntity(ProdutoCriacaoDTO produtoCriacaoDTO, Pedido pedido){
-        if (produtoCriacaoDTO == null) return null;
-        Produto entity = new Produto();
-
-        entity.setId(null);
-        entity.setNome(produtoCriacaoDTO.getNome());
-        entity.setPreco(produtoCriacaoDTO.getPreco());
-        entity.setQuantidadeEstoque(produtoCriacaoDTO.getQuantidadeEstoque());
-        entity.setPedido(pedido);
-        return entity;
-    }
-
     public static Produto toEntity(ProdutoCriacaoDTO produtoCriacaoDTO){
         if (produtoCriacaoDTO == null) return null;
         Produto entity = new Produto();
@@ -70,18 +58,6 @@ public class ProdutoMapper {
         produtoListagemDTO.setTipoProduto(tipoProdutoDto);
 
         return produtoListagemDTO;
-    }
-
-    public static ProdutoCriacaoDTO toCriacaoDto(Produto produto){
-        if (produto == null) return null;
-
-        ProdutoCriacaoDTO dto = new ProdutoCriacaoDTO();
-        dto.setNome(produto.getNome());
-        dto.setPreco(produto.getPreco());
-        dto.setQuantidadeEstoque(produto.getQuantidadeEstoque());
-        dto.setPedidoId(produto.getId());
-
-        return dto;
     }
 
     public static List<ProdutoListagemDTO> toListagemDto(List<Produto> produtos){

@@ -32,6 +32,4 @@ public class RecheioController {
         if (recheios.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(RecheioMapper.toDto(recheios));
     }
-
-
 }
