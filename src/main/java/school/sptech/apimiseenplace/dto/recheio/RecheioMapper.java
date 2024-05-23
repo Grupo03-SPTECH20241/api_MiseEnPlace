@@ -19,7 +19,6 @@ public class RecheioMapper {
     public static Recheio toEntity(RecheioCriacaoDto dto){
 
         Recheio entity = new Recheio();
-        entity.setPreco(dto.getPreco());
         entity.setNome(dto.getNome());
         entity.setPreco(dto.getPreco());
 

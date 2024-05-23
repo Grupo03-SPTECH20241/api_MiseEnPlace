@@ -60,8 +60,8 @@ public class RecheioController {
         service.deletarRecheioPorId(id);
         return ResponseEntity.status(204).body("Recheio Deletado com sucesso!");
         }
-
-        return ResponseEntity.badRequest().build();
+        service.deletarRecheioPorId(id);
+        return ResponseEntity.status(204).body("Recheio Deletado com sucesso!");
     }
 
 
