@@ -43,6 +43,16 @@ public class MetaController {
         return ResponseEntity.ok(MetaMapper.toMetaListagemDto(metaAtualizada));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletarMeta(@PathVariable int id){
+        metaService.deletarMetaPorId(id);
+        return ResponseEntity.ok("Meta deletada com sucesso");
+    }
+
+
+
+
+
 
 
 

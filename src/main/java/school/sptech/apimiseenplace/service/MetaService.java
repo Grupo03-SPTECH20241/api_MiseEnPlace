@@ -36,4 +36,9 @@ public class MetaService {
         meta.setDtTermino(metaCriacaoDto.getDtTermino());
         return repository.save(meta);
     }
+
+    public void deletarMetaPorId(int id){
+        if(!repository.existsById(id)) throw new BadRequestException("Meta");
+        repository.deleteById(id);
+    }
 }
