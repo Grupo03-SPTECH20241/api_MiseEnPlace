@@ -2,15 +2,14 @@ package school.sptech.apimiseenplace.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import school.sptech.apimiseenplace.dto.metas.MetaCriacaoDto;
 import school.sptech.apimiseenplace.dto.metas.MetaListagemDto;
 import school.sptech.apimiseenplace.dto.metas.MetaMapper;
 import school.sptech.apimiseenplace.entity.Metas;
 import school.sptech.apimiseenplace.service.MetaService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/metas")
@@ -23,5 +22,12 @@ public class MetaController {
     public ResponseEntity<MetaListagemDto> criarMeta(@RequestBody MetaCriacaoDto metaCriacaoDto){
         Metas metaSalva =  metaService.criarMeta(metaCriacaoDto);
         return ResponseEntity.ok().body(MetaMapper.toMetaListagemDto(metaSalva));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MetaListagemDto>> listarMetas(){
+        List<Metas> metas = metaService.listarMetas();
+        if (metas.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MetaMapper.toMetaListagemDto(metas));
     }
 }
