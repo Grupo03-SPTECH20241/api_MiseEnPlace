@@ -46,4 +46,10 @@ public class PersonalizacaoService {
 
         return PersonalizacaoMapper.toDtoSemPersonalizacao(repository.save(p2));
     }
+
+    public Personalizacao encontrarPorId(Integer id) {
+        return repository.findById(id).orElseThrow(
+                () -> new NaoEncontradoException("Personalização")
+        );
+    }
 }
