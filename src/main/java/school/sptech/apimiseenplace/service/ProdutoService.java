@@ -58,7 +58,7 @@ public class ProdutoService {
         return ProdutoMapper.toListagemDto(produtos);
     }
 
-    public Produto atualizarProduto(int id, Produto produto) {
+    public Produto atualizarProduto(int id, Produto produto, Integer recheioId, Integer massaId, Integer coberturaId, Integer unidadeMedidaId, Integer tipoProdutoId) {
         Produto produtoEncontrado = encontrarPorId(id);
 
         produtoEncontrado.setIdProduto(id);
@@ -66,12 +66,19 @@ public class ProdutoService {
         produtoEncontrado.setPreco(produto.getPreco());
         produtoEncontrado.setDescricao(produto.getDescricao());
         produtoEncontrado.setFoto(produto.getFoto());
-        produtoEncontrado.setQtdDisponivel(produto.getIdProduto());
-        produtoEncontrado.setRecheio(produto.getRecheio());
-        produtoEncontrado.setMassa(produto.getMassa());
-        produtoEncontrado.setCobertura(produto.getCobertura());
-        produtoEncontrado.setUnidadeMedida(produto.getUnidadeMedida());
-        produtoEncontrado.setTipoProduto(produto.getTipoProduto());
+        produtoEncontrado.setQtdDisponivel(produto.getQtdDisponivel());
+
+        Recheio recheio = recheioService.encontrarPorId(recheioId);
+        Massa massa = massaService.buscarPorId(massaId);
+        Cobertura cobertura = coberturaService.buscarPorId(coberturaId);
+        UnidadeMedida unidadeMedida = unidadeMedidaService.buscarPorId(unidadeMedidaId);
+        TipoProduto tipoProduto = tipoProdutoService.buscarPorId(tipoProdutoId);
+
+        produtoEncontrado.setRecheio(recheio);
+        produtoEncontrado.setMassa(massa);
+        produtoEncontrado.setCobertura(cobertura);
+        produtoEncontrado.setUnidadeMedida(unidadeMedida);
+        produtoEncontrado.setTipoProduto(tipoProduto);
 
         return produtoRepository.save(produtoEncontrado);
     }

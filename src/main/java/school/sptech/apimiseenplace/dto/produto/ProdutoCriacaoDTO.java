@@ -16,5 +16,5 @@ public class ProdutoCriacaoDTO {
     private Integer massaId;
     private Integer coberturaId;
     private Integer unidadeMedidaId;
-    private Integer tipoProduto;
+    private Integer tipoProdutoId;
 }

@@ -38,7 +38,7 @@ public class ProdutoController {
                 produtoCriacaoDTO.getMassaId(),
                 produtoCriacaoDTO.getCoberturaId(),
                 produtoCriacaoDTO.getUnidadeMedidaId(),
-                produtoCriacaoDTO.getTipoProduto()
+                produtoCriacaoDTO.getTipoProdutoId()
         );
         ProdutoListagemDTO produtoListagemDTO = ProdutoMapper.toListagemDto(produto);
         URI uri = URI.create("/produtos/" + produtoListagemDTO.getId());
@@ -61,7 +61,15 @@ public class ProdutoController {
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoListagemDTO> atualizarProduto(@PathVariable int id, @RequestBody @Valid ProdutoCriacaoDTO produtoCriacaoDTO) {
         Produto produto = ProdutoMapper.toEntity(produtoCriacaoDTO);
-        produto = produtoService.atualizarProduto(id, produto);
+        produto = produtoService.atualizarProduto(
+                id,
+                produto,
+                produtoCriacaoDTO.getRecheioId(),
+                produtoCriacaoDTO.getMassaId(),
+                produtoCriacaoDTO.getCoberturaId(),
+                produtoCriacaoDTO.getUnidadeMedidaId(),
+                produtoCriacaoDTO.getTipoProdutoId()
+        );
         return ResponseEntity.ok(ProdutoMapper.toListagemDto(produto));
     }
 
