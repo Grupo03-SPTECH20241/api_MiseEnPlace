@@ -67,6 +67,7 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/personalizacoes"),
             new AntPathRequestMatcher("/personalizacoes/**"),
             new AntPathRequestMatcher("/metas"),
+            new AntPathRequestMatcher("/metas/**"),
 
     };
 

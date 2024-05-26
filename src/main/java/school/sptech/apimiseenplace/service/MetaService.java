@@ -6,6 +6,7 @@ import school.sptech.apimiseenplace.dto.metas.MetaCriacaoDto;
 import school.sptech.apimiseenplace.dto.metas.MetaMapper;
 import school.sptech.apimiseenplace.entity.Metas;
 import school.sptech.apimiseenplace.exception.BadRequestException;
+import school.sptech.apimiseenplace.exception.NaoEncontradoException;
 import school.sptech.apimiseenplace.repository.MetaRepository;
 
 import java.util.List;
@@ -22,5 +23,17 @@ public class MetaService {
 
     public List<Metas> listarMetas(){
         return repository.findAll();
+    }
+    public Metas encontrarPorId(int id){
+        return repository.findById(id).orElseThrow(
+                () -> new NaoEncontradoException("Meta")
+        );
+    }
+    public Metas atualizarMeta(int id, MetaCriacaoDto metaCriacaoDto){
+        Metas meta = encontrarPorId(id);
+        if (Objects.isNull(meta)) return null;
+        meta.setDescricao(metaCriacaoDto.getDescricao());
+        meta.setDtTermino(metaCriacaoDto.getDtTermino());
+        return repository.save(meta);
     }
 }
