@@ -1,18 +1,20 @@
-package school.sptech.apimiseenplace.dto.pedido;
+package school.sptech.crudloginsenha.dto.produto;
 
-public class PedidoProdutoListagemDTO {
-    private Integer id;
+import jakarta.validation.constraints.*;
+
+public class ProdutoCriacaoDTO {
+    @Size(min = 3, max = 100)
+    @NotBlank
     private String nome;
+    @NotNull
+    @Positive
     private double preco;
+    @NotNull
+    @PositiveOrZero
     private int quantidadeEstoque;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @NotNull
+    @Positive
+    private Integer pedidoId;
 
     public String getNome() {
         return nome;
@@ -36,5 +38,13 @@ public class PedidoProdutoListagemDTO {
 
     public void setQuantidadeEstoque(int quantidadeEstoque) {
         this.quantidadeEstoque = quantidadeEstoque;
+    }
+
+    public Integer getPedidoId() {
+        return pedidoId;
+    }
+
+    public void setPedidoId(Integer pedidoId) {
+        this.pedidoId = pedidoId;
     }
 }
