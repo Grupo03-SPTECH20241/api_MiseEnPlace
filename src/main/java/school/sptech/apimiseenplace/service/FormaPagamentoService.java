@@ -25,6 +25,12 @@ public class FormaPagamentoService {
         return repository.findAll();
     }
 
+    public FormaPagamento atualizar(int id, FormaPagamentoCriacaoDto dto){
+        FormaPagamento formaPagamento = buscarPorId(id);
+        formaPagamento.setFormaPagamento(dto.getFormaPagamento());
+        return repository.save(formaPagamento);
+    }
+
     public FormaPagamento buscarPorId(int id) {
         return repository.findById(id).orElseThrow(
                 () -> new NaoEncontradoException("Nenhuma forma de pagamento foi encontrada")

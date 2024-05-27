@@ -25,6 +25,12 @@ public class FormaPagamentoController {
         return ResponseEntity.ok(FormaPagamentoMapper.toDto(formaPagamento));
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<FormaPagamentoListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid FormaPagamentoCriacaoDto formaPagamentoCriacaoDto){
+        FormaPagamento formaPagamento = service.atualizar(id, formaPagamentoCriacaoDto);
+        return ResponseEntity.ok(FormaPagamentoMapper.toDto(formaPagamento));
+    }
+
     @GetMapping
     public  ResponseEntity<List<FormaPagamentoListagemDto>> listar(){
         List<FormaPagamento> formasPagamento = service.listar();

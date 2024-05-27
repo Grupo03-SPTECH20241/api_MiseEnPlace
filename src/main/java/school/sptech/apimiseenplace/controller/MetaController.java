@@ -25,6 +25,7 @@ public class MetaController {
         return ResponseEntity.ok().body(MetaMapper.toMetaListagemDto(metaSalva));
     }
 
+
     @GetMapping
     public ResponseEntity<List<MetaListagemDto>> listarMetas(){
         List<Metas> metas = metaService.listarMetas();
