@@ -15,6 +15,8 @@ public class FormaPagamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idFormaPagamento;
 
+    private String formaPagamento;
+
     @OneToMany(mappedBy = "formaPagamento")
     private List<Pedido> pedidos;
 }
