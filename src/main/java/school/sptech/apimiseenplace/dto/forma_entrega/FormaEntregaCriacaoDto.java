@@ -5,6 +5,5 @@ import school.sptech.apimiseenplace.entity.FormaEntrega;
 
 @Data
 public class FormaEntregaCriacaoDto {
-    private Integer idFormaEntrega;
     private String formaEntrega;
 }

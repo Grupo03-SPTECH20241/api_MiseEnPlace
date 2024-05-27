@@ -66,7 +66,18 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/recheios/**"),
             new AntPathRequestMatcher("/personalizacoes"),
             new AntPathRequestMatcher("/personalizacoes/**"),
-
+            new AntPathRequestMatcher("/clientes"),
+            new AntPathRequestMatcher("/clientes/**"),
+            new AntPathRequestMatcher("/enderecos"),
+            new AntPathRequestMatcher("/enderecos/**"),
+            new AntPathRequestMatcher("/forma-entregas"),
+            new AntPathRequestMatcher("/forma-entregas/**"),
+            new AntPathRequestMatcher("/festas"),
+            new AntPathRequestMatcher("/festas/**"),
+            new AntPathRequestMatcher("/pedidos"),
+            new AntPathRequestMatcher("/pedidos/**"),
+            new AntPathRequestMatcher("/produto-pedidos"),
+            new AntPathRequestMatcher("/produto-pedidos/**"),
     };
 
     @Bean

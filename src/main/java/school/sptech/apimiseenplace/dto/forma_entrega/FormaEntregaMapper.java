@@ -11,7 +11,6 @@ public class FormaEntregaMapper {
     public static FormaEntrega toEntity(FormaEntregaCriacaoDto formaEntregaCriacaoDto) {
         FormaEntrega formaEntrega = new FormaEntrega();
 
-        formaEntrega.setIdFormaEntrega(formaEntregaCriacaoDto.getIdFormaEntrega());
         formaEntrega.setFormaEntrega(formaEntregaCriacaoDto.getFormaEntrega());
 
         return formaEntrega;

@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/enredecos")
+@RequestMapping("/enderecos")
 @RequiredArgsConstructor
 public class EnderecoController {
     private final EnderecoService enderecoService;

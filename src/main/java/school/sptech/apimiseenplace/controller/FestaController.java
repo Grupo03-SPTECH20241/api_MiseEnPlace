@@ -40,7 +40,7 @@ public class FestaController {
         return ResponseEntity.ok(festaListagemDtos);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<FestaListagemDto> atualizar(@PathVariable Integer id, @RequestBody FestaCriacaoDto festaCriacaoDto) {
         Festa festa = FestaMapper.toEntity();
         festa = festaService.atualizar(id, festa, festaCriacaoDto.getPedidoId(), festaCriacaoDto.getEnderecoId());
