@@ -3,10 +3,7 @@ package school.sptech.apimiseenplace.controller;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import school.sptech.apimiseenplace.dto.formaPagamento.FormaPagamentoListagemDto;
 import school.sptech.apimiseenplace.dto.formaPagamento.FormaPagamentoMapper;
 import school.sptech.apimiseenplace.entity.FormaPagamento;
@@ -25,5 +22,12 @@ public class FormaPagamentoController {
         List<FormaPagamento> formasPagamento = service.listar();
         if(formasPagamento.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(FormaPagamentoMapper.toDto(formasPagamento));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<FormaPagamentoListagemDto> buscarPorId(@PathVariable int id){
+        FormaPagamento formaPagamento = service.buscarPorId(id);
+
+        return ResponseEntity.ok(FormaPagamentoMapper.toDto(formaPagamento));
     }
 }
