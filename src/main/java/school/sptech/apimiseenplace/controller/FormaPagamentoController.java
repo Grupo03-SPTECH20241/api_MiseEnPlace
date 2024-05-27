@@ -44,4 +44,10 @@ public class FormaPagamentoController {
 
         return ResponseEntity.ok(FormaPagamentoMapper.toDto(formaPagamento));
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deletar(@PathVariable int id){
+        service.deletar(id);
+        return ResponseEntity.ok("Forma de pagamento deletada com sucesso");
+    }
 }
