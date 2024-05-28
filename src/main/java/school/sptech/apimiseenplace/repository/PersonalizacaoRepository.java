@@ -10,4 +10,9 @@ public interface PersonalizacaoRepository extends JpaRepository<Personalizacao, 
     @Query("select p from Personalizacao p where p.recheio.idRecheio = :idRecheio")
     List<Personalizacao> findbyRecheioIdRecheioEquals(Integer idRecheio);
 
+    @Query("select p from Personalizacao p where p.cobertura.idCobertura = :idCobertura")
+    List<Personalizacao> findByCoberturaIdEquals(Integer idCobertura);
+
+    @Query("select p from Personalizacao p where p.massa.idMassa = :idMassa")
+    List<Personalizacao> findByMassaIdEquals(Integer idMassa);
 }
