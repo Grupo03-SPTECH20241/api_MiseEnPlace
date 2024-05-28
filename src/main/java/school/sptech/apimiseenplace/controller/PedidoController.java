@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.apimiseenplace.dto.pedido.PedidoCriacaoDTO;
 import school.sptech.apimiseenplace.dto.pedido.PedidoListagemDTO;
 import school.sptech.apimiseenplace.dto.pedido.PedidoMapper;
+import school.sptech.apimiseenplace.dto.pedido.PedidoProcedureDto;
 import school.sptech.apimiseenplace.dto.produto.ProdutoMapper;
 import school.sptech.apimiseenplace.entity.Pedido;
 import school.sptech.apimiseenplace.exception.BadRequestException;
@@ -25,7 +26,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/pedidos")
 public class PedidoController {
+   private final PedidoService pedidoService;
 
+    @PostMapping
+    public ResponseEntity<PedidoCriacaoDTO> criarPedido(@RequestBody PedidoProcedureDto pedidoCriacaoDTO){
+        pedidoService.inserirPedido(pedidoCriacaoDTO);
 
+        return ResponseEntity.status(200).build();
+    }
 
 }
