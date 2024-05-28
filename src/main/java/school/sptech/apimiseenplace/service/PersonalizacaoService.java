@@ -49,6 +49,11 @@ public class PersonalizacaoService {
         return PersonalizacaoMapper.toDtoSemPersonalizacao(repository.save(p2));
     }
 
+    public Personalizacao encontrarPorId(Integer id) {
+        return repository.findById(id).orElseThrow(
+                () -> new NaoEncontradoException("Personalização")
+        );
+      
     public List<RecheioListagemDto.PersonalizacaoListagem> listarWhereIdCoberturaEquals(Integer idCobertura){
         return PersonalizacaoMapper.toDtoSemPersonalizacao(repository.findByCoberturaIdEquals(idCobertura));
     }

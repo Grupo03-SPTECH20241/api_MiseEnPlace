@@ -41,4 +41,10 @@ public class FormaPagamentoService {
         if(!repository.existsById(id)) throw new NaoEncontradoException("Nenhuma forma de pagamento foi encontrada");
         repository.deleteById(id);
     }
+  
+    public FormaPagamento encontrarPorId(Integer id) {
+        return formaPagamentoRepository.findById(id).orElseThrow(
+                () -> new NaoEncontradoException("Produto")
+        );
+    }
 }

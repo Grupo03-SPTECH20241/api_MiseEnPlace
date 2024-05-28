@@ -1,43 +1,36 @@
 package school.sptech.apimiseenplace.dto.pedido;
 
+import lombok.Data;
+
 import java.time.LocalDate;
-import java.util.List;
 
+@Data
 public class PedidoListagemDTO {
-    private int id;
-    private String cliente;
-    private LocalDate dataEntrega;
-    private List<PedidoProdutoListagemDTO> produtos;
+    private Integer idPedido;
+    private LocalDate dtPedido;
+    private Double vlPedido;
+    private char status;
+    private FormaEntregaDto formaEntregaDto;
+    private ClienteDto clienteDto;
+    private FormaPagamentoDto formaPagamentoDto;
 
-    public int getId() {
-        return id;
+    @Data
+    public static class FormaEntregaDto {
+        private Integer idFormaEntrega;
+        private String formaEntrega;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @Data
+    public static class ClienteDto {
+        private Integer idCliente;
+        private String nome;
+        private String numero;
+        private LocalDate dtAniversario;
     }
 
-    public String getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
-    }
-
-    public LocalDate getDataEntrega() {
-        return dataEntrega;
-    }
-
-    public void setDataEntrega(LocalDate dataEntrega) {
-        this.dataEntrega = dataEntrega;
-    }
-
-    public List<PedidoProdutoListagemDTO> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(List<PedidoProdutoListagemDTO> produtos) {
-        this.produtos = produtos;
+    @Data
+    public static class FormaPagamentoDto {
+        private Integer idFormaPagamento;
+        private String formaPagamento;
     }
 }
