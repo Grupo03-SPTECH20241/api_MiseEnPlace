@@ -39,8 +39,8 @@ public class ProdutoService {
         if(produto == null) throw new BadRequestException("Produto de Criação");
 
         Recheio recheio = recheioService.encontrarPorId(recheioId);
-        Massa massa = massaService.buscarPorId(massaId);
-        Cobertura cobertura = coberturaService.buscarPorId(coberturaId);
+        Massa massa = massaService.encontrarPorId(massaId);
+        Cobertura cobertura = coberturaService.encontrarPorId(coberturaId);
         UnidadeMedida unidadeMedida = unidadeMedidaService.buscarPorId(unidadeMedidaId);
         TipoProduto tipoProduto = tipoProdutoService.buscarPorId(tipoProdutoId);
 
@@ -69,8 +69,8 @@ public class ProdutoService {
         produtoEncontrado.setQtdDisponivel(produto.getQtdDisponivel());
 
         Recheio recheio = recheioService.encontrarPorId(recheioId);
-        Massa massa = massaService.buscarPorId(massaId);
-        Cobertura cobertura = coberturaService.buscarPorId(coberturaId);
+        Massa massa = massaService.encontrarPorId(massaId);
+        Cobertura cobertura = coberturaService.encontrarPorId(coberturaId);
         UnidadeMedida unidadeMedida = unidadeMedidaService.buscarPorId(unidadeMedidaId);
         TipoProduto tipoProduto = tipoProdutoService.buscarPorId(tipoProdutoId);
 

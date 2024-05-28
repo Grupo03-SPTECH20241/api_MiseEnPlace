@@ -43,7 +43,7 @@ public class FormaPagamentoService {
     }
   
     public FormaPagamento encontrarPorId(Integer id) {
-        return formaPagamentoRepository.findById(id).orElseThrow(
+        return repository.findById(id).orElseThrow(
                 () -> new NaoEncontradoException("Produto")
         );
     }

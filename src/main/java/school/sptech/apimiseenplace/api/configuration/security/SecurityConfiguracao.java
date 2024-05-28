@@ -83,13 +83,13 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/coberturas"),
             new AntPathRequestMatcher("/coberturas/**"),
             new AntPathRequestMatcher("/massas"),
-            new AntPathRequestMatcher("/massas/**")
+            new AntPathRequestMatcher("/massas/**"),
             new AntPathRequestMatcher("/forma-pagamento"),
             new AntPathRequestMatcher("/forma-pagamento/**"),
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(CsrfConfigurer<HttpSecurity>::disable)
