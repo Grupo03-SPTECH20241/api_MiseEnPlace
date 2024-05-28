@@ -16,6 +16,8 @@ public class FormaPagamento {
     private Integer idFormaPagamento;
     private String FormaPagamento;
 
+    private String formaPagamento;
+
     @OneToMany(mappedBy = "formaPagamento")
     private List<Pedido> pedidos;
 }
