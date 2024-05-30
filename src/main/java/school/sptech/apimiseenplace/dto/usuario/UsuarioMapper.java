@@ -12,7 +12,8 @@ public class UsuarioMapper {
         entity.setNome(dto.getNome());
         entity.setEmail(dto.getEmail());
         entity.setSenha(dto.getSenha());
-        entity.setLogado(dto.getLogado());
+        entity.setLogo(dto.getLogo());
+        entity.setCnpj(dto.getCnpj());
 
         return entity;
     }
@@ -22,16 +23,7 @@ public class UsuarioMapper {
 
         dto.setNome(entity.getNome());
         dto.setEmail(entity.getEmail());
-        dto.setLogado(entity.getLogado());
-        return dto;
-
-    }
-
-    public static UsuarioCriacaoDto toCriacaoDto(Usuario entity){
-        UsuarioCriacaoDto dto = new UsuarioCriacaoDto();
-
-        dto.setNome(entity.getNome());
-        dto.setEmail(entity.getEmail());
+        dto.setCnpj(entity.getCnpj());
 
         return dto;
 

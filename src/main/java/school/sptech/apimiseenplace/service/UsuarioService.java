@@ -84,8 +84,12 @@ public class UsuarioService {
 
         Usuario usuarioAchado = encontrarPorId(id);
         usuarioAchado.setIdUsuario(id);
-        usuarioAchado.setNome(usuarioAtualizacao.getNome());
-        usuarioAchado.setEmail(usuarioAtualizacao.getEmail());
+
+        if(usuarioAtualizacao.getNome() != null && !usuarioAtualizacao.getNome().isBlank() && !usuarioAtualizacao.getNome().isEmpty() ) usuarioAchado.setNome(usuarioAtualizacao.getNome());
+        if(usuarioAtualizacao.getEmail() != null && !usuarioAtualizacao.getEmail().isBlank() && !usuarioAtualizacao.getEmail().isEmpty() ) usuarioAchado.setEmail(usuarioAtualizacao.getEmail());
+        if(usuarioAtualizacao.getCnpj() != null && !usuarioAtualizacao.getCnpj().isBlank() && !usuarioAtualizacao.getCnpj().isEmpty() ) usuarioAchado.setCnpj(usuarioAtualizacao.getCnpj());
+        if(usuarioAtualizacao.getLogo() != null && !usuarioAtualizacao.getLogo().isBlank() && !usuarioAtualizacao.getLogo().isEmpty() ) usuarioAchado.setLogo(usuarioAtualizacao.getLogo());
+
         return UsuarioMapper.toDto(usuarioRepository.save(usuarioAchado));
     }
 

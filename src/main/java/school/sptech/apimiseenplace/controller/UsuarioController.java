@@ -71,26 +71,12 @@ public class UsuarioController {
             if (usuario.isEmpty()){
                 return ResponseEntity.noContent().build();
             }else{
-                usuario.get().setLogado(1);
                 usuarioService.autenticar(usuarioLoginDto);
             }
         }
         return ResponseEntity.status(200).body(usuarioToken);
     }
 
-    @PatchMapping("/logoff")
-    public ResponseEntity<String> logoff(@RequestParam int id){
-        Optional<Usuario> usuarioAchado = usuarioRepository.findById(id);
-        if (usuarioAchado.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }
-
-        usuarioAchado.get().setIdUsuario(id);
-        usuarioAchado.get().setLogado(0);
-        usuarioRepository.save(usuarioAchado.get());
-
-        return ResponseEntity.ok("Usuario deslogado com sucesso!");
-    }
 
     @GetMapping("/quicksort-nome")
     public ResponseEntity<List<UsuarioListagemDto>> ordernar() {
