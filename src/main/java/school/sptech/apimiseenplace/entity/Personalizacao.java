@@ -17,12 +17,15 @@ public class Personalizacao {
     private String tema;
 
     @ManyToOne
+    @JoinColumn(name = "fkRecheio")
     private Recheio recheio;
 
     @ManyToOne
+    @JoinColumn(name = "fkMassa")
     private Massa massa;
 
     @ManyToOne
+    @JoinColumn(name = "fkCobertura")
     private Cobertura cobertura;
 
     @OneToMany(mappedBy = "personalizacao")

@@ -53,6 +53,7 @@ public class PersonalizacaoMapper {
         RecheioSemPersonalizacaoDto dto = new RecheioSemPersonalizacaoDto();
         dto.setIdRecheio(entitie.getIdRecheio());
         dto.setNome(entitie.getNome());
+        dto.setPreco(entitie.getPreco());
 
         return dto;
     }

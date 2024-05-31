@@ -24,8 +24,35 @@ public class PersonalizacaoService {
     private final PersonalizacaoRepository repository;
 
 
+
+    public Personalizacao criar(Personalizacao personalizacao){
+        if (personalizacao.getCobertura() == null) throw new BadRequestException("Cobertura");
+        if (personalizacao.getRecheio() == null) throw new BadRequestException("Recheio");
+        if (personalizacao.getMassa() == null) throw new BadRequestException("Massa");
+
+        return repository.save(personalizacao);
+    }
+
+
     public List<RecheioListagemDto.PersonalizacaoListagem> listar(){
         return PersonalizacaoMapper.toDtoSemPersonalizacao(repository.findAll());
+    }
+
+    public Personalizacao atualizar(Personalizacao personalizacao, Integer id){
+        if(!repository.existsById(id)) throw new BadRequestException("Personalizacao");
+
+        if (personalizacao.getCobertura() == null) throw new BadRequestException("Cobertura");
+        if (personalizacao.getRecheio() == null) throw new BadRequestException("Recheio");
+        if (personalizacao.getMassa() == null) throw new BadRequestException("Massa");
+
+        personalizacao.setIdPersonalizacao(id);
+        return repository.save(personalizacao);
+    }
+
+    public void deletar(Integer id){
+        if(!repository.existsById(id)) throw new BadRequestException("Personalizacao");
+
+        repository.deleteById(id);
     }
 
     public List<RecheioListagemDto.PersonalizacaoListagem> listarWhereIdRecheioEquals(Integer idRecheio){
