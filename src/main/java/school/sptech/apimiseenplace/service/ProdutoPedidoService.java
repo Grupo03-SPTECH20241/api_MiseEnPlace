@@ -2,8 +2,10 @@ package school.sptech.apimiseenplace.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import school.sptech.apimiseenplace.dto.personalizacao.PersonalizacaoMapper;
 import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoListagemDTO;
 import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoMapper;
+import school.sptech.apimiseenplace.dto.recheio.RecheioListagemDto;
 import school.sptech.apimiseenplace.entity.Pedido;
 import school.sptech.apimiseenplace.entity.Personalizacao;
 import school.sptech.apimiseenplace.entity.Produto;
@@ -13,6 +15,7 @@ import school.sptech.apimiseenplace.exception.NaoEncontradoException;
 import school.sptech.apimiseenplace.repository.ProdutoPedidoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -80,5 +83,26 @@ public class ProdutoPedidoService {
         }
 
         produtoPedidoRepository.deleteById(id);
+    }
+
+    public List<ProdutoPedidoListagemDTO> listarWhereIdPersonalizacaoEquals(Integer idPedido) {
+        return ProdutoPedidoMapper.toDto(produtoPedidoRepository.findByIdPersonalizacaoEquals(idPedido));
+    }
+
+    public ProdutoPedidoListagemDTO updatePersonalizacao(Personalizacao p, Integer idProdutoPedido) {
+        if(!produtoPedidoRepository.existsById(idProdutoPedido)) throw new BadRequestException("Produto Pedido");
+
+        Optional<ProdutoPedido> p2 = produtoPedidoRepository.findById(idProdutoPedido);
+        if (p2.isEmpty()) throw new NaoEncontradoException("Produto Pedido");
+
+        ProdutoPedido p3 = new ProdutoPedido();
+        p3.setIdProdutoPedido(idProdutoPedido);
+        p3.setQtProduto(p2.get().getQtProduto());
+        p3.setObservacoes(p2.get().getObservacoes());
+        p3.setProduto(p2.get().getProduto());
+        p3.setPedido(p2.get().getPedido());
+        p3.setPersonalizacao(p);
+
+         return ProdutoPedidoMapper.toDto(produtoPedidoRepository.save(p3));
     }
 }
