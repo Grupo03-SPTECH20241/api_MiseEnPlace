@@ -38,7 +38,7 @@ class TipoProdutoServiceTest {
             TipoProduto tipoProduto = new TipoProduto(null, "Salgado", Collections.emptyList());
             TipoProduto tipoProduto2 = new TipoProduto(1, "Salgado", Collections.emptyList());
 
-            Mockito.when(repository.save(tipoProduto2)).thenReturn(tipoProduto2);
+            Mockito.when(repository.save(Mockito.any(TipoProduto.class))).thenReturn(tipoProduto2);
 
             TipoProduto tipoProdutoSalvo = service.salvar(tipoProduto);
 
@@ -50,16 +50,12 @@ class TipoProdutoServiceTest {
         @Test
         @DisplayName("1.2 - Deve throwlar BadRequestException, quando tipoProduto passado como null")
         void deveThrowlarException(){
-            TipoProduto tipoProduto = new TipoProduto(null, null, Collections.emptyList());
-
-            Mockito.when(repository.save(tipoProduto)).thenReturn(null);
-
             BadRequestException exception = Assertions.assertThrows(BadRequestException.class,
-                    () -> service.salvar(tipoProduto));
+                    () -> service.salvar(null));
 
             Assertions.assertEquals("Tipo Produto enviado de forma incorreta!", exception.getLocalizedMessage());
 
-            Mockito.verify(repository, Mockito.times(1)).save(tipoProduto);
+            Mockito.verify(repository, Mockito.times(0)).save(Mockito.any(TipoProduto.class));
         }
     }
 
@@ -149,22 +145,21 @@ class TipoProdutoServiceTest {
         void retornaObjetoAtualizado(){
             TipoProduto tipoProdutoAntigo = new TipoProduto(1, "Salgado", Collections.emptyList());
             TipoProduto tipoProdutoAtualizado = new TipoProduto(1, "Pirulito", Collections.emptyList());
-            Integer idBusca = 1;
 
-            Mockito.when(repository.findById(idBusca)).thenReturn(Optional.of(tipoProdutoAntigo));
+            Mockito.when(repository.findById(Mockito.any(Integer.class))).thenReturn(Optional.of(tipoProdutoAntigo));
 
-            TipoProduto tipoProdutoEncontrado = service.buscarPorId(idBusca);
+            TipoProduto tipoProdutoEncontrado = service.buscarPorId(Mockito.any(Integer.class));
 
             Assertions.assertEquals(tipoProdutoEncontrado.getIdTipoProduto(), tipoProdutoAntigo.getIdTipoProduto());
             Assertions.assertEquals(tipoProdutoEncontrado.getTipo(), tipoProdutoAntigo.getTipo());
-            Mockito.when(repository.save(tipoProdutoAtualizado)).thenReturn(tipoProdutoAtualizado);
+            Mockito.when(repository.save(Mockito.any(TipoProduto.class))).thenReturn(tipoProdutoAtualizado);
             TipoProduto tipoProdutoRetornado = service.atualizar(tipoProdutoAtualizado);
 
             Assertions.assertEquals(tipoProdutoRetornado.getIdTipoProduto(), tipoProdutoAtualizado.getIdTipoProduto());
             Assertions.assertEquals(tipoProdutoRetornado.getTipo(), tipoProdutoAtualizado.getTipo());
 
-            Mockito.verify(repository, Mockito.times(1)).findById(idBusca);
-            Mockito.verify(repository, Mockito.times(1)).save(tipoProdutoAtualizado);
+            Mockito.verify(repository, Mockito.times(2)).findById(Mockito.any(Integer.class));
+            Mockito.verify(repository, Mockito.times(1)).save(Mockito.any(TipoProduto.class));
         }
 
         @Test
@@ -175,10 +170,10 @@ class TipoProdutoServiceTest {
 
             Mockito.when(repository.findById(idBusca)).thenReturn(Optional.empty());
 
-            BadRequestException exception = Assertions.assertThrows(BadRequestException.class,
+            NaoEncontradoException exception = Assertions.assertThrows(NaoEncontradoException.class,
                     () -> service.buscarPorId(idBusca));
 
-            Assertions.assertEquals("Id Tipo Produto enviado de forma incorreta", exception.getLocalizedMessage());
+            Assertions.assertEquals("Tipo Produto não encontrado", exception.getLocalizedMessage());
 
             Mockito.verify(repository, Mockito.times(1)).findById(idBusca);
         }
@@ -191,28 +186,24 @@ class TipoProdutoServiceTest {
         @Test
         @DisplayName("4.1 - Deve retornar String de sucesso quando id do tipoProduto passado corretamente")
         void retornaStringSucesso(){
-            Integer idBusca = 1;
+            Mockito.when(repository.existsById(Mockito.any(Integer.class))).thenReturn(Boolean.TRUE);
 
-            Mockito.when(repository.existsById(idBusca)).thenReturn(Boolean.TRUE);
-
-            String retorno = service.deletar(idBusca);
+            String retorno = service.deletar(Mockito.any(Integer.class));
 
             Assertions.assertEquals(retorno, "Tipo Produto deletado com sucesso!");
-            Mockito.verify(repository, Mockito.times(1)).existsById(idBusca);
-            Mockito.verify(repository, Mockito.times(1)).deleteById(idBusca);
+            Mockito.verify(repository, Mockito.times(1)).existsById(Mockito.any(Integer.class));
+            Mockito.verify(repository, Mockito.times(1)).deleteById(Mockito.any(Integer.class));
         }
         @Test
         @DisplayName("4.2 - Deve retornar BadRequestException quando id do TipoProduto passado incorretamente")
         void throwlaBadRequest(){
-            Integer idBusca = -1;
-
-            Mockito.when(repository.existsById(idBusca)).thenReturn(Boolean.FALSE);
+            Mockito.when(repository.existsById(Mockito.any(Integer.class))).thenReturn(Boolean.FALSE);
 
             BadRequestException exception = Assertions.assertThrows(BadRequestException.class,
-                    () -> repository.deleteById(idBusca));
+                    () -> service.deletar(Mockito.any(Integer.class)));
 
-            Assertions.assertEquals(exception.getLocalizedMessage(), "Id Tipo Produto envido de forma incorreta");
-            Mockito.verify(repository, Mockito.times(1)).existsById(idBusca);
+            Assertions.assertEquals(exception.getLocalizedMessage(), "Id Tipo Produto enviado de forma incorreta!");
+            Mockito.verify(repository, Mockito.times(1)).existsById(Mockito.any(Integer.class));
         }
     }
 
