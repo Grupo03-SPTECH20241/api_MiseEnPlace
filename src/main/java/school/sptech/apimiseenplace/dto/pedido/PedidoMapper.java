@@ -50,4 +50,38 @@ public class PedidoMapper {
         if (pedidos == null) return null;
         return pedidos.stream().map(PedidoMapper::toDto).toList();
     }
+
+    public static PedidoListagemDTO[] toDto(Pedido[] pedidos) {
+        if (pedidos == null) {
+            return null;
+        }
+
+        PedidoListagemDTO[] pedidoListagemDTO = new PedidoListagemDTO[pedidos.length];
+
+        for (Integer i = 0; i < pedidos.length; i++) {
+            pedidoListagemDTO[i].setIdPedido(pedidos[i].getIdPedido());
+            pedidoListagemDTO[i].setDtPedido(pedidos[i].getDtPedido());
+            pedidoListagemDTO[i].setVlPedido(pedidos[i].getVlPedido());
+            pedidoListagemDTO[i].setStatus(pedidos[i].getStatus());
+
+            PedidoListagemDTO.FormaEntregaDto formaEntregaDto = new PedidoListagemDTO.FormaEntregaDto();
+            formaEntregaDto.setIdFormaEntrega(pedidos[i].getFormaEntrega().getIdFormaEntrega());
+            formaEntregaDto.setFormaEntrega(pedidos[i].getFormaEntrega().getFormaEntrega());
+            pedidoListagemDTO[i].setFormaEntregaDto(formaEntregaDto);
+
+            PedidoListagemDTO.ClienteDto clienteDto = new PedidoListagemDTO.ClienteDto();
+            clienteDto.setIdCliente(pedidos[i].getCliente().getIdCliente());
+            clienteDto.setNome(pedidos[i].getCliente().getNome());
+            clienteDto.setNumero(pedidos[i].getCliente().getNumero());
+            clienteDto.setDtAniversario(pedidos[i].getCliente().getDtAniversario());
+            pedidoListagemDTO[i].setClienteDto(clienteDto);
+
+            PedidoListagemDTO.FormaPagamentoDto formaPagamentoDto = new PedidoListagemDTO.FormaPagamentoDto();
+            formaPagamentoDto.setIdFormaPagamento(pedidos[i].getFormaPagamento().getIdFormaPagamento());
+            formaPagamentoDto.setFormaPagamento(pedidos[i].getFormaPagamento().getFormaPagamento());
+            pedidoListagemDTO[i].setFormaPagamentoDto(formaPagamentoDto);
+        }
+
+        return pedidoListagemDTO;
+    }
 }

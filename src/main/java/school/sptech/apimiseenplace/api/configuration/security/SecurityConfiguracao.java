@@ -86,6 +86,10 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/massas/**"),
             new AntPathRequestMatcher("/forma-pagamento"),
             new AntPathRequestMatcher("/forma-pagamento/**"),
+            new AntPathRequestMatcher("/pilha"),
+            new AntPathRequestMatcher("/pilha/**"),
+            new AntPathRequestMatcher("/fila"),
+            new AntPathRequestMatcher("/fila/**"),
     };
 
     @Bean
