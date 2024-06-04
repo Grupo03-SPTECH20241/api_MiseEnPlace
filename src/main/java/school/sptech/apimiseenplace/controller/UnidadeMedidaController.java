@@ -34,4 +34,9 @@ public class UnidadeMedidaController {
         return ResponseEntity.ok(UnidadeMedidaMapper.toDto(unidadesMedida));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UnidadeMedidaListagemDto> listarPorId(@PathVariable int id){
+        return ResponseEntity.ok(UnidadeMedidaMapper.toDto( unidadeMedidaService.buscarPorId(id)));
+    }
+
 }
