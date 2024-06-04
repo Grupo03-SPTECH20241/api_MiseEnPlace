@@ -29,4 +29,10 @@ public class UnidadeMedidaService {
     public List<UnidadeMedida> listar() {
         return unidadeMedidaRepository.findAll();
     }
+
+    public UnidadeMedida atualizar(Integer id, UnidadeMedidaCriacaoDto unidadeMedidaAtualizacao) {
+        UnidadeMedida unidadeMedida = buscarPorId(id);
+        unidadeMedida.setUnidadeMedida(unidadeMedidaAtualizacao.getUnidadeMedida());
+        return unidadeMedidaRepository.save(unidadeMedida);
+    }
 }

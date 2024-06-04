@@ -39,4 +39,11 @@ public class UnidadeMedidaController {
         return ResponseEntity.ok(UnidadeMedidaMapper.toDto( unidadeMedidaService.buscarPorId(id)));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UnidadeMedidaListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid UnidadeMedidaCriacaoDto unidadeMedidaAtualizacao){
+        UnidadeMedida unidadeMedidaAtualizada = unidadeMedidaService.atualizar(id, unidadeMedidaAtualizacao);
+        return ResponseEntity.ok(UnidadeMedidaMapper.toDto(unidadeMedidaAtualizada));
+    }
+
+    
 }
