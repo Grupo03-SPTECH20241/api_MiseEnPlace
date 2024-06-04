@@ -8,6 +8,8 @@ import school.sptech.apimiseenplace.entity.UnidadeMedida;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
 import school.sptech.apimiseenplace.repository.UnidadeMedidaRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UnidadeMedidaService {
@@ -22,5 +24,9 @@ public class UnidadeMedidaService {
     public UnidadeMedida criar(UnidadeMedidaCriacaoDto unidadeMedidaCriacaoDto) {
         UnidadeMedida unidadeMedida = UnidadeMedidaMapper.toEntity(unidadeMedidaCriacaoDto);
         return unidadeMedidaRepository.save(unidadeMedida);
+    }
+
+    public List<UnidadeMedida> listar() {
+        return unidadeMedidaRepository.findAll();
     }
 }

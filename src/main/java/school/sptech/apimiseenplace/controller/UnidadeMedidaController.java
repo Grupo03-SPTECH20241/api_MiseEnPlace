@@ -3,15 +3,14 @@ package school.sptech.apimiseenplace.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import school.sptech.apimiseenplace.dto.unidadeMedida.UnidadeMedidaCriacaoDto;
 import school.sptech.apimiseenplace.dto.unidadeMedida.UnidadeMedidaListagemDto;
 import school.sptech.apimiseenplace.dto.unidadeMedida.UnidadeMedidaMapper;
 import school.sptech.apimiseenplace.entity.UnidadeMedida;
 import school.sptech.apimiseenplace.service.UnidadeMedidaService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/unidades-medida")
@@ -24,4 +23,15 @@ public class UnidadeMedidaController {
         UnidadeMedida unidadeMedidaSalva = unidadeMedidaService.criar(unidadeMedidaCriacaoDto);
         return ResponseEntity.ok().body(UnidadeMedidaMapper.toDto(unidadeMedidaSalva));
     }
+
+    @GetMapping
+    public ResponseEntity<List<UnidadeMedidaListagemDto>> listar(){
+        List<UnidadeMedida> unidadesMedida = unidadeMedidaService.listar();
+        if (unidadesMedida.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(UnidadeMedidaMapper.toDto(unidadesMedida));
+    }
+
 }
