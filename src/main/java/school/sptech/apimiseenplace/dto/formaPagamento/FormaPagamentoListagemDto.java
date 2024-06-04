@@ -11,4 +11,5 @@ import java.util.List;
 public class FormaPagamentoListagemDto {
     private Integer idFormaPagamento;
     private String formaPagamento;
+
 }
