@@ -35,4 +35,8 @@ public class UnidadeMedidaService {
         unidadeMedida.setUnidadeMedida(unidadeMedidaAtualizacao.getUnidadeMedida());
         return unidadeMedidaRepository.save(unidadeMedida);
     }
+
+    public void deletar(Integer id) {
+        unidadeMedidaRepository.deleteById(id);
+    }
 }

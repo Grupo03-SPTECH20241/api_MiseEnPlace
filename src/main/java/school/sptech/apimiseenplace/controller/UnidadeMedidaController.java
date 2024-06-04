@@ -45,5 +45,9 @@ public class UnidadeMedidaController {
         return ResponseEntity.ok(UnidadeMedidaMapper.toDto(unidadeMedidaAtualizada));
     }
 
-    
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deletar(@PathVariable int id){
+        unidadeMedidaService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
 }
