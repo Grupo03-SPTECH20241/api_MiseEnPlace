@@ -12,15 +12,18 @@ public class ProdutoPedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idProdutoPedido;
-    private int qtProduto;
+    private Integer qtProduto;
     private String observacoes;
 
     @ManyToOne
+    @JoinColumn(name = "fkProduto")
     private Produto produto;
 
     @ManyToOne
+    @JoinColumn(name = "fkPersonalizacao")
     private Personalizacao personalizacao;
 
     @ManyToOne
+    @JoinColumn(name = "fkPedido")
     private Pedido pedido;
 }
