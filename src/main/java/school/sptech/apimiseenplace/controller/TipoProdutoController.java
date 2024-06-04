@@ -34,7 +34,7 @@ public class TipoProdutoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TipoProdutoListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid TipoProdutoCriacaoDto dtoAtualizacao) {
-        TipoProduto tipoProdutoAtualizado = service.atualizar(id, dtoAtualizacao);
+        TipoProduto tipoProdutoAtualizado = service.atualizar(id, TipoProdutoMapper.toEntity(dtoAtualizacao));
 
         if (tipoProdutoAtualizado == null) return ResponseEntity.noContent().build();
 

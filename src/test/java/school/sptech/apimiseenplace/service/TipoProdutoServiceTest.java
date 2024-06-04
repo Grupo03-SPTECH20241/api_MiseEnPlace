@@ -153,7 +153,7 @@ class TipoProdutoServiceTest {
             Assertions.assertEquals(tipoProdutoEncontrado.getIdTipoProduto(), tipoProdutoAntigo.getIdTipoProduto());
             Assertions.assertEquals(tipoProdutoEncontrado.getTipo(), tipoProdutoAntigo.getTipo());
             Mockito.when(repository.save(Mockito.any(TipoProduto.class))).thenReturn(tipoProdutoAtualizado);
-            TipoProduto tipoProdutoRetornado = service.atualizar(tipoProdutoAtualizado);
+            TipoProduto tipoProdutoRetornado = service.atualizar(Mockito.any(Integer.class),tipoProdutoAtualizado);
 
             Assertions.assertEquals(tipoProdutoRetornado.getIdTipoProduto(), tipoProdutoAtualizado.getIdTipoProduto());
             Assertions.assertEquals(tipoProdutoRetornado.getTipo(), tipoProdutoAtualizado.getTipo());

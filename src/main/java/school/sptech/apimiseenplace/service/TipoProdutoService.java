@@ -31,7 +31,7 @@ public class TipoProdutoService {
         return tipoProdutoRepository.findAll();
     }
 
-    public TipoProduto atualizar(int id, TipoProdutoCriacaoDto tipoProdutoAtualizado) {
+    public TipoProduto atualizar(int id, TipoProduto tipoProdutoAtualizado) {
         TipoProduto tipoProduto = buscarPorId(id);
 
         tipoProduto.setTipo(tipoProdutoAtualizado.getTipo());
