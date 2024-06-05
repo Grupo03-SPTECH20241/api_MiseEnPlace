@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
-    @Query("SELECT p FROM Produto p ORDER BY p.preco DESC")
+    @Query("SELECT p FROM Produto p ORDER BY p.preco")
     List<Produto> filtrarNome();
 
-    @Query("SELECT p FROM Produto p ORDER BY p.nome DESC")
+    @Query("SELECT p FROM Produto p ORDER BY p.nome")
     List<Produto> filtrarPreco();
 
 }
