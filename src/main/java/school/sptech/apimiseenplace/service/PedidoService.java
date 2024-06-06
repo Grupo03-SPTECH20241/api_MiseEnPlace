@@ -72,4 +72,12 @@ public class PedidoService {
 
         pedidoRepository.deleteById(id);
     }
+
+    public List<Pedido> filtrar() {
+        List<Pedido> pedidos = pedidoRepository.getPedidosEmOrdemDeEntrega();
+        if (pedidos.isEmpty()) {
+            return null;
+        }
+        return pedidos;
+    }
 }

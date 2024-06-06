@@ -64,4 +64,14 @@ public class PedidoController {
         pedidoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<PedidoListagemDTO>> listarFiltrado() {
+        List<Pedido> pedidos = pedidoService.filtrar();
+        if (pedidos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        List<PedidoListagemDTO> pedidoListagemDTOS = PedidoMapper.toDto(pedidos);
+        return ResponseEntity.ok(pedidoListagemDTOS);
+    }
 }
