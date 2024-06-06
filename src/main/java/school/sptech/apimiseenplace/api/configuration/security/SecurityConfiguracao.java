@@ -92,6 +92,7 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/pilha/**"),
             new AntPathRequestMatcher("/fila"),
             new AntPathRequestMatcher("/fila/**"),
+            new AntPathRequestMatcher("localhost:3000/**")
     };
 
     @Bean
