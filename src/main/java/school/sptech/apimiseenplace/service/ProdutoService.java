@@ -91,4 +91,14 @@ public class ProdutoService {
         produtoRepository.deleteById(id);
     }
 
+    public List<Produto> filtrarNome() {
+        List<Produto> produtos = produtoRepository.filtrarNome();
+        return produtos;
+    }
+
+    public List<Produto> filtrarPreco() {
+        List<Produto> produtos = produtoRepository.filtrarPreco();
+        return produtos;
+    }
+
 }

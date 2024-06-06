@@ -84,4 +84,21 @@ public class ProdutoController {
         produtoService.deletarProdutoPorId(idProduto);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/filtrar-nome")
+    public ResponseEntity<List<ProdutoListagemDTO>> filtrarNome() {
+        List<Produto> produtos = produtoService.filtrarNome();
+        if (produtos.isEmpty()) return ResponseEntity.noContent().build();
+        List<ProdutoListagemDTO> produtoListagemDTOS = ProdutoMapper.toListagemDto(produtos);
+        return ResponseEntity.ok(produtoListagemDTOS);
+    }
+
+    @GetMapping("/filtrar-preco")
+    public ResponseEntity<List<ProdutoListagemDTO>> filtrarPreco() {
+        List<Produto> produtos = produtoService.filtrarPreco();
+        if (produtos.isEmpty()) return ResponseEntity.noContent().build();
+        List<ProdutoListagemDTO> produtoListagemDTOS = ProdutoMapper.toListagemDto(produtos);
+        return ResponseEntity.ok(produtoListagemDTOS);
+    }
+
 }
