@@ -1,4 +1,4 @@
-package school.sptech.apimiseenplace.view;
+package school.sptech.apimiseenplace.view.graficoTipoProduto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,11 +9,11 @@ import org.hibernate.annotations.Immutable;
 @Entity
 @Immutable
 @Data
-public class VwQuantidadeVendidosMes {
+public class VwTipoProduto {
     @Id
-    @Column(name = "mes")
-    private Integer mes;
-    @Column(name = "Quantidade vendida")
+    @Column(name = "id")
+    private Integer id;
+    private String tipoProduto;
+    @Column(name = "Quantidade_Vendida")
     private Integer quantidadeVendida;
-
 }

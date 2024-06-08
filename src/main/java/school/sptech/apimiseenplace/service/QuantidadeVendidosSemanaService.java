@@ -2,9 +2,8 @@ package school.sptech.apimiseenplace.service;
 
 import lombok.Data;
 import org.springframework.stereotype.Service;
-import school.sptech.apimiseenplace.dto.vwQuandidadeVendidosSemana.QuandidadeVendidosSemanaDto;
 import school.sptech.apimiseenplace.repository.QuantidadeVendidosSemanaRepository;
-import school.sptech.apimiseenplace.view.VwQuantidadeVendidosSemana;
+import school.sptech.apimiseenplace.view.graficoQuantidadeMaisVendidos.VwQuantidadeVendidosSemana;
 
 import java.util.List;
 

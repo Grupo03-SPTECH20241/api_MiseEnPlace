@@ -1,6 +1,6 @@
 package school.sptech.apimiseenplace.dto.vw_quantidade_vendida_mes;
 
-import school.sptech.apimiseenplace.view.VwQuantidadeVendidosMes;
+import school.sptech.apimiseenplace.view.graficoQuantidadeMaisVendidos.VwQuantidadeVendidosMes;
 
 import java.util.List;
 

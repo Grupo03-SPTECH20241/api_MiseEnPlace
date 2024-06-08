@@ -1,4 +1,4 @@
-package school.sptech.apimiseenplace.view;
+package school.sptech.apimiseenplace.view.graficoQuantidadeMaisVendidos;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -6,13 +6,15 @@ import jakarta.persistence.Id;
 import lombok.Data;
 import org.hibernate.annotations.Immutable;
 
+import java.time.LocalDate;
+
 @Entity
-@Immutable
 @Data
-public class VwQuantidadeVendidosDia {
+@Immutable
+public class VwQuantidadeVendidosSemana {
     @Id
     @Column(name = "dia")
-    private Integer dia;
+    private LocalDate dia;
     @Column(name = "Quantidade Vendida")
     private Integer quantidadeVendida;
 }
