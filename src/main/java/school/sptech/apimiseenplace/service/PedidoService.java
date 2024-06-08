@@ -50,19 +50,24 @@ public class PedidoService {
         );
     }
 
-    public Pedido atualizar(Integer id, Pedido pedido) {
+    public Pedido atualizar(Integer id, Pedido pedido, Integer formaEntregaId, Integer clienteId, Integer formaPagamentoId) {
         Pedido pedidoEncontrado = encontrarPorId(id);
 
-        pedidoEncontrado.setIdPedido(pedido.getIdPedido());
+        pedidoEncontrado.setIdPedido(id);
         pedidoEncontrado.setDtPedido(pedido.getDtPedido());
         pedidoEncontrado.setVlPedido(pedido.getVlPedido());
         pedidoEncontrado.setStatus(pedido.getStatus());
         pedidoEncontrado.setValorSinal(pedido.getValorSinal());
-        pedidoEncontrado.setFormaEntrega(pedido.getFormaEntrega());
-        pedidoEncontrado.setCliente(pedido.getCliente());
-        pedidoEncontrado.setFormaPagamento(pedido.getFormaPagamento());
 
-        return pedidoEncontrado;
+        FormaEntrega formaEntrega = formaEntregaService.encontrarPorId(formaEntregaId);
+        Cliente cliente = clienteService.encontrarPorId(clienteId);
+        FormaPagamento formaPagamento = formaPagamentoService.encontrarPorId(formaPagamentoId);
+
+        pedidoEncontrado.setFormaEntrega(formaEntrega);
+        pedidoEncontrado.setCliente(cliente);
+        pedidoEncontrado.setFormaPagamento(formaPagamento);
+
+        return pedidoRepository.save(pedidoEncontrado);
     }
 
     public void deletar(Integer id) {

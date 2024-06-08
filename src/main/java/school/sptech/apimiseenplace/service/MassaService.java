@@ -37,7 +37,7 @@ public class MassaService {
         Massa massaAchada = encontrarPorId(id);
 
         massaAchada.setIdMassa(id);
-        massaAchada.setNome(massaAchada.getNome());
+        massaAchada.setNome(massa.getNome());
 
         return repository.save(massaAchada);
     }

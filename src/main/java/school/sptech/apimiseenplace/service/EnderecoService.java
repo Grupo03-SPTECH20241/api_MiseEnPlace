@@ -35,7 +35,7 @@ public class EnderecoService {
     public Endereco atualizar(Integer id, Endereco endereco) {
         Endereco enderecoEncontrado = encontrarPorId(id);
 
-        enderecoEncontrado.setIdEndereco(endereco.getIdEndereco());
+        enderecoEncontrado.setIdEndereco(id);
         enderecoEncontrado.setLogradouro(endereco.getLogradouro());
         enderecoEncontrado.setComplemento(endereco.getComplemento());
         enderecoEncontrado.setCep(endereco.getCep());

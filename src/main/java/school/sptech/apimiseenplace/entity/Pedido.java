@@ -20,17 +20,20 @@ public class Pedido {
     private Double valorSinal;
 
     @ManyToOne
+    @JoinColumn(name = "fkFormaEntrega")
     private FormaEntrega formaEntrega;
 
     @OneToMany(mappedBy = "pedido")
     private List<ProdutoPedido> produtoPedidos;
 
     @ManyToOne
+    @JoinColumn(name = "fkCliente")
     private Cliente cliente;
 
     @OneToMany(mappedBy = "pedido")
     private List<Festa> festas;
 
     @ManyToOne
+    @JoinColumn(name = "fkFormaPagamento")
     private FormaPagamento formaPagamento;
 }

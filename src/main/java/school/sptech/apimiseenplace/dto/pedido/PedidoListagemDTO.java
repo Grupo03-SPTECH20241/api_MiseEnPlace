@@ -10,6 +10,7 @@ public class PedidoListagemDTO {
     private LocalDate dtPedido;
     private Double vlPedido;
     private char status;
+    private Double valorSinal;
     private FormaEntregaDto formaEntregaDto;
     private ClienteDto clienteDto;
     private FormaPagamentoDto formaPagamentoDto;

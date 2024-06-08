@@ -35,7 +35,7 @@ public class ClienteService {
     public Cliente atualizarCliente(int id, Cliente cliente) {
         Cliente clienteEncontrado = encontrarPorId(id);
 
-        clienteEncontrado.setIdCliente(cliente.getIdCliente());
+        clienteEncontrado.setIdCliente(id);
         clienteEncontrado.setNome(cliente.getNome());
         clienteEncontrado.setNumero(cliente.getNumero());
         clienteEncontrado.setDtAniversario(cliente.getDtAniversario());

@@ -18,17 +18,22 @@ public class Produto {
     private int qtdDisponivel;
 
     @ManyToOne
+    @JoinColumn(name = "fkRecheio")
     private Recheio recheio;
 
     @ManyToOne
+    @JoinColumn(name = "fkMassa")
     private Massa massa;
 
     @ManyToOne
+    @JoinColumn(name = "fkCobertura")
     private Cobertura cobertura;
 
     @ManyToOne
+    @JoinColumn(name = "fkUnidadeMedida")
     private UnidadeMedida unidadeMedida;
 
     @ManyToOne
+    @JoinColumn(name = "fkTipoProduto")
     private TipoProduto tipoProduto;
 }
