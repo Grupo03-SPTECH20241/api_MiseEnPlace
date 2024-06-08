@@ -100,6 +100,7 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/quantidade-vendidos-semana"),
             new AntPathRequestMatcher("/quantidade-vendidos-tipo-produto"),
             new AntPathRequestMatcher("/quantidade-vendida-valor-vendido"),
+            new AntPathRequestMatcher("/quantidade-vendida-valor-vendido-semana"),
     };
 
     @Bean
