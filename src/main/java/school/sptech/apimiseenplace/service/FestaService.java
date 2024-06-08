@@ -46,7 +46,7 @@ public class FestaService {
     public Festa atualizar(Integer id, Festa festa, Integer pedidoId, Integer enderecoId) {
         Festa festaEncontrada = encontrarPorId(id);
 
-        festaEncontrada.setIdFesta(festa.getIdFesta());
+        festaEncontrada.setIdFesta(id);
 
         Pedido pedido = pedidoService.encontrarPorId(pedidoId);
         Endereco endereco = enderecoService.encontrarPorId(enderecoId);

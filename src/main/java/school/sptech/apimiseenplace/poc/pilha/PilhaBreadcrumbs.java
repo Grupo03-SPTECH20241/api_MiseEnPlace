@@ -36,7 +36,9 @@ public class PilhaBreadcrumbs {
         if (isEmpty()) {
             return null;
         }
-        return pilha[topo--];
+        String retorno = this.pilha[topo--];
+        this.pilha[topo + 1] = null;
+        return retorno;
     }
 
     public String peek() {
@@ -59,6 +61,7 @@ public class PilhaBreadcrumbs {
 
     public void limpar() {
         this.pilha = new String[20];
+        this.topo = -1;
     }
 
 }

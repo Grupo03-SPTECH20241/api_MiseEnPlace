@@ -15,8 +15,10 @@ public class Festa {
 
 
     @ManyToOne
+    @JoinColumn(name = "fkPedido")
     private Pedido pedido;
 
     @ManyToOne
+    @JoinColumn(name = "fkEndereco")
     private Endereco endereco;
 }

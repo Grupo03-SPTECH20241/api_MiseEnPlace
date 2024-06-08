@@ -25,6 +25,7 @@ public class PedidoMapper {
         pedidoListagemDTO.setDtPedido(pedido.getDtPedido());
         pedidoListagemDTO.setVlPedido(pedido.getVlPedido());
         pedidoListagemDTO.setStatus(pedido.getStatus());
+        pedidoListagemDTO.setValorSinal(pedido.getValorSinal());
 
         PedidoListagemDTO.FormaEntregaDto formaEntregaDto = new PedidoListagemDTO.FormaEntregaDto();
         formaEntregaDto.setIdFormaEntrega(pedido.getFormaEntrega().getIdFormaEntrega());

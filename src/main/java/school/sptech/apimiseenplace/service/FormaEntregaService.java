@@ -36,10 +36,10 @@ public class FormaEntregaService {
     public FormaEntrega atualizar(Integer id, FormaEntrega formaEntrega) {
         FormaEntrega formaEntregaEncontrada = encontrarPorId(id);
 
-        formaEntregaEncontrada.setIdFormaEntrega(formaEntrega.getIdFormaEntrega());
+        formaEntregaEncontrada.setIdFormaEntrega(id);
         formaEntregaEncontrada.setFormaEntrega(formaEntrega.getFormaEntrega());
 
-        return formaEntregaEncontrada;
+        return formaEntregaRepository.save(formaEntregaEncontrada);
     }
 
     public boolean existePorId(Integer id) {

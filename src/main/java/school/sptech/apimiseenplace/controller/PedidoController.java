@@ -55,7 +55,13 @@ public class PedidoController {
     @PutMapping("/{id}")
     public ResponseEntity<PedidoListagemDTO> atualizar(@PathVariable Integer id, @RequestBody PedidoCriacaoDTO pedidoCriacaoDTO) {
         Pedido pedido = PedidoMapper.toEntity(pedidoCriacaoDTO);
-        pedido = pedidoService.atualizar(id, pedido);
+        pedido = pedidoService.atualizar(
+                id,
+                pedido,
+                pedidoCriacaoDTO.getFormaEntregaId(),
+                pedidoCriacaoDTO.getClienteId(),
+                pedidoCriacaoDTO.getFormaPagamentoId()
+        );
         return ResponseEntity.ok(PedidoMapper.toDto(pedido));
     }
 
@@ -65,7 +71,7 @@ public class PedidoController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/filtrar")
+    @GetMapping("/filtrar-data")
     public ResponseEntity<List<PedidoListagemDTO>> listarFiltrado() {
         List<Pedido> pedidos = pedidoService.filtrar();
         if (pedidos.isEmpty()) {

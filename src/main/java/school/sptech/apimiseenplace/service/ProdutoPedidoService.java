@@ -55,12 +55,12 @@ public class ProdutoPedidoService {
     public ProdutoPedido atualizar(Integer id, ProdutoPedido produtoPedido, Integer produtoId, Integer personalizacaoId, Integer pedidoId) {
         ProdutoPedido produtoPedidoEncontrado = encontrarPorId(id);
 
-        produtoPedidoEncontrado.setIdProdutoPedido(produtoPedido.getIdProdutoPedido());
+        produtoPedidoEncontrado.setIdProdutoPedido(id);
         produtoPedidoEncontrado.setQtProduto(produtoPedido.getQtProduto());
         produtoPedidoEncontrado.setObservacoes(produtoPedido.getObservacoes());
 
         Produto produto = produtoService.encontrarPorId(produtoId);
-        if (personalizacaoId == null) {
+        if (personalizacaoId != null) {
             Personalizacao personalizacao = personalizacaoService.encontrarPorId(personalizacaoId);
             produtoPedidoEncontrado.setPersonalizacao(personalizacao);
         }

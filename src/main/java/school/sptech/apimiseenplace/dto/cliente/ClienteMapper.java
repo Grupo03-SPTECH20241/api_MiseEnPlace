@@ -21,7 +21,7 @@ public class ClienteMapper {
         clienteListagemDto.setIdCliente(cliente.getIdCliente());
         clienteListagemDto.setNome(cliente.getNome());
         clienteListagemDto.setNumero(cliente.getNumero());
-        cliente.setDtAniversario(cliente.getDtAniversario());
+        clienteListagemDto.setDtAniversario(cliente.getDtAniversario());
 
         return clienteListagemDto;
     }
