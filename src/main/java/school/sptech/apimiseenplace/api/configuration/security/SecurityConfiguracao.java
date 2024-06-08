@@ -94,7 +94,8 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/fila/**"),
             new AntPathRequestMatcher("/tipo-produtos"),
             new AntPathRequestMatcher("/tipo-produtos/**"),
-            new AntPathRequestMatcher("localhost:3000/**")
+            new AntPathRequestMatcher("localhost:3000/**"),
+            new AntPathRequestMatcher("/quantidade-vendidos-mes"),
     };
 
     @Bean
