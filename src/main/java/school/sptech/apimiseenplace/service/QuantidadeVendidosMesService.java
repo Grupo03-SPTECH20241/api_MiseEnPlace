@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import school.sptech.apimiseenplace.dto.vw_quantidade_vendida_mes.QuantidadeVendidosListagemDto;
 import school.sptech.apimiseenplace.dto.vw_quantidade_vendida_mes.QuantidadeVendidosMapper;
 import school.sptech.apimiseenplace.repository.QuantidadeVendidosRepository;
-import school.sptech.apimiseenplace.view.VwQuantidadeVendidosMes;
+import school.sptech.apimiseenplace.view.graficoQuantidadeMaisVendidos.VwQuantidadeVendidosMes;
 
 import java.util.List;
 
