@@ -1,4 +1,4 @@
-package school.sptech.apimiseenplace.view;
+package school.sptech.apimiseenplace.view.graficoQuantidadeMaisVendidos;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
