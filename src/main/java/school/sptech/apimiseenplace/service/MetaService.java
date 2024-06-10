@@ -32,7 +32,7 @@ public class MetaService {
     public Metas atualizarMeta(int id, MetaCriacaoDto metaCriacaoDto){
         Metas meta = encontrarPorId(id);
         if (Objects.isNull(meta)) return null;
-        meta.setDescricao(metaCriacaoDto.getDescricao());
+        meta.setValor(metaCriacaoDto.getValor());
         meta.setDtTermino(metaCriacaoDto.getDtTermino());
         return repository.save(meta);
     }

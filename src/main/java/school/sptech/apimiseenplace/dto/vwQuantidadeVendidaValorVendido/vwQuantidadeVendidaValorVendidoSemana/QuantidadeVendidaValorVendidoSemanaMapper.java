@@ -5,6 +5,7 @@ import school.sptech.apimiseenplace.view.graficoQuantidadeVendidaValorVendido.Vw
 import java.util.List;
 
 public class QuantidadeVendidaValorVendidoSemanaMapper {
+
     public static QuantidadeVendidaValorVendidoSemanaDto toDto(VwQuantidadeVendidaValorVendidoSemana entity) {
         QuantidadeVendidaValorVendidoSemanaDto dto = new QuantidadeVendidaValorVendidoSemanaDto();
         dto.setNome(entity.getNome());

@@ -17,7 +17,7 @@ public class Metas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMeta;
-    private String descricao;
+    private Double valor;
     private LocalDate dtTermino;
     private LocalDate dtInicio;
 }
