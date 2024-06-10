@@ -7,7 +7,12 @@ import java.time.LocalDate;
 public class MetaListagemDto {
 
     private Double valor;
+    private Double valorRealizado;
+    private Double percentualRealizado;
     private LocalDate dtTermino;
     private LocalDate dtInicio;
 
+    public Double getPercentualRealizado() {
+        return (valorRealizado / valor) * 100;
+    }
 }

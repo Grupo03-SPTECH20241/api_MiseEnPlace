@@ -27,10 +27,11 @@ public class MetaController {
 
 
     @GetMapping
-    public ResponseEntity<List<MetaListagemDto>> listarMetas(){
-        List<Metas> metas = metaService.listarMetas();
-        if (metas.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(MetaMapper.toMetaListagemDto(metas));
+    public ResponseEntity<MetaListagemDto> listarMetas(){
+        Metas metas = metaService.encontrarPorId(1);
+        MetaListagemDto dto = MetaMapper.toMetaListagemDto(metas);
+        dto.setValorRealizado(metaService.AcompanhamentoMeta());
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/{id}")
