@@ -13,6 +13,9 @@ import java.time.LocalDate;
 @Data
 public class VwQuantidadeVendidaValorVendidoDia {
     @Id
+    @Column(name = "nome")
+    private String nome;
+
     @Column(name = "dia")
     private LocalDate dia;
     @Column(name = "quantidade vendida")

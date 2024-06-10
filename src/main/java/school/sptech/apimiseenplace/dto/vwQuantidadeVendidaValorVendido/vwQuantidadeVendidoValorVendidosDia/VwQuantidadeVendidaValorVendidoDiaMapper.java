@@ -8,6 +8,7 @@ public class VwQuantidadeVendidaValorVendidoDiaMapper {
 
     public static VwQuantidadeVendidaValorVendidoDiaDto toDto(VwQuantidadeVendidaValorVendidoDia vwQuantidadeVendidaValorVendidoDia) {
         VwQuantidadeVendidaValorVendidoDiaDto vwQuantidadeVendidaValorVendidoDiaDto = new VwQuantidadeVendidaValorVendidoDiaDto();
+        vwQuantidadeVendidaValorVendidoDiaDto.setNome(vwQuantidadeVendidaValorVendidoDia.getNome());
         vwQuantidadeVendidaValorVendidoDiaDto.setDia(vwQuantidadeVendidaValorVendidoDia.getDia());
         vwQuantidadeVendidaValorVendidoDiaDto.setQuantidadeVendida(vwQuantidadeVendidaValorVendidoDia.getQuantidadeVendida());
         vwQuantidadeVendidaValorVendidoDiaDto.setValorVendido(vwQuantidadeVendidaValorVendidoDia.getValorVendido());
