@@ -9,7 +9,7 @@ public class MetaMapper {
 
     public static MetaListagemDto toMetaListagemDto(Metas meta) {
         MetaListagemDto metaListagemDto = new MetaListagemDto();
-        metaListagemDto.setDescricao(meta.getDescricao());
+        metaListagemDto.setValor(meta.getValor());
         metaListagemDto.setDtInicio(meta.getDtInicio());
         metaListagemDto.setDtTermino(meta.getDtTermino());
         return metaListagemDto;
@@ -18,7 +18,7 @@ public class MetaMapper {
 
     public static Metas toEntity(MetaCriacaoDto metaCriacaoDto) {
         Metas meta = new Metas();
-        meta.setDescricao(metaCriacaoDto.getDescricao());
+        meta.setValor(metaCriacaoDto.getValor());
         meta.setDtInicio(LocalDate.now());
         meta.setDtTermino(metaCriacaoDto.getDtTermino());
         return meta;
