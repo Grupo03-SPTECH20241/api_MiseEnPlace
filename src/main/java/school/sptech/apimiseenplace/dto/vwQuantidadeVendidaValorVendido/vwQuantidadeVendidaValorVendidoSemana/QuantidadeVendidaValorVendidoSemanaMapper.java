@@ -7,6 +7,7 @@ import java.util.List;
 public class QuantidadeVendidaValorVendidoSemanaMapper {
     public static QuantidadeVendidaValorVendidoSemanaDto toDto(VwQuantidadeVendidaValorVendidoSemana entity) {
         QuantidadeVendidaValorVendidoSemanaDto dto = new QuantidadeVendidaValorVendidoSemanaDto();
+        dto.setNome(entity.getNome());
         dto.setDia(entity.getDia());
         dto.setQuantidadeVendida(entity.getQuantidadeVendida());
         dto.setValorVendido(entity.getValorVendido());
