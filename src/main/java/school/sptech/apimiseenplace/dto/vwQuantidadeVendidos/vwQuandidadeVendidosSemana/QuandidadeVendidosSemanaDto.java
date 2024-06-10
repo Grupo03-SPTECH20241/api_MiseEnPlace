@@ -1,4 +1,4 @@
-package school.sptech.apimiseenplace.dto.vwQuandidadeVendidosSemana;
+package school.sptech.apimiseenplace.dto.vwQuantidadeVendidos.vwQuandidadeVendidosSemana;
 
 import lombok.Data;
 
