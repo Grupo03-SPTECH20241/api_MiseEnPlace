@@ -31,16 +31,17 @@ public class FilaPedidoController {
         if (filaNovos.isFull()) {
             this.filaNovos.poll();
         }
-        this.filaNovos.insert(ultimoPedido.get());
+        Pedido pedido = ultimoPedido.get();
+        this.filaNovos.insert(pedido);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
     public ResponseEntity<PedidoListagemDTO[]> listar() {
-        PedidoListagemDTO[] pedidoListagemDTOS = PedidoMapper.toDto(this.filaNovos.getFila());
-        if (pedidoListagemDTOS == null) {
+        if (this.filaNovos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+        PedidoListagemDTO[] pedidoListagemDTOS = PedidoMapper.toDto(this.filaNovos.getFila());
         return ResponseEntity.ok(pedidoListagemDTOS);
     }
 

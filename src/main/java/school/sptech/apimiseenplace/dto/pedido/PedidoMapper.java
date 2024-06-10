@@ -57,32 +57,38 @@ public class PedidoMapper {
             return null;
         }
 
-        PedidoListagemDTO[] pedidoListagemDTO = new PedidoListagemDTO[pedidos.length];
+        PedidoListagemDTO[] pedidoListagemDTOS = new PedidoListagemDTO[pedidos.length];
 
-        for (Integer i = 0; i < pedidos.length; i++) {
-            pedidoListagemDTO[i].setIdPedido(pedidos[i].getIdPedido());
-            pedidoListagemDTO[i].setDtPedido(pedidos[i].getDtPedido());
-            pedidoListagemDTO[i].setVlPedido(pedidos[i].getVlPedido());
-            pedidoListagemDTO[i].setStatus(pedidos[i].getStatus());
+        for (int i = 0; i < pedidos.length; i++) {
+            if (pedidos[i] == null) break;
+            PedidoListagemDTO pedidoListagemDTO = new PedidoListagemDTO();
+
+            pedidoListagemDTO.setIdPedido(pedidos[i].getIdPedido());
+            pedidoListagemDTO.setDtPedido(pedidos[i].getDtPedido());
+            pedidoListagemDTO.setVlPedido(pedidos[i].getVlPedido());
+            pedidoListagemDTO.setStatus(pedidos[i].getStatus());
+            pedidoListagemDTO.setValorSinal(pedidos[i].getValorSinal());
 
             PedidoListagemDTO.FormaEntregaDto formaEntregaDto = new PedidoListagemDTO.FormaEntregaDto();
             formaEntregaDto.setIdFormaEntrega(pedidos[i].getFormaEntrega().getIdFormaEntrega());
             formaEntregaDto.setFormaEntrega(pedidos[i].getFormaEntrega().getFormaEntrega());
-            pedidoListagemDTO[i].setFormaEntregaDto(formaEntregaDto);
+            pedidoListagemDTO.setFormaEntregaDto(formaEntregaDto);
 
             PedidoListagemDTO.ClienteDto clienteDto = new PedidoListagemDTO.ClienteDto();
             clienteDto.setIdCliente(pedidos[i].getCliente().getIdCliente());
             clienteDto.setNome(pedidos[i].getCliente().getNome());
             clienteDto.setNumero(pedidos[i].getCliente().getNumero());
             clienteDto.setDtAniversario(pedidos[i].getCliente().getDtAniversario());
-            pedidoListagemDTO[i].setClienteDto(clienteDto);
+            pedidoListagemDTO.setClienteDto(clienteDto);
 
             PedidoListagemDTO.FormaPagamentoDto formaPagamentoDto = new PedidoListagemDTO.FormaPagamentoDto();
             formaPagamentoDto.setIdFormaPagamento(pedidos[i].getFormaPagamento().getIdFormaPagamento());
             formaPagamentoDto.setFormaPagamento(pedidos[i].getFormaPagamento().getFormaPagamento());
-            pedidoListagemDTO[i].setFormaPagamentoDto(formaPagamentoDto);
+            pedidoListagemDTO.setFormaPagamentoDto(formaPagamentoDto);
+
+            pedidoListagemDTOS[i] = pedidoListagemDTO;
         }
 
-        return pedidoListagemDTO;
+        return pedidoListagemDTOS;
     }
 }

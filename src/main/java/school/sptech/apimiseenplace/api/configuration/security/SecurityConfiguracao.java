@@ -96,6 +96,8 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/tipo-produtos/**"),
             new AntPathRequestMatcher("localhost:3000/**"),
             new AntPathRequestMatcher("/quantidade-vendidos-mes"),
+            new AntPathRequestMatcher("/matriz"),
+            new AntPathRequestMatcher("/matriz/**"),
             new AntPathRequestMatcher("/quantidade-vendidos-dia"),
             new AntPathRequestMatcher("/quantidade-vendidos-semana"),
             new AntPathRequestMatcher("/quantidade-vendidos-tipo-produto"),
