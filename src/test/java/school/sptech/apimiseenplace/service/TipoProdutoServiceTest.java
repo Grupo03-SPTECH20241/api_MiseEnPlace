@@ -88,7 +88,7 @@ class TipoProdutoServiceTest {
                 Mockito.verify(repository, Mockito.times(1)).findAll();
             }
 
-            @Test@DisplayName("2.1.2 - Deve retornara lista vazia de tiposProduto")
+            @Test@DisplayName("2.1.2 - Deve retornar a lista vazia de tiposProduto")
             void retornaListaVazia(){
                 List<TipoProduto> tiposProduto = new ArrayList<>();
 
@@ -165,7 +165,6 @@ class TipoProdutoServiceTest {
         @Test
         @DisplayName("3.2 - Deve throwlar BadRequestException, quando passado o id de atualização incorreto")
         void throwlaBadRequest(){
-            TipoProduto tipoProdutoAntigo = new TipoProduto(1, "Salgado", Collections.emptyList());
             Integer idBusca = 1;
 
             Mockito.when(repository.findById(idBusca)).thenReturn(Optional.empty());
@@ -190,7 +189,7 @@ class TipoProdutoServiceTest {
 
             String retorno = service.deletar(Mockito.any(Integer.class));
 
-            Assertions.assertEquals(retorno, "Tipo Produto deletado com sucesso!");
+            Assertions.assertEquals("Tipo Produto deletado com sucesso!", retorno);
             Mockito.verify(repository, Mockito.times(1)).existsById(Mockito.any(Integer.class));
             Mockito.verify(repository, Mockito.times(1)).deleteById(Mockito.any(Integer.class));
         }
