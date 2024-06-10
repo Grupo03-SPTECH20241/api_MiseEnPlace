@@ -18,4 +18,13 @@ public class FormaPagamento {
 
     @OneToMany(mappedBy = "formaPagamento")
     private List<Pedido> pedidos;
+
+    public FormaPagamento() {
+    }
+
+    public FormaPagamento(Integer idFormaPagamento, String formaPagamento, List<Pedido> pedidos) {
+        this.idFormaPagamento = idFormaPagamento;
+        this.formaPagamento = formaPagamento;
+        this.pedidos = pedidos;
+    }
 }
