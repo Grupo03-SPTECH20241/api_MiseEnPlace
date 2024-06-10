@@ -1,4 +1,4 @@
-package school.sptech.apimiseenplace.dto.vw_quantidade_vendida_mes;
+package school.sptech.apimiseenplace.dto.vwQuantidadeVendidos.vw_quantidade_vendida_mes;
 
 import lombok.Data;
 

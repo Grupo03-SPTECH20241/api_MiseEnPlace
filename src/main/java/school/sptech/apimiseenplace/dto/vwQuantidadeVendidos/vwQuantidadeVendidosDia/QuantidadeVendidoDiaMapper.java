@@ -1,4 +1,4 @@
-package school.sptech.apimiseenplace.dto.vwQuantidadeVendidosDia;
+package school.sptech.apimiseenplace.dto.vwQuantidadeVendidos.vwQuantidadeVendidosDia;
 
 import school.sptech.apimiseenplace.view.graficoQuantidadeMaisVendidos.VwQuantidadeVendidosDia;
 

@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import school.sptech.apimiseenplace.dto.vwQuandidadeVendidosSemana.QuandidadeVendidosSemanaDto;
-import school.sptech.apimiseenplace.dto.vwQuandidadeVendidosSemana.QuantidadeVendidosSemanaMapper;
+import school.sptech.apimiseenplace.dto.vwQuantidadeVendidos.vwQuandidadeVendidosSemana.QuandidadeVendidosSemanaDto;
+import school.sptech.apimiseenplace.dto.vwQuantidadeVendidos.vwQuandidadeVendidosSemana.QuantidadeVendidosSemanaMapper;
 import school.sptech.apimiseenplace.service.QuantidadeVendidosSemanaService;
 import school.sptech.apimiseenplace.view.graficoQuantidadeMaisVendidos.VwQuantidadeVendidosSemana;
 

@@ -3,7 +3,6 @@ package school.sptech.apimiseenplace.service;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import school.sptech.apimiseenplace.dto.vwQuantidadeVendidaValorVendidoSemana.QuantidadeVendidaValorVendidoSemanaDto;
 import school.sptech.apimiseenplace.repository.QuantidadeVendidaValorVendidoSemanaRepository;
 import school.sptech.apimiseenplace.view.graficoQuantidadeVendidaValorVendido.VwQuantidadeVendidaValorVendidoSemana;
 

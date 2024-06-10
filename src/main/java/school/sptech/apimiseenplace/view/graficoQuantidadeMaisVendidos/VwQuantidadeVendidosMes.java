@@ -11,6 +11,8 @@ import org.hibernate.annotations.Immutable;
 @Data
 public class VwQuantidadeVendidosMes {
     @Id
+    @Column(name = "nome")
+    private String nome;
     @Column(name = "mes")
     private Integer mes;
     @Column(name = "Quantidade vendida")

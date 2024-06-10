@@ -1,13 +1,12 @@
 package school.sptech.apimiseenplace.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import school.sptech.apimiseenplace.dto.vwQuantidadeVendidoValorVendidosDia.VwQuantidadeVendidaValorVendidoDiaDto;
-import school.sptech.apimiseenplace.dto.vwQuantidadeVendidoValorVendidosDia.VwQuantidadeVendidaValorVendidoDiaMapper;
+import school.sptech.apimiseenplace.dto.vwQuantidadeVendidaValorVendido.vwQuantidadeVendidoValorVendidosDia.VwQuantidadeVendidaValorVendidoDiaDto;
+import school.sptech.apimiseenplace.dto.vwQuantidadeVendidaValorVendido.vwQuantidadeVendidoValorVendidosDia.VwQuantidadeVendidaValorVendidoDiaMapper;
 import school.sptech.apimiseenplace.service.VwQuantidadeVendidaValorVendidoDiaService;
 import school.sptech.apimiseenplace.view.graficoQuantidadeVendidaValorVendido.VwQuantidadeVendidaValorVendidoDia;
 

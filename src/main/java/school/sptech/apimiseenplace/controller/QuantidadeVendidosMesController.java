@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import school.sptech.apimiseenplace.dto.vw_quantidade_vendida_mes.QuantidadeVendidosListagemDto;
+import school.sptech.apimiseenplace.dto.vwQuantidadeVendidos.vw_quantidade_vendida_mes.QuantidadeVendidosListagemDto;
 import school.sptech.apimiseenplace.service.QuantidadeVendidosMesService;
 
 import java.util.List;
