@@ -7,7 +7,6 @@ import java.util.List;
 public class QuantidadeVendidaValorVendidoMapper {
     public static QuantidadeVendidaValorVendidoDto toDto(VwQuantidadeVendidaValorVendido vwQuantidadeVendidaValorVendido) {
         QuantidadeVendidaValorVendidoDto dto = new QuantidadeVendidaValorVendidoDto();
-        dto.setNome(vwQuantidadeVendidaValorVendido.getNome());
         dto.setMes(vwQuantidadeVendidaValorVendido.getMes());
         dto.setQuantidadeVendida(vwQuantidadeVendidaValorVendido.getQuantidadeVendida());
         dto.setValorVendido(vwQuantidadeVendidaValorVendido.getValorVendido());

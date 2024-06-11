@@ -13,8 +13,6 @@ import java.time.LocalDate;
 @Immutable
 public class VwQuantidadeVendidosSemana {
     @Id
-    @Column(name = "nome")
-    private String nome;
     @Column(name = "dia")
     private LocalDate dia;
     @Column(name = "Quantidade Vendida")
