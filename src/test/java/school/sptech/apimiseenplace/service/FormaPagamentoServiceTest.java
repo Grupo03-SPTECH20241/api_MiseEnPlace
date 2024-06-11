@@ -79,6 +79,7 @@ class FormaPagamentoServiceTest {
                 assertEquals(1, listaFormaPagamento.size());
                 assertEquals(formaPagamento.getIdFormaPagamento(), listaFormaPagamento.get(0).getIdFormaPagamento());
                 assertEquals(formaPagamento.getFormaPagamento(), listaFormaPagamento.get(0).getFormaPagamento());
+                Mockito.verify(repository, Mockito.times(1)).findAll();
             }
 
             @Test
@@ -159,7 +160,7 @@ class FormaPagamentoServiceTest {
             FormaPagamento formaPagamento = new FormaPagamento(1, "Dinheiro", Collections.emptyList());
             FormaPagamento formaPagamentoAtualizada = new FormaPagamento(1, "Cartão", Collections.emptyList());
 
-            Mockito.when(repository.findById(formaPagamento.getIdFormaPagamento())).thenReturn(java.util.Optional.empty());
+            Mockito.when(repository.findById(Mockito.any(Integer.class))).thenReturn(java.util.Optional.empty());
 
             NaoEncontradoException exception = Assertions.assertThrows(
                     NaoEncontradoException.class,
