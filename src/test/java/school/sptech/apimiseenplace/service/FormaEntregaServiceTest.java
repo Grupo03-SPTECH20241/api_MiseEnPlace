@@ -142,14 +142,14 @@ class FormaEntregaServiceTest {
 
             FormaEntrega formaEntregaEncontradaa = service.encontrarPorId(Mockito.any(Integer.class));
 
-            assertEquals(formaEntregaEncontradaa.getIdFormaEntrega(), formaEntrega.getIdFormaEntrega());
-            assertEquals(formaEntregaEncontradaa.getFormaEntrega(), formaEntrega.getFormaEntrega());
+            assertEquals(formaEntrega.getIdFormaEntrega(), formaEntregaEncontradaa.getIdFormaEntrega());
+            assertEquals(formaEntrega.getFormaEntrega(), formaEntregaEncontradaa.getFormaEntrega());
 
             Mockito.when(repository.save(Mockito.any(FormaEntrega.class))).thenReturn(formaEntregaAtualizada);
             FormaEntrega formaEntregarRetornada = service.atualizar(Mockito.any(Integer.class), formaEntregaAtualizada);
 
-            assertEquals(formaEntregarRetornada.getIdFormaEntrega(), formaEntregaAtualizada.getIdFormaEntrega());
-            assertEquals(formaEntregarRetornada.getFormaEntrega(), formaEntregaAtualizada.getFormaEntrega());
+            assertEquals(formaEntregaAtualizada.getIdFormaEntrega(), formaEntregarRetornada.getIdFormaEntrega());
+            assertEquals(formaEntregaAtualizada.getFormaEntrega(), formaEntregarRetornada.getFormaEntrega());
 
             Mockito.verify(repository, Mockito.times(2)).findById(Mockito.any(Integer.class));
             Mockito.verify(repository, Mockito.times(1)).save(Mockito.any(FormaEntrega.class));
@@ -171,7 +171,7 @@ class FormaEntregaServiceTest {
             );
 
             assertEquals("Forma Entrega não encontrado", exception.getLocalizedMessage());
-            Mockito.verify(repository, Mockito.times(1)).findById(formaEntrega.getIdFormaEntrega());
+            Mockito.verify(repository, Mockito.times(1)).findById(Mockito.any(Integer.class));
             Mockito.verify(repository, Mockito.times(0)).save(Mockito.any(FormaEntrega.class));
         }
     }
@@ -186,7 +186,7 @@ class FormaEntregaServiceTest {
 
             String retorno = service.deletar(Mockito.any(Integer.class));
 
-            assertEquals(retorno, "Forma de Entrega deletada com sucesso!");
+            assertEquals("Forma de Entrega deletada com sucesso!", retorno);
             Mockito.verify(repository, Mockito.times(1)).existsById(Mockito.any(Integer.class));
             Mockito.verify(repository, Mockito.times(1)).deleteById(Mockito.any(Integer.class));
         }

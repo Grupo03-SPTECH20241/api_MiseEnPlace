@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.awt.color.ProfileDataException;
 import java.util.List;
 
 @Entity
@@ -18,4 +17,13 @@ public class UnidadeMedida {
 
     @OneToMany(mappedBy = "unidadeMedida")
     private List<Produto> produtos;
+
+    public UnidadeMedida() {
+    }
+
+    public UnidadeMedida(Integer idUnidadeMedida, String unidadeMedida, List<Produto> produtos) {
+        this.idUnidadeMedida = idUnidadeMedida;
+        this.unidadeMedida = unidadeMedida;
+        this.produtos = produtos;
+    }
 }

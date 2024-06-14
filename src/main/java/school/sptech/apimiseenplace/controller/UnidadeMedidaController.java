@@ -20,7 +20,7 @@ public class UnidadeMedidaController {
 
     @PostMapping
     public ResponseEntity<UnidadeMedidaListagemDto> criar(@RequestBody @Valid UnidadeMedidaCriacaoDto unidadeMedidaCriacaoDto){
-        UnidadeMedida unidadeMedidaSalva = unidadeMedidaService.criar(unidadeMedidaCriacaoDto);
+        UnidadeMedida unidadeMedidaSalva = unidadeMedidaService.criar(UnidadeMedidaMapper.toEntity(unidadeMedidaCriacaoDto));
         return ResponseEntity.ok().body(UnidadeMedidaMapper.toDto(unidadeMedidaSalva));
     }
 
@@ -41,13 +41,12 @@ public class UnidadeMedidaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UnidadeMedidaListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid UnidadeMedidaCriacaoDto unidadeMedidaAtualizacao){
-        UnidadeMedida unidadeMedidaAtualizada = unidadeMedidaService.atualizar(id, unidadeMedidaAtualizacao);
+        UnidadeMedida unidadeMedidaAtualizada = unidadeMedidaService.atualizar(id, UnidadeMedidaMapper.toEntity(unidadeMedidaAtualizacao));
         return ResponseEntity.ok(UnidadeMedidaMapper.toDto(unidadeMedidaAtualizada));
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deletar(@PathVariable int id){
-        unidadeMedidaService.deletar(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deletar(@PathVariable int id){
+        return ResponseEntity.status(204).body(unidadeMedidaService.deletar(id));
     }
 }
