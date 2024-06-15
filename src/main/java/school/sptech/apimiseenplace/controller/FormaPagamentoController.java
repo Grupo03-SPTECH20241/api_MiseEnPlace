@@ -2,7 +2,6 @@ package school.sptech.apimiseenplace.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.apimiseenplace.dto.formaPagamento.FormaPagamentoCriacaoDto;
@@ -21,13 +20,13 @@ public class FormaPagamentoController {
 
     @PostMapping
     public ResponseEntity<FormaPagamentoListagemDto> criar(@RequestBody @Valid FormaPagamentoCriacaoDto formaPagamentoListagemDto){
-        FormaPagamento formaPagamento = service.criar(formaPagamentoListagemDto);
+        FormaPagamento formaPagamento = service.criar(FormaPagamentoMapper.toEntity(formaPagamentoListagemDto));
         return ResponseEntity.ok(FormaPagamentoMapper.toDto(formaPagamento));
     }
 
     @PutMapping("{id}")
     public ResponseEntity<FormaPagamentoListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid FormaPagamentoCriacaoDto formaPagamentoCriacaoDto){
-        FormaPagamento formaPagamento = service.atualizar(id, formaPagamentoCriacaoDto);
+        FormaPagamento formaPagamento = service.atualizar(id, FormaPagamentoMapper.toEntity(formaPagamentoCriacaoDto));
         return ResponseEntity.ok(FormaPagamentoMapper.toDto(formaPagamento));
     }
 

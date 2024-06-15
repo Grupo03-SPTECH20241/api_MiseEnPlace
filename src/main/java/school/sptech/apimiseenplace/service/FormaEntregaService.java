@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import school.sptech.apimiseenplace.dto.forma_entrega.FormaEntregaListagemDto;
 import school.sptech.apimiseenplace.dto.forma_entrega.FormaEntregaMapper;
-import school.sptech.apimiseenplace.entity.Cliente;
 import school.sptech.apimiseenplace.entity.FormaEntrega;
 import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
@@ -46,10 +45,11 @@ public class FormaEntregaService {
         return formaEntregaRepository.existsById(id);
     }
 
-    public void deletar(Integer id) {
+    public String deletar(Integer id) {
         if (!existePorId(id)) {
-            throw new BadRequestException("Forma de Entrega");
+            throw new NaoEncontradoException("Forma Entrega");
         }
         formaEntregaRepository.deleteById(id);
+        return "Forma de Entrega deletada com sucesso!";
     }
 }

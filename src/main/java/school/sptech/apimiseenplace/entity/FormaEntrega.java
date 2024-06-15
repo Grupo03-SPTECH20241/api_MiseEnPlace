@@ -17,4 +17,13 @@ public class FormaEntrega {
 
     @OneToMany(mappedBy = "formaEntrega")
     private List<Pedido> pedidos;
+
+    public FormaEntrega() {
+    }
+
+    public FormaEntrega(Integer idFormaEntrega, String formaEntrega, List<Pedido> pedidos) {
+        this.idFormaEntrega = idFormaEntrega;
+        this.formaEntrega = formaEntrega;
+        this.pedidos = pedidos;
+    }
 }
