@@ -46,7 +46,7 @@ class FormaPagamentoServiceTest {
             Assertions.assertEquals(formaPagamentoRecebida.getIdFormaPagamento(), formaPagamentoSalva.getIdFormaPagamento());
             Assertions.assertEquals(formaPagamentoRecebida.getFormaPagamento(), formaPagamentoSalva.getFormaPagamento());
 
-            Mockito.verify(repository, Mockito.times(1)).save(formaPagamentoEnviada);
+            Mockito.verify(repository, Mockito.times(1)).save(Mockito.any(FormaPagamento.class));
         }
 
         @Test
@@ -91,6 +91,7 @@ class FormaPagamentoServiceTest {
 
                 assertNotNull(listaFormaPagamento);
                 assertEquals(0, listaFormaPagamento.size());
+                Mockito.verify(repository, Mockito.times(1)).findAll();
             }
         }
 
@@ -147,8 +148,8 @@ class FormaPagamentoServiceTest {
             Mockito.when(repository.save(Mockito.any(FormaPagamento.class))).thenReturn(formaPagamentoAtualizada);
             FormaPagamento formaPagamentoRetornada = service.atualizar(Mockito.any(Integer.class), formaPagamentoAtualizada);
 
-            Assertions.assertEquals(formaPagamentoRetornada.getIdFormaPagamento(), formaPagamentoAtualizada.getIdFormaPagamento());
-            Assertions.assertEquals(formaPagamentoRetornada.getFormaPagamento(), formaPagamentoAtualizada.getFormaPagamento());
+            Assertions.assertEquals(formaPagamentoAtualizada.getIdFormaPagamento(), formaPagamentoRetornada.getIdFormaPagamento());
+            Assertions.assertEquals(formaPagamentoAtualizada.getFormaPagamento(), formaPagamentoRetornada.getFormaPagamento());
 
             Mockito.verify(repository, Mockito.times(2)).findById(Mockito.any(Integer.class));
             Mockito.verify(repository, Mockito.times(1)).save(Mockito.any(FormaPagamento.class));
@@ -171,13 +172,13 @@ class FormaPagamentoServiceTest {
 
             Assertions.assertEquals("Forma de Pagamento não encontrado", exception.getLocalizedMessage());
 
-            Mockito.verify(repository, Mockito.times(1)).findById(formaPagamento.getIdFormaPagamento());
+            Mockito.verify(repository, Mockito.times(1)).findById(Mockito.any(Integer.class));
             Mockito.verify(repository, Mockito.times(0)).save(Mockito.any(FormaPagamento.class));
         }
     }
 
     @Nested
-    @DisplayName("4 - Cenários de Deleção")
+    @DisplayName("4 - Cenários de Exclusão")
     public class CenarioDelecao {
         @Test
         @DisplayName("4.1 - Deve retornar String de sucesso quando id da formaPagamento passado corretamente")

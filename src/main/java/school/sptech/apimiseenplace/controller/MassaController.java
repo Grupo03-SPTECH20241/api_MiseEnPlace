@@ -27,7 +27,7 @@ public class MassaController {
 
     @PostMapping
     public ResponseEntity<MassaListagemDto> criar(@RequestBody @Valid MassaCriacaoDto massaCriacaoDto){
-        Massa massaSalva = service.criar(massaCriacaoDto);
+        Massa massaSalva = service.criar(MassaMapper.toEntity(massaCriacaoDto));
         return ResponseEntity.ok(MassaMapper.toDto(massaSalva));
     }
 
@@ -40,7 +40,7 @@ public class MassaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MassaListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid MassaCriacaoDto massaCriacaoDto){
-        Massa massaAtualizada = service.atualizar(massaCriacaoDto, id);
+        Massa massaAtualizada = service.atualizar(MassaMapper.toEntity(massaCriacaoDto), id);
         return ResponseEntity.ok(MassaMapper.toDto(massaAtualizada));
     }
 

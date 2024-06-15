@@ -26,11 +26,12 @@ public class MassaService {
         );
     }
 
-    public Massa criar(MassaCriacaoDto dto){
-        return repository.save(MassaMapper.toEntity(dto));
+    public Massa criar(Massa dto){
+        if (dto == null) throw new BadRequestException("Massa");
+        return repository.save(dto);
     }
 
-    public Massa atualizar(MassaCriacaoDto massa, Integer id){
+    public Massa atualizar(Massa massa, Integer id){
 
         if(massa == null) throw new BadRequestException("Massa");
 
@@ -42,10 +43,11 @@ public class MassaService {
         return repository.save(massaAchada);
     }
 
-    public void deletar(Integer id){
-        if(!repository.existsById(id)) throw new BadRequestException("Massa");
+    public String deletar(Integer id){
+        if(!repository.existsById(id)) throw new NaoEncontradoException("Massa");
 
         repository.deleteById(id);
+        return "Massa deletada com sucesso!";
     }
 }
 

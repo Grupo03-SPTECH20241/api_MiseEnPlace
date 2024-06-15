@@ -23,6 +23,13 @@ public class Massa {
     @OneToMany(mappedBy = "massa")
     private List<Personalizacao> personalizacoes;
 
+    public Massa() {
+    }
 
-
+    public Massa(Integer idMassa, String nome, List<Produto> produtos, List<Personalizacao> personalizacoes) {
+        this.idMassa = idMassa;
+        this.nome = nome;
+        this.produtos = produtos;
+        this.personalizacoes = personalizacoes;
+    }
 }
