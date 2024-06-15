@@ -11,6 +11,16 @@ import java.util.List;
 @Setter
 public class Endereco {
 
+    public Endereco() {}
+
+    public Endereco(Integer idEndereco, String logradouro, String complemento, String cep, int numero) {
+        this.idEndereco = idEndereco;
+        this.logradouro = logradouro;
+        this.complemento = complemento;
+        Cep = cep;
+        this.numero = numero;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEndereco;
