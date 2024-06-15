@@ -22,4 +22,14 @@ public class VwQuantidadeVendidaValorVendidoDia {
     private Integer quantidadeVendida;
     @Column(name = "Valor Vendido")
     private Double valorVendido;
+
+    public VwQuantidadeVendidaValorVendidoDia() {
+    }
+
+    public VwQuantidadeVendidaValorVendidoDia(String nome, LocalDate dia, Integer quantidadeVendida, Double valorVendido) {
+        this.nome = nome;
+        this.dia = dia;
+        this.quantidadeVendida = quantidadeVendida;
+        this.valorVendido = valorVendido;
+    }
 }

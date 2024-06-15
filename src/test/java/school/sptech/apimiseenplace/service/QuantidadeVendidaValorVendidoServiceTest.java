@@ -32,6 +32,7 @@ public class QuantidadeVendidaValorVendidoServiceTest {
         @DisplayName("Deve retornar uma lista com um Json de bolo de baunilha")
         void deveRetornarLista(){
             VwQuantidadeVendidaValorVendido vwQuantidadeVendidaValorVendido = new VwQuantidadeVendidaValorVendido("Bolo de Baunilha", 1, 10, 100.0);
+            String nome = "Bolo de Baunilha";
             Mockito.when(repository.findAll()).thenReturn(Collections.singletonList(vwQuantidadeVendidaValorVendido));
             assertNotNull(service.findAll());
             assertEquals(1, service.findAll().size());
