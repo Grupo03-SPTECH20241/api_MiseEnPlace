@@ -8,4 +8,12 @@ import java.time.LocalDate;
 public class QuantidadeVendidosListagemDto {
     private Integer mes;
     private Integer quantidadeVendida;
+
+    public QuantidadeVendidosListagemDto() {
+    }
+
+    public QuantidadeVendidosListagemDto(Integer mes, Integer quantidadeVendida) {
+        this.mes = mes;
+        this.quantidadeVendida = quantidadeVendida;
+    }
 }

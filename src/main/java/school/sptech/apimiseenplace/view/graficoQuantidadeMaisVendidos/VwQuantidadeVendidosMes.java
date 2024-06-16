@@ -16,4 +16,11 @@ public class VwQuantidadeVendidosMes {
     @Column(name = "Quantidade vendida")
     private Integer quantidadeVendida;
 
+    public VwQuantidadeVendidosMes(Integer mes, Integer quantidadeVendida) {
+        this.mes = mes;
+        this.quantidadeVendida = quantidadeVendida;
+    }
+
+    public VwQuantidadeVendidosMes() {
+    }
 }
