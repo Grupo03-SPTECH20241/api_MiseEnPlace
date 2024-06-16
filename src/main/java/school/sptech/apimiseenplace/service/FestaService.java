@@ -32,9 +32,9 @@ public class FestaService {
         return festaRepository.save(festa);
     }
 
-    public List<FestaListagemDto> listar() {
+    public List<Festa> listar() {
         List<Festa> festas = festaRepository.findAll();
-        return FestaMapper.toDto(festas);
+        return festas;
     }
 
     public Festa encontrarPorId(Integer id) {
@@ -57,11 +57,11 @@ public class FestaService {
         return festaRepository.save(festaEncontrada);
     }
 
-    public void deletar(Integer id) {
+    public String deletar(Integer id) {
         if(!festaRepository.existsById(id)){
             throw new BadRequestException("Festa");
         }
-
         festaRepository.deleteById(id);
+        return "Festa deletado com sucesso!";
     }
 }

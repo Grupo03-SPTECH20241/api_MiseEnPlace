@@ -11,6 +11,19 @@ import java.util.List;
 @Getter
 @Setter
 public class Pedido {
+    public Pedido() {}
+
+    public Pedido(Integer idPedido, LocalDate dtPedido, Double vlPedido, char status, Double valorSinal, FormaEntrega formaEntrega, Cliente cliente, FormaPagamento formaPagamento) {
+        this.idPedido = idPedido;
+        this.dtPedido = dtPedido;
+        this.vlPedido = vlPedido;
+        this.status = status;
+        this.valorSinal = valorSinal;
+        this.formaEntrega = formaEntrega;
+        this.cliente = cliente;
+        this.formaPagamento = formaPagamento;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPedido;

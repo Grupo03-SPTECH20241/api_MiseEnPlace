@@ -12,6 +12,13 @@ import java.util.List;
 @Setter
 public class Massa {
 
+    public Massa() {}
+
+    public Massa(Integer idMassa, String nome) {
+        this.idMassa = idMassa;
+        this.nome = nome;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMassa;

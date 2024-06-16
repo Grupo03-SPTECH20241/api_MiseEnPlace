@@ -21,7 +21,8 @@ public class MetaController {
 
     @PostMapping
     public ResponseEntity<MetaListagemDto> criarMeta(@RequestBody @Valid MetaCriacaoDto metaCriacaoDto){
-        Metas metaSalva =  metaService.criarMeta(metaCriacaoDto);
+        Metas metas = MetaMapper.toEntity(metaCriacaoDto);
+        Metas metaSalva =  metaService.criarMeta(metas);
         return ResponseEntity.ok().body(MetaMapper.toMetaListagemDto(metaSalva));
     }
 
@@ -36,7 +37,8 @@ public class MetaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MetaListagemDto> atualizarMeta(@PathVariable int id, @RequestBody @Valid MetaCriacaoDto dtoAtualizacao){
-        Metas metaAtualizada = metaService.atualizarMeta(id, dtoAtualizacao);
+        Metas meta = MetaMapper.toEntity(dtoAtualizacao);
+        Metas metaAtualizada = metaService.atualizarMeta(id, meta);
 
         if (metaAtualizada == null){
             return ResponseEntity.noContent().build();

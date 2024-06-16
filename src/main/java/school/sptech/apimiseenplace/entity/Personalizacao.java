@@ -11,6 +11,16 @@ import java.util.List;
 @Setter
 public class Personalizacao {
 
+    public Personalizacao() {}
+
+    public Personalizacao(Integer idPersonalizacao, String tema, Recheio recheio, Massa massa, Cobertura cobertura) {
+        this.idPersonalizacao = idPersonalizacao;
+        this.tema = tema;
+        this.recheio = recheio;
+        this.massa = massa;
+        this.cobertura = cobertura;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPersonalizacao;
