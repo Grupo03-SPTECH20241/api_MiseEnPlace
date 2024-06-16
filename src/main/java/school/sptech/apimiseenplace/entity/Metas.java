@@ -14,6 +14,15 @@ import java.time.LocalDate;
 @Setter
 public class Metas {
 
+    public Metas() {}
+
+    public Metas(Integer idMeta, Double valor, LocalDate dtTermino, LocalDate dtInicio) {
+        this.idMeta = idMeta;
+        this.valor = valor;
+        this.dtTermino = dtTermino;
+        this.dtInicio = dtInicio;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMeta;

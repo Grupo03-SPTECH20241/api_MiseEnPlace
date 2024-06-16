@@ -12,6 +12,15 @@ import java.util.List;
 @Setter
 public class Cliente {
 
+    public Cliente() {}
+
+    public Cliente(Integer idCliente, String nome, String numero, LocalDate dtAniversario) {
+        this.idCliente = idCliente;
+        this.nome = nome;
+        this.numero = numero;
+        this.dtAniversario = dtAniversario;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCliente;

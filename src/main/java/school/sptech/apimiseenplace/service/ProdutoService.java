@@ -36,7 +36,7 @@ public class ProdutoService {
             Integer unidadeMedidaId,
             Integer tipoProdutoId
     ){
-        if(produto == null) throw new BadRequestException("Produto de Criação");
+        if(produto == null) throw new BadRequestException("Produto");
 
         Recheio recheio = recheioService.encontrarPorId(recheioId);
         Massa massa = massaService.encontrarPorId(massaId);
@@ -53,9 +53,9 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public List<ProdutoListagemDTO> listarProdutos(){
+    public List<Produto> listarProdutos(){
         List<Produto> produtos = produtoRepository.findAll();
-        return ProdutoMapper.toListagemDto(produtos);
+        return produtos;
     }
 
     public Produto atualizarProduto(int id, Produto produto, Integer recheioId, Integer massaId, Integer coberturaId, Integer unidadeMedidaId, Integer tipoProdutoId) {
@@ -83,12 +83,13 @@ public class ProdutoService {
         return produtoRepository.save(produtoEncontrado);
     }
 
-    public void deletarProdutoPorId(Integer id){
+    public String deletarProdutoPorId(Integer id){
         if(!produtoRepository.existsById(id)){
             throw new BadRequestException("Produto");
         }
 
         produtoRepository.deleteById(id);
+        return "Produto deletado com sucesso!";
     }
 
     public List<Produto> filtrarNome() {

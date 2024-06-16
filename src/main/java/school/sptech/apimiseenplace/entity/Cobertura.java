@@ -12,6 +12,13 @@ import java.util.List;
 @Setter
 public class Cobertura {
 
+    public Cobertura() {}
+
+    public Cobertura(Integer idCobertura, String nome) {
+        this.idCobertura = idCobertura;
+        this.nome = nome;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCobertura;

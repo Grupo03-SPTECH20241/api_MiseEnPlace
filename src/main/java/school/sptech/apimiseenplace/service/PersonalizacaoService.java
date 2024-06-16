@@ -26,6 +26,7 @@ public class PersonalizacaoService {
 
 
     public Personalizacao criar(Personalizacao personalizacao){
+        if (personalizacao == null) throw new BadRequestException("Personalização");
         if (personalizacao.getCobertura() == null) throw new BadRequestException("Cobertura");
         if (personalizacao.getRecheio() == null) throw new BadRequestException("Recheio");
         if (personalizacao.getMassa() == null) throw new BadRequestException("Massa");
@@ -34,12 +35,12 @@ public class PersonalizacaoService {
     }
 
 
-    public List<RecheioListagemDto.PersonalizacaoListagem> listar(){
-        return PersonalizacaoMapper.toDtoSemPersonalizacao(repository.findAll());
+    public List<Personalizacao> listar(){
+        return repository.findAll();
     }
 
     public Personalizacao atualizar(Personalizacao personalizacao, Integer id){
-        if(!repository.existsById(id)) throw new BadRequestException("Personalizacao");
+        this.encontrarPorId(id);
 
         if (personalizacao.getCobertura() == null) throw new BadRequestException("Cobertura");
         if (personalizacao.getRecheio() == null) throw new BadRequestException("Recheio");
@@ -49,10 +50,11 @@ public class PersonalizacaoService {
         return repository.save(personalizacao);
     }
 
-    public void deletar(Integer id){
+    public String deletar(Integer id){
         if(!repository.existsById(id)) throw new BadRequestException("Personalizacao");
 
         repository.deleteById(id);
+        return "Personalização deletado com sucesso!";
     }
 
     public List<RecheioListagemDto.PersonalizacaoListagem> listarWhereIdRecheioEquals(Integer idRecheio){

@@ -27,13 +27,13 @@ public class PersonalizacaoController {
 
     @GetMapping
     public ResponseEntity<List<RecheioListagemDto.PersonalizacaoListagem>> listar(){
-        List<RecheioListagemDto.PersonalizacaoListagem> personalizacoes = service.listar();
+        List<Personalizacao> personalizacoes = service.listar();
 
         if (personalizacoes.isEmpty()){
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok(personalizacoes);
+        return ResponseEntity.ok(PersonalizacaoMapper.toDtoSemPersonalizacao(personalizacoes));
     }
 
     @GetMapping("/{id}")

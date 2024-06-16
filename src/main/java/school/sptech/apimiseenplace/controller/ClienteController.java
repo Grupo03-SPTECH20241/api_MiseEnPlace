@@ -32,10 +32,11 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<ClienteListagemDto>> listarCLientes() {
-        List<ClienteListagemDto> clienteListagemDtos = clienteService.listarClientes();
-        if (clienteListagemDtos.isEmpty()) {
+        List<Cliente> clientes = clienteService.listarClientes();
+        if (clientes.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+        List<ClienteListagemDto> clienteListagemDtos = ClienteMapper.toDto(clientes);
         return ResponseEntity.ok(clienteListagemDtos);
     }
 

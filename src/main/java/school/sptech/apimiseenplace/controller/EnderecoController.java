@@ -29,11 +29,11 @@ public class EnderecoController {
 
     @GetMapping
     public ResponseEntity<List<EnderecoListagemDto>> listar() {
-        List<EnderecoListagemDto> enderecoListagemDtos = enderecoService.listar();
-        if (enderecoListagemDtos.isEmpty()) {
+        List<Endereco> enderecos = enderecoService.listar();
+        if (enderecos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(enderecoListagemDtos);
+        return ResponseEntity.ok(EnderecoMapper.toDto(enderecos));
     }
 
     @PutMapping("/{id}")

@@ -30,9 +30,9 @@ public class MetaService {
 
         return valorVendido;
     }
-    public Metas criarMeta(MetaCriacaoDto metaCriacaoDto){
-        if (Objects.isNull(metaCriacaoDto)) throw new BadRequestException(" ");
-        return repository.save(MetaMapper.toEntity(metaCriacaoDto));
+    public Metas criarMeta(Metas metas){
+        if (Objects.isNull(metas)) throw new BadRequestException("Meta");
+        return repository.save(metas);
     }
 
     public List<Metas> listarMetas(){
@@ -43,16 +43,17 @@ public class MetaService {
                 () -> new NaoEncontradoException("Meta")
         );
     }
-    public Metas atualizarMeta(int id, MetaCriacaoDto metaCriacaoDto){
-        Metas meta = encontrarPorId(id);
-        if (Objects.isNull(meta)) return null;
-        meta.setValor(metaCriacaoDto.getValor());
-        meta.setDtTermino(metaCriacaoDto.getDtTermino());
-        return repository.save(meta);
+    public Metas atualizarMeta(int id, Metas meta){
+        Metas metaEncontrada = encontrarPorId(id);
+        if (Objects.isNull(metaEncontrada)) return null;
+        metaEncontrada.setValor(meta.getValor());
+        metaEncontrada.setDtTermino(meta.getDtTermino());
+        return repository.save(metaEncontrada);
     }
 
-    public void deletarMetaPorId(int id){
+    public String deletarMetaPorId(int id){
         if(!repository.existsById(id)) throw new BadRequestException("Meta");
         repository.deleteById(id);
+        return "Meta deletado com sucesso!";
     }
 }

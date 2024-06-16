@@ -27,11 +27,14 @@ public class CoberturaService {
         );
     }
 
-    public Cobertura criar(CoberturaCriacaoDto dto){
-        return repository.save(CoberturaMapper.toEntity(dto));
+    public Cobertura criar(Cobertura cobertura){
+        if (cobertura == null) {
+            throw new BadRequestException("Cobertura");
+        }
+        return repository.save(cobertura);
     }
 
-    public Cobertura atualizar(CoberturaCriacaoDto cobertura, Integer id){
+    public Cobertura atualizar(Integer id, Cobertura cobertura){
 
         if (cobertura == null) throw new BadRequestException("Cobertura");
 
@@ -40,13 +43,13 @@ public class CoberturaService {
         coberturaAchada.setIdCobertura(id);
         coberturaAchada.setNome(cobertura.getNome());
 
-
         return repository.save(coberturaAchada);
     }
 
-    public void deletar(Integer id){
+    public String deletar(Integer id){
         if (!repository.existsById(id)) throw new BadRequestException("Cobertura");
 
         repository.deleteById(id);
+        return "Cobertura deletado com sucesso!";
     }
 }

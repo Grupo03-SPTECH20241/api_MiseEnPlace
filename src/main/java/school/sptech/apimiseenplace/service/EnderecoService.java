@@ -27,9 +27,9 @@ public class EnderecoService {
         return enderecoRepository.save(endereco);
     }
 
-    public List<EnderecoListagemDto> listar() {
+    public List<Endereco> listar() {
         List<Endereco> enderecos = enderecoRepository.findAll();
-        return EnderecoMapper.toDto(enderecos);
+        return enderecos;
     }
 
     public Endereco atualizar(Integer id, Endereco endereco) {
@@ -49,10 +49,11 @@ public class EnderecoService {
         return enderecoRepository.existsById(id);
     }
 
-    public void deletar(Integer id) {
+    public String deletar(Integer id) {
         if (!existePorId(id)) {
             throw new BadRequestException("Endereço");
         }
         enderecoRepository.deleteById(id);
+        return "Endereço deletado com sucesso!";
     }
 }

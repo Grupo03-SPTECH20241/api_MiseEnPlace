@@ -51,11 +51,11 @@ public class ProdutoController {
     })
     @GetMapping
     public ResponseEntity<List<ProdutoListagemDTO>> listarProdutos(){
-        List<ProdutoListagemDTO> produtos = produtoService.listarProdutos();
+        List<Produto> produtos = produtoService.listarProdutos();
         if(produtos.isEmpty()){
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(produtos);
+        return ResponseEntity.ok(ProdutoMapper.toListagemDto(produtos));
     }
 
     @PutMapping("/{id}")

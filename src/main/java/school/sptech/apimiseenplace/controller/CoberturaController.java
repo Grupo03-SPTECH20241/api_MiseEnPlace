@@ -30,7 +30,8 @@ public class CoberturaController {
 
     @PostMapping
     public ResponseEntity<CoberturaListagemDto> criar(@RequestBody @Valid CoberturaCriacaoDto coberturaCriacao){
-        Cobertura coberturaSalva = service.criar(coberturaCriacao);
+        Cobertura cobertura = CoberturaMapper.toEntity(coberturaCriacao);
+        Cobertura coberturaSalva = service.criar(cobertura);
         return ResponseEntity.ok().body(CoberturaMapper.toDto(coberturaSalva));
     }
 
@@ -43,7 +44,8 @@ public class CoberturaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CoberturaListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid CoberturaCriacaoDto dtoAtualizacao){
-        Cobertura coberturaAtualizada = service.atualizar(dtoAtualizacao, id);
+        Cobertura cobertura = CoberturaMapper.toEntity(dtoAtualizacao);
+        Cobertura coberturaAtualizada = service.atualizar(id, cobertura);
         return ResponseEntity.ok(CoberturaMapper.toDto(coberturaAtualizada));
     }
 

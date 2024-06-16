@@ -26,7 +26,7 @@ public class PedidoService {
             Integer clienteId,
             Integer formaPagamentoId
     ) {
-        if (pedido == null) throw new BadRequestException("Pedido de Criação");
+        if (pedido == null) throw new BadRequestException("Pedido");
 
         FormaEntrega formaEntrega = formaEntregaService.encontrarPorId(formaEntregaId);
         Cliente cliente = clienteService.encontrarPorId(clienteId);
@@ -39,9 +39,9 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public List<PedidoListagemDTO> listar(){
+    public List<Pedido> listar(){
         List<Pedido> pedidoListagemDTOS = pedidoRepository.findAll();
-        return PedidoMapper.toDto(pedidoListagemDTOS);
+        return pedidoListagemDTOS;
     }
 
     public Pedido encontrarPorId(Integer id) {
@@ -70,12 +70,13 @@ public class PedidoService {
         return pedidoRepository.save(pedidoEncontrado);
     }
 
-    public void deletar(Integer id) {
+    public String deletar(Integer id) {
         if(!pedidoRepository.existsById(id)){
             throw new BadRequestException("Pedido");
         }
 
         pedidoRepository.deleteById(id);
+        return "Pedido deletado com sucesso!";
     }
 
     public List<Pedido> filtrar() {

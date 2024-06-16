@@ -33,11 +33,11 @@ public class FestaController {
 
     @GetMapping
     public ResponseEntity<List<FestaListagemDto>> listar() {
-        List<FestaListagemDto> festaListagemDtos = festaService.listar();
-        if (festaListagemDtos.isEmpty()) {
+        List<Festa> festas = festaService.listar();
+        if (festas.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(festaListagemDtos);
+        return ResponseEntity.ok(FestaMapper.toDto(festas));
     }
 
     @PutMapping("/{id}")

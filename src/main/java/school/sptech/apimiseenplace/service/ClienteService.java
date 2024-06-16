@@ -21,9 +21,9 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public List<ClienteListagemDto> listarClientes() {
+    public List<Cliente> listarClientes() {
         List<Cliente> clientes = clienteRepository.findAll();
-        return ClienteMapper.toDto(clientes);
+        return clientes;
     }
 
     public Cliente encontrarPorId(Integer id) {
@@ -48,10 +48,11 @@ public class ClienteService {
         return clienteRepository.existsById(id);
     }
 
-    public void deletarCliente(Integer id) {
+    public String deletarCliente(Integer id) {
         if (!existePorId(id)) {
             throw new BadRequestException("Cliente");
         }
         clienteRepository.deleteById(id);
+        return "Cliente deletado com sucesso!";
     }
 }

@@ -45,11 +45,11 @@ public class PedidoController {
 
     @GetMapping
     public ResponseEntity<List<PedidoListagemDTO>> listar() {
-        List<PedidoListagemDTO> pedidoListagemDTOS = pedidoService.listar();
-        if (pedidoListagemDTOS.isEmpty()) {
+        List<Pedido> pedidos = pedidoService.listar();
+        if (pedidos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(pedidoListagemDTOS);
+        return ResponseEntity.ok(PedidoMapper.toDto(pedidos));
     }
 
     @PutMapping("/{id}")
