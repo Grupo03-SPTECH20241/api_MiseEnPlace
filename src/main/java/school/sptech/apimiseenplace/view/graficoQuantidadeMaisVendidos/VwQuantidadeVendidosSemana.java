@@ -17,4 +17,12 @@ public class VwQuantidadeVendidosSemana {
     private LocalDate dia;
     @Column(name = "Quantidade Vendida")
     private Integer quantidadeVendida;
+
+    public VwQuantidadeVendidosSemana() {
+    }
+
+    public VwQuantidadeVendidosSemana(LocalDate dia, Integer quantidadeVendida) {
+        this.dia = dia;
+        this.quantidadeVendida = quantidadeVendida;
+    }
 }

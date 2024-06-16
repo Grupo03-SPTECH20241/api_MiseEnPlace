@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Immutable;
 
 @Entity
-@Immutable
 @Data
 public class VwQuantidadeVendidaValorVendido {
+
     @Id
     @Column(name = "nome")
     private String nome;
@@ -20,4 +20,15 @@ public class VwQuantidadeVendidaValorVendido {
     private Integer QuantidadeVendida;
     @Column(name = "valor vendido")
     private Double ValorVendido;
+
+    public VwQuantidadeVendidaValorVendido() {
+
+    }
+
+    public VwQuantidadeVendidaValorVendido(String nome, Integer mes, Integer quantidadeVendida, Double valorVendido) {
+        this.nome = nome;
+        this.mes = mes;
+        QuantidadeVendida = quantidadeVendida;
+        ValorVendido = valorVendido;
+    }
 }

@@ -15,4 +15,12 @@ public class VwQuantidadeVendidosDia {
     private Integer dia;
     @Column(name = "Quantidade Vendida")
     private Integer quantidadeVendida;
+
+    public VwQuantidadeVendidosDia() {
+    }
+
+    public VwQuantidadeVendidosDia(Integer dia, Integer quantidadeVendida) {
+        this.dia = dia;
+        this.quantidadeVendida = quantidadeVendida;
+    }
 }
