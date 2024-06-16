@@ -25,6 +25,8 @@ public class QuantidadeVendidaValorVendidoServiceTest {
 
     @Mock
     private QuantidadeVendidaValorVendidoRepository repository;
+
+
     @Nested
     @DisplayName("Cenario de listagem")
     public class cenarioListagem{
