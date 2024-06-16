@@ -1,7 +1,6 @@
 package school.sptech.apimiseenplace.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,4 +21,14 @@ public class Recheio {
     @OneToMany(mappedBy = "recheio")
     private List<Personalizacao> personalizacao;
 
+    public Recheio(Integer idRecheio, String nome, Double preco, List<Produto> produtos, List<Personalizacao> personalizacao) {
+        this.idRecheio = idRecheio;
+        this.nome = nome;
+        this.preco = preco;
+        this.produtos = produtos;
+        this.personalizacao = personalizacao;
+    }
+
+    public Recheio() {
+    }
 }

@@ -2,15 +2,13 @@ package school.sptech.apimiseenplace.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import school.sptech.apimiseenplace.dto.recheio.RecheioCriacaoDto;
-import school.sptech.apimiseenplace.dto.recheio.RecheioMapper;
 import school.sptech.apimiseenplace.entity.Recheio;
 import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
 import school.sptech.apimiseenplace.repository.RecheioRepository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +16,9 @@ public class RecheioService {
 
     private final RecheioRepository repository;
 
-    public Recheio cadastrarRecheio(RecheioCriacaoDto recheioCriacaoDto){
+    public Recheio cadastrarRecheio(Recheio recheioCriacaoDto){
         if(recheioCriacaoDto == null) throw new BadRequestException("Recheio");
-        return repository.save(RecheioMapper.toEntity(recheioCriacaoDto));
+        return repository.save(recheioCriacaoDto);
     }
 
     public List<Recheio> listarRecheios(){
@@ -33,7 +31,7 @@ public class RecheioService {
         );
     }
 
-    public Recheio atualizarRecheio(int id, RecheioCriacaoDto recheioCriacaoDto){
+    public Recheio atualizarRecheio(int id, Recheio recheioCriacaoDto){
         Recheio recheioAchado = encontrarPorId(id);
 
         recheioAchado.setIdRecheio(id);
@@ -43,9 +41,13 @@ public class RecheioService {
         return repository.save(recheioAchado);
     }
 
-    public void deletarRecheioPorId(int id){
-        if(!repository.existsById(id)) throw new BadRequestException("Recheio");
+    public String deletarRecheioPorId(int id){
+        if(!repository.existsById(id)) throw new NaoEncontradoException("Recheio");
 
         repository.deleteById(id);
+        return "Recheio deletado com sucesso!";
+    }
+
+    public void excluirRecheio(Integer idBusca) {
     }
 }

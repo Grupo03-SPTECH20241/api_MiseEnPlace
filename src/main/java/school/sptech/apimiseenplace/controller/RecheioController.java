@@ -2,7 +2,6 @@ package school.sptech.apimiseenplace.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.apimiseenplace.dto.recheio.RecheioCriacaoDto;
@@ -13,7 +12,7 @@ import school.sptech.apimiseenplace.entity.Recheio;
 import school.sptech.apimiseenplace.service.PersonalizacaoService;
 import school.sptech.apimiseenplace.service.RecheioService;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @RestController
@@ -26,7 +25,7 @@ public class RecheioController {
 
     @PostMapping
     public ResponseEntity<RecheioListagemDto> criar(@RequestBody @Valid RecheioCriacaoDto recheioCriacaoDto){
-        Recheio recheioSalvo = service.cadastrarRecheio(recheioCriacaoDto);
+        Recheio recheioSalvo = service.cadastrarRecheio(RecheioMapper.toEntity(recheioCriacaoDto));
         return ResponseEntity.ok().body(RecheioMapper.toDto(recheioSalvo));
     }
 
@@ -39,7 +38,7 @@ public class RecheioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<RecheioListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid RecheioCriacaoDto dtoAtualizacao){
-        Recheio recheioAtualizado = service.atualizarRecheio(id, dtoAtualizacao);
+        Recheio recheioAtualizado = service.atualizarRecheio(id, RecheioMapper.toEntity(dtoAtualizacao));
 
         if (recheioAtualizado == null){
             return ResponseEntity.noContent().build();
