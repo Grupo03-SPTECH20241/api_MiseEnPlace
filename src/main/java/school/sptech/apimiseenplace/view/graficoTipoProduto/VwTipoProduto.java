@@ -16,4 +16,13 @@ public class VwTipoProduto {
     private String tipoProduto;
     @Column(name = "Quantidade_Vendida")
     private Integer quantidadeVendida;
+
+    public VwTipoProduto() {
+    }
+
+    public VwTipoProduto(Integer id, String tipoProduto, Integer quantidadeVendida) {
+        this.id = id;
+        this.tipoProduto = tipoProduto;
+        this.quantidadeVendida = quantidadeVendida;
+    }
 }
