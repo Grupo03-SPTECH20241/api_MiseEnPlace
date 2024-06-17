@@ -105,7 +105,6 @@ class RecheioServiceTest {
                 Recheio recheio = new Recheio(1, "Recheio de Frango", 5.5, Collections.emptyList(), Collections.emptyList());
                 Integer idBusca = 1;
 
-
                 Mockito.when(repository.findById(idBusca)).thenReturn(Optional.of(recheio));
 
                 Recheio recheioEncontrado = service.encontrarPorId(idBusca);

@@ -18,4 +18,15 @@ public class Usuario {
     private String email;
     private String senha;
 
+    public Usuario(Integer idUsuario, String nome, String cnpj, String logo, String email, String senha) {
+        this.idUsuario = idUsuario;
+        this.nome = nome;
+        this.cnpj = cnpj;
+        this.logo = logo;
+        this.email = email;
+        this.senha = senha;
+    }
+
+    public Usuario() {
+    }
 }

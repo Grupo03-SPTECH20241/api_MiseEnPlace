@@ -59,8 +59,8 @@ public class UsuarioService {
         return usuarioRepository.save(UsuarioMapper.toEntity(usuarioCriacaoDto));
     }
 
-    public List<UsuarioListagemDto> listar(){
-        return UsuarioMapper.toDto(usuarioRepository.findAll());
+    public List<Usuario> listar(){
+        return usuarioRepository.findAll();
     }
 
     public Usuario encontrarPorId(Integer id) {
@@ -69,12 +69,13 @@ public class UsuarioService {
         );
     }
 
-    public void deletarUsuarioPorId(Integer id){
+    public String deletarUsuarioPorId(Integer id){
         if(!usuarioRepository.existsById(id)){
             throw new NaoEncontradoException("Usuario");
         }
 
         usuarioRepository.deleteById(id);
+        return "Usuario deletado com sucesso!";
     }
 
     public UsuarioListagemDto atualizar(int id, UsuarioAtualizarDto usuarioAtualizacao){
