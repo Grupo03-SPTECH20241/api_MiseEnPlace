@@ -33,7 +33,7 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<List<UsuarioListagemDto>> listar(){
-        List<UsuarioListagemDto> usuarios = usuarioService.listar();
+        List<UsuarioListagemDto> usuarios = UsuarioMapper.toDto(usuarioService.listar());
         if (usuarios.isEmpty()){
             return ResponseEntity.noContent().build();
         }
