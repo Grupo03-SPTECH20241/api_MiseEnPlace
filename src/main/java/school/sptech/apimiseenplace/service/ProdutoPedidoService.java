@@ -77,12 +77,13 @@ public class ProdutoPedidoService {
         return produtoPedidoRepository.existsById(id);
     }
 
-    public void deletar(Integer id) {
+    public String deletar(Integer id) {
         if(!produtoPedidoRepository.existsById(id)){
-            throw new BadRequestException("Festa");
+            throw new NaoEncontradoException("Produto Pedido");
         }
 
         produtoPedidoRepository.deleteById(id);
+        return "Produto Pedido deletado com sucesso!";
     }
 
     public List<ProdutoPedidoListagemDTO> listarWhereIdPersonalizacaoEquals(Integer idPedido) {

@@ -48,6 +48,4 @@ public class RecheioService {
         return "Recheio deletado com sucesso!";
     }
 
-    public void excluirRecheio(Integer idBusca) {
-    }
 }

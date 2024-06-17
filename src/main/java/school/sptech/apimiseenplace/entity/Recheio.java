@@ -11,8 +11,6 @@ import java.util.List;
 @Setter
 public class Recheio {
 
-    public Recheio() {}
-
     public Recheio(Integer idRecheio, String nome, Double preco) {
         this.idRecheio = idRecheio;
         this.nome = nome;
