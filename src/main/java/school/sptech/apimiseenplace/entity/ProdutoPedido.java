@@ -26,4 +26,16 @@ public class ProdutoPedido {
     @ManyToOne
     @JoinColumn(name = "fkPedido")
     private Pedido pedido;
+
+    public ProdutoPedido(Integer idProdutoPedido, Integer qtProduto, String observacoes, Produto produto, Personalizacao personalizacao, Pedido pedido) {
+        this.idProdutoPedido = idProdutoPedido;
+        this.qtProduto = qtProduto;
+        this.observacoes = observacoes;
+        this.produto = produto;
+        this.personalizacao = personalizacao;
+        this.pedido = pedido;
+    }
+
+    public ProdutoPedido() {
+    }
 }
