@@ -3,9 +3,7 @@ package school.sptech.apimiseenplace.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.apimiseenplace.dto.usuario.*;
 import school.sptech.apimiseenplace.entity.Usuario;
@@ -26,8 +24,8 @@ public class UsuarioController {
 
     @PostMapping
     @SecurityRequirement(name = "Bearer")
-    public ResponseEntity<UsuarioListagemDto> criar(@RequestBody @Valid UsuarioCriacaoDto usuarioCriacao){
-        Usuario usuarioSalvo = usuarioService.criar(usuarioCriacao);
+    public ResponseEntity<UsuarioListagemDto> criar(@RequestBody @Valid UsuarioEmailDto usuarioEmailDto){
+        Usuario usuarioSalvo = usuarioService.criar(usuarioEmailDto);
         return ResponseEntity.created(null).body(UsuarioMapper.toDto(usuarioSalvo));
     }
 

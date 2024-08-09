@@ -18,6 +18,24 @@ public class UsuarioMapper {
         return entity;
     }
 
+    public static Usuario toEntityFromEmail(UsuarioEmailDto dto){
+        Usuario entity = new Usuario();
+        entity.setNome(dto.getNome());
+        entity.setEmail(dto.getEmail());
+        entity.setCnpj(dto.getCnpj());
+        entity.setLogo(dto.getLogo());
+        return entity;
+    }
+
+    public static UsuarioCriacaoDto fromEmailToCriacao(UsuarioEmailDto dto){
+        UsuarioCriacaoDto entity = new UsuarioCriacaoDto();
+        entity.setNome(dto.getNome());
+        entity.setEmail(dto.getEmail());
+        entity.setCnpj(dto.getCnpj());
+        entity.setLogo(dto.getLogo());
+        return entity;
+    }
+
     public static UsuarioListagemDto toDto(Usuario entity){
         UsuarioListagemDto dto = new UsuarioListagemDto();
 
