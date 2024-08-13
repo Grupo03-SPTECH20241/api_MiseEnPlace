@@ -80,4 +80,11 @@ public class PedidoController {
         List<PedidoListagemDTO> pedidoListagemDTOS = PedidoMapper.toDto(pedidos);
         return ResponseEntity.ok(pedidoListagemDTOS);
     }
+
+    @PutMapping("/{id}/status/{status}")
+    public ResponseEntity<PedidoListagemDTO> atualizarStatus(@PathVariable Integer id, @PathVariable char status) {
+        Pedido pedido = pedidoService.atualizarStatus(id, status);
+        return ResponseEntity.ok(PedidoMapper.toDto(pedido));
+    }
+
 }
