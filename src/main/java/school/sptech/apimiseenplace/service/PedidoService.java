@@ -86,4 +86,12 @@ public class PedidoService {
         }
         return pedidos;
     }
+
+    public Pedido atualizarStatus(Integer id, char status) {
+        Pedido pedidoEncontrado = encontrarPorId(id);
+
+        pedidoEncontrado.setStatus(status);
+
+        return pedidoRepository.save(pedidoEncontrado);
+    }
 }
