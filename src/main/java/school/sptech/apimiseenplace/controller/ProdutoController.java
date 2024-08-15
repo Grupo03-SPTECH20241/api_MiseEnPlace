@@ -101,4 +101,12 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoListagemDTOS);
     }
 
+    @GetMapping("/filtrar-tipo/{tipo}")
+    public ResponseEntity<List<ProdutoListagemDTO>> filtrarTipo(@PathVariable String tipo) {
+        List<Produto> produtos = produtoService.filtrarTipo(tipo);
+        if (produtos.isEmpty()) return ResponseEntity.noContent().build();
+        List<ProdutoListagemDTO> produtoListagemDTOS = ProdutoMapper.toListagemDto(produtos);
+        return ResponseEntity.ok(produtoListagemDTOS);
+    }
+
 }
