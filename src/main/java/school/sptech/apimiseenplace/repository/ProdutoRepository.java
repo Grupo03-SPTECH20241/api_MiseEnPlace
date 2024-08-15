@@ -14,4 +14,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     @Query("SELECT p FROM Produto p ORDER BY p.preco")
     List<Produto> filtrarPreco();
 
+    @Query("SELECT p FROM Produto p JOIN p.tipoProduto tp WHERE tp.tipo = :tipo")
+    List<Produto> filtrarTipo(String tipo);
+
 }

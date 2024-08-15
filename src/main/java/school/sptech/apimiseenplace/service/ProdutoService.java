@@ -102,4 +102,9 @@ public class ProdutoService {
         return produtos;
     }
 
+    public List<Produto> filtrarTipo(String tipo) {
+        List<Produto> produtos = produtoRepository.filtrarTipo(tipo);
+        return produtos;
+    }
+
 }
