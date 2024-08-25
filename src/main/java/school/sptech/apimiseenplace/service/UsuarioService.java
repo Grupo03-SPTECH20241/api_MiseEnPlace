@@ -1,6 +1,7 @@
 package school.sptech.apimiseenplace.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Chars;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import school.sptech.apimiseenplace.exception.ConflitoException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
 import school.sptech.apimiseenplace.repository.UsuarioRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -131,18 +133,21 @@ public class UsuarioService {
     }
 
     private String generateSenha(int tamanho){
-        final String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        final String LOWER = UPPER.toLowerCase();
-        final String DIGITS = "0123456789";
-        final String SPECIAL_CHARS = "!@#$%^&*()_+{}[]";
 
-        final String CHARS = UPPER + LOWER + DIGITS + SPECIAL_CHARS;
+        List<String> CHARS = new ArrayList<>();
+        var chars = "!;#;$;%;&;(;);*;+;,;-;.;/;0;1;2;3;4;5;6;7;8;9;:;<;=;>;?;@;A;B;C;D;E;F;G;H;I;J;K;L;M;N;O;P;Q;R;S;T;U;V;W;X;Y;Z;[;];^;_;`;a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;{;|;};~;'".split(";");
+
+        for (var item: chars) {
+            CHARS.add(item);
+        }
+
+        CHARS.remove(CHARS.size() - 1);
 
         Random random = new Random();
         StringBuilder password = new StringBuilder();
 
         for(int i =0; i < tamanho; i++){
-            password.append(CHARS.charAt(random.nextInt(10, CHARS.length() - 1)));
+            password.append(CHARS.get(random.nextInt(0, CHARS.size() - 1)));
         }
 
         return password.toString();
