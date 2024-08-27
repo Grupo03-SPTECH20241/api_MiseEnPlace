@@ -106,4 +106,16 @@ public class ProdutoPedidoService {
 
          return ProdutoPedidoMapper.toDto(produtoPedidoRepository.save(p3));
     }
+
+    public Long getQuantidadeProduto(Integer id) {
+        List<ProdutoPedidoListagemDTO> listaProdutoPedido = listar();
+
+        Long quantidadeProdutos = listaProdutoPedido.stream()
+                .filter(produtoPedido -> produtoPedido.getPedidoDto().getIdPedido().equals(id))
+                .map(ProdutoPedidoListagemDTO::getProdutoDto)
+                .distinct()
+                .count();
+
+        return quantidadeProdutos;
+    }
 }

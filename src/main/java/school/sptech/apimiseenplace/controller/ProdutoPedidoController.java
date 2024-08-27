@@ -60,4 +60,10 @@ public class ProdutoPedidoController {
         produtoPedidoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/quantidade-produto/pedido/{id}")
+    public ResponseEntity<Long> getQuantidadeProduto(@PathVariable Integer id) {
+        Long quantidadeProduto = produtoPedidoService.getQuantidadeProduto(id);
+        return ResponseEntity.ok(quantidadeProduto);
+    }
 }
