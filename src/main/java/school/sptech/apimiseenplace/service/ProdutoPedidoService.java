@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import school.sptech.apimiseenplace.dto.personalizacao.PersonalizacaoMapper;
 import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoListagemDTO;
 import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoMapper;
+import school.sptech.apimiseenplace.dto.produto_pedido.QuantidadeProdutoDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioListagemDto;
 import school.sptech.apimiseenplace.entity.Pedido;
 import school.sptech.apimiseenplace.entity.Personalizacao;
@@ -16,6 +17,7 @@ import school.sptech.apimiseenplace.repository.ProdutoPedidoRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -105,5 +107,22 @@ public class ProdutoPedidoService {
         p3.setPersonalizacao(p);
 
          return ProdutoPedidoMapper.toDto(produtoPedidoRepository.save(p3));
+    }
+
+    public List<QuantidadeProdutoDto> getQuantidadeProduto() {
+        List<ProdutoPedidoListagemDTO> listaProdutoPedido = listar();
+
+        List<QuantidadeProdutoDto> quantidadeProdutos = listaProdutoPedido.stream()
+                .collect(Collectors.groupingBy(produto -> produto.getPedidoDto().getIdPedido(), Collectors.counting()))
+                .entrySet().stream()
+                .map(entry -> {
+                    QuantidadeProdutoDto quantidadeProdutoDto = new QuantidadeProdutoDto();
+                    quantidadeProdutoDto.setIdPedido(entry.getKey());
+                    quantidadeProdutoDto.setQuantidadeProdutos(entry.getValue().intValue());
+                    return quantidadeProdutoDto;
+                })
+                .collect(Collectors.toList());
+
+        return quantidadeProdutos;
     }
 }

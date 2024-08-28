@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoCriacaoDto;
 import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoListagemDTO;
 import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoMapper;
+import school.sptech.apimiseenplace.dto.produto_pedido.QuantidadeProdutoDto;
 import school.sptech.apimiseenplace.entity.ProdutoPedido;
 import school.sptech.apimiseenplace.service.ProdutoPedidoService;
 
@@ -59,5 +60,11 @@ public class ProdutoPedidoController {
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         produtoPedidoService.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/quantidade-produto/pedido")
+    public ResponseEntity<List<QuantidadeProdutoDto>> getQuantidadeProduto() {
+        List<QuantidadeProdutoDto> quantidadeProduto = produtoPedidoService.getQuantidadeProduto();
+        return ResponseEntity.ok(quantidadeProduto);
     }
 }
