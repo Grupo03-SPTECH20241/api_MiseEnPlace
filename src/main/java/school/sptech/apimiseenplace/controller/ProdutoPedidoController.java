@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoCriacaoDto;
-import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoListagemDTO;
-import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoMapper;
-import school.sptech.apimiseenplace.dto.produto_pedido.QuantidadeProdutoDto;
+import school.sptech.apimiseenplace.dto.produto_pedido.*;
 import school.sptech.apimiseenplace.entity.ProdutoPedido;
 import school.sptech.apimiseenplace.service.ProdutoPedidoService;
 
@@ -62,9 +59,15 @@ public class ProdutoPedidoController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/quantidade-produto/pedido")
+    @GetMapping("/quantidade-produto")
     public ResponseEntity<List<QuantidadeProdutoDto>> getQuantidadeProduto() {
         List<QuantidadeProdutoDto> quantidadeProduto = produtoPedidoService.getQuantidadeProduto();
+        return ResponseEntity.ok(quantidadeProduto);
+    }
+
+    @GetMapping("/listagem-produtos")
+    public ResponseEntity<List<ListagemProdutosDto>> listagemProdutos() {
+        List<ListagemProdutosDto> quantidadeProduto = produtoPedidoService.listagemProdutos();
         return ResponseEntity.ok(quantidadeProduto);
     }
 }

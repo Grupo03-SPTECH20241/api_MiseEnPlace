@@ -3,6 +3,7 @@ package school.sptech.apimiseenplace.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import school.sptech.apimiseenplace.dto.personalizacao.PersonalizacaoMapper;
+import school.sptech.apimiseenplace.dto.produto_pedido.ListagemProdutosDto;
 import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoListagemDTO;
 import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoMapper;
 import school.sptech.apimiseenplace.dto.produto_pedido.QuantidadeProdutoDto;
@@ -124,5 +125,23 @@ public class ProdutoPedidoService {
                 .collect(Collectors.toList());
 
         return quantidadeProdutos;
+    }
+
+    public List<ListagemProdutosDto> listagemProdutos() {
+        List<ProdutoPedidoListagemDTO> listaProdutoPedido = listar();
+
+        List<ListagemProdutosDto> listagemProdutos = listaProdutoPedido.stream()
+                .collect(Collectors.groupingBy(produto -> produto.getPedidoDto().getIdPedido(),
+                        Collectors.mapping(ProdutoPedidoListagemDTO::getProdutoDto, Collectors.toList())))
+                .entrySet().stream()
+                .map(entry -> {
+                    ListagemProdutosDto listagemProdutosDto = new ListagemProdutosDto();
+                    listagemProdutosDto.setIdPedido(entry.getKey());
+                    listagemProdutosDto.setProdutos(entry.getValue());
+                    return listagemProdutosDto;
+                })
+                .collect(Collectors.toList());
+
+        return listagemProdutos;
     }
 }
