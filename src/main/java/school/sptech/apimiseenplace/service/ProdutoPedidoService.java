@@ -3,10 +3,7 @@ package school.sptech.apimiseenplace.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import school.sptech.apimiseenplace.dto.personalizacao.PersonalizacaoMapper;
-import school.sptech.apimiseenplace.dto.produto_pedido.ListagemProdutosDto;
-import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoListagemDTO;
-import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoMapper;
-import school.sptech.apimiseenplace.dto.produto_pedido.QuantidadeProdutoDto;
+import school.sptech.apimiseenplace.dto.produto_pedido.*;
 import school.sptech.apimiseenplace.dto.recheio.RecheioListagemDto;
 import school.sptech.apimiseenplace.entity.Pedido;
 import school.sptech.apimiseenplace.entity.Personalizacao;
@@ -16,6 +13,8 @@ import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
 import school.sptech.apimiseenplace.repository.ProdutoPedidoRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -144,4 +143,8 @@ public class ProdutoPedidoService {
 
         return listagemProdutos;
     }
+    public List<ProdutoPedido> listagemAgenda(LocalDate dataInicio, LocalDate dataFim){
+        return produtoPedidoRepository.findByDataInicioAndDataFim(dataInicio, dataFim);
+    }
+
 }

@@ -2,10 +2,10 @@ package school.sptech.apimiseenplace.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import school.sptech.apimiseenplace.entity.Personalizacao;
 import school.sptech.apimiseenplace.entity.Produto;
 import school.sptech.apimiseenplace.entity.ProdutoPedido;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ProdutoPedidoRepository extends JpaRepository<ProdutoPedido, Integer> {
@@ -18,4 +18,8 @@ public interface ProdutoPedidoRepository extends JpaRepository<ProdutoPedido, In
 
     @Query("SELECT pp.qtProduto FROM ProdutoPedido pp WHERE pp.pedido.idPedido = :fkPedido")
     List<Integer> findQuantidades(Integer fkPedido);
+
+    @Query("SELECT p FROM ProdutoPedido p WHERE p.pedido.dtPedido BETWEEN :dataInicio AND :dataFim")
+    List<ProdutoPedido> findByDataInicioAndDataFim(LocalDate dataInicio, LocalDate dataFim);
+
 }

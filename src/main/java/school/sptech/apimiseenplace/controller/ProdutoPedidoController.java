@@ -9,7 +9,13 @@ import school.sptech.apimiseenplace.entity.ProdutoPedido;
 import school.sptech.apimiseenplace.service.ProdutoPedidoService;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/produto-pedidos")
@@ -69,5 +75,52 @@ public class ProdutoPedidoController {
     public ResponseEntity<List<ListagemProdutosDto>> listagemProdutos() {
         List<ListagemProdutosDto> quantidadeProduto = produtoPedidoService.listagemProdutos();
         return ResponseEntity.ok(quantidadeProduto);
+    }
+
+    @GetMapping("/agenda")
+    public ResponseEntity<AgendaDTO> listagemAgenda(@RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
+        List<ProdutoPedido> produtoPedido = produtoPedidoService.listagemAgenda(
+                dataInicio, dataFim);
+        AgendaDTO agendaDTO = new AgendaDTO();
+
+        Map<LocalDate, List<ProdutoPedido>> produtoPedidoGroupedByDate = produtoPedido.stream()
+                .collect(Collectors.groupingBy(produto -> produto.getPedido().getDtPedido()));
+
+        for (var entry : produtoPedidoGroupedByDate.entrySet()) {
+            var listagemAgenda = new ListagemAgenda();
+            if(entry.getKey() == LocalDate.now()){
+                listagemAgenda.setTitle(entry.getKey().getDayOfWeek().getDisplayName(java.time.format.TextStyle.FULL,
+                        new Locale("pt", "BR")).toUpperCase()
+                        + ", "
+                        + entry.getKey().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        + " | Hoje");
+            } else if(entry.getKey() == LocalDate.now().plusDays(1)){
+                listagemAgenda.setTitle(entry.getKey().getDayOfWeek().getDisplayName(java.time.format.TextStyle.FULL,
+                        new Locale("pt", "BR")).toUpperCase()
+                        + ", "
+                        + entry.getKey().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        + " | Amanhã");
+            } else {
+                listagemAgenda.setTitle(entry.getKey().getDayOfWeek().getDisplayName(java.time.format.TextStyle.FULL,
+                        new Locale("pt", "BR")).toUpperCase()
+                        + ", "
+                        + entry.getKey().toString());
+            }
+
+            for (var produto : entry.getValue()) {
+                var item = new AgendaItemsDTO();
+                item.setPedido(produto.getPedido().getIdPedido().toString());
+                item.setDescricao(produto.getProduto().getDescricao() + " " + produto.getObservacoes());
+                item.setStatus(produto.getPedido().getStatus());
+                item.setCliente(produto.getPedido().getCliente().getNome());
+                item.setDataEntrega(produto.getPedido().getDtPedido());
+
+                listagemAgenda.getItems().add(item);
+            }
+            agendaDTO.getItemsAgenda().add(listagemAgenda);
+        }
+
+
+        return ResponseEntity.ok(agendaDTO);
     }
 }

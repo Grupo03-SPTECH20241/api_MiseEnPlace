@@ -14,6 +14,7 @@ public class PedidoMapper {
         pedido.setVlPedido(pedidoCriacaoDTO.getVlPedido());
         pedido.setStatus(pedidoCriacaoDTO.getStatus());
         pedido.setValorSinal(pedidoCriacaoDTO.getValorSinal());
+        pedido.setDtEntrega(pedidoCriacaoDTO.getDtEntrega());
 
         return pedido;
     }
@@ -26,6 +27,7 @@ public class PedidoMapper {
         pedidoListagemDTO.setVlPedido(pedido.getVlPedido());
         pedidoListagemDTO.setStatus(pedido.getStatus());
         pedidoListagemDTO.setValorSinal(pedido.getValorSinal());
+        pedidoListagemDTO.setDtEntrega(pedido.getDtEntrega());
 
         PedidoListagemDTO.FormaEntregaDto formaEntregaDto = new PedidoListagemDTO.FormaEntregaDto();
         formaEntregaDto.setIdFormaEntrega(pedido.getFormaEntrega().getIdFormaEntrega());
@@ -68,6 +70,7 @@ public class PedidoMapper {
             pedidoListagemDTO.setVlPedido(pedidos[i].getVlPedido());
             pedidoListagemDTO.setStatus(pedidos[i].getStatus());
             pedidoListagemDTO.setValorSinal(pedidos[i].getValorSinal());
+            pedidoListagemDTO.setDtEntrega(pedidos[i].getDtEntrega());
 
             PedidoListagemDTO.FormaEntregaDto formaEntregaDto = new PedidoListagemDTO.FormaEntregaDto();
             formaEntregaDto.setIdFormaEntrega(pedidos[i].getFormaEntrega().getIdFormaEntrega());
