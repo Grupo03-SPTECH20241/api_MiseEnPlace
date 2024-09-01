@@ -16,4 +16,5 @@ public class PedidoCriacaoDTO {
     private Integer formaEntregaId;
     private Integer clienteId;
     private Integer formaPagamentoId;
+    private LocalDate dtEntrega;
 }

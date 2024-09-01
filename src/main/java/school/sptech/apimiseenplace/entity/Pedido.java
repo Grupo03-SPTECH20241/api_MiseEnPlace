@@ -13,7 +13,7 @@ import java.util.List;
 public class Pedido {
     public Pedido() {}
 
-    public Pedido(Integer idPedido, LocalDate dtPedido, Double vlPedido, char status, Double valorSinal, FormaEntrega formaEntrega, Cliente cliente, FormaPagamento formaPagamento) {
+    public Pedido(Integer idPedido, LocalDate dtPedido, Double vlPedido, char status, Double valorSinal, FormaEntrega formaEntrega, Cliente cliente, FormaPagamento formaPagamento, LocalDate dtEntrega) {
         this.idPedido = idPedido;
         this.dtPedido = dtPedido;
         this.vlPedido = vlPedido;
@@ -22,6 +22,7 @@ public class Pedido {
         this.formaEntrega = formaEntrega;
         this.cliente = cliente;
         this.formaPagamento = formaPagamento;
+        this.dtEntrega = dtEntrega;
     }
 
     @Id
@@ -31,6 +32,7 @@ public class Pedido {
     private Double vlPedido;
     private char status;
     private Double valorSinal;
+    private LocalDate dtEntrega;
 
     @ManyToOne
     @JoinColumn(name = "fkFormaEntrega")

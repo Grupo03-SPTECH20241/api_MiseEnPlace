@@ -14,6 +14,7 @@ public class PedidoListagemDTO {
     private FormaEntregaDto formaEntregaDto;
     private ClienteDto clienteDto;
     private FormaPagamentoDto formaPagamentoDto;
+    private LocalDate dtEntrega;
 
     @Data
     public static class FormaEntregaDto {
