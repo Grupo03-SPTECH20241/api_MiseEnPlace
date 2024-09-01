@@ -38,7 +38,7 @@ public class Pedido {
     @JoinColumn(name = "fkFormaEntrega")
     private FormaEntrega formaEntrega;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdutoPedido> produtoPedidos;
 
     @ManyToOne
