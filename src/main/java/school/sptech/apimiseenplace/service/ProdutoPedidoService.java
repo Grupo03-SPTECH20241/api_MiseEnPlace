@@ -62,9 +62,13 @@ public class ProdutoPedidoService {
         produtoPedidoEncontrado.setObservacoes(produtoPedido.getObservacoes());
 
         Produto produto = produtoService.encontrarPorId(produtoId);
+
         if (personalizacaoId != null) {
             Personalizacao personalizacao = personalizacaoService.encontrarPorId(personalizacaoId);
             produtoPedidoEncontrado.setPersonalizacao(personalizacao);
+        }
+        else {
+            produtoPedidoEncontrado.setPersonalizacao(null);
         }
         Pedido pedido = pedidoService.encontrarPorId(pedidoId);
 

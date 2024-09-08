@@ -53,23 +53,28 @@ public class ProdutoPedidoMapper {
         produtoDto.setTipoProduto(tipoProdutoDto);
         produtoPedidoListagemDTO.setProdutoDto(produtoDto);
 
-        ProdutoPedidoListagemDTO.PersonalizacaoDto personalizacaoDto = new ProdutoPedidoListagemDTO.PersonalizacaoDto();
-        personalizacaoDto.setIdPersonalizacao(produtoPedido.getPersonalizacao().getIdPersonalizacao());
-        personalizacaoDto.setTema(produtoPedido.getPersonalizacao().getTema());
-        ProdutoPedidoListagemDTO.PersonalizacaoDto.RecheioDto recheioDtoPersonalizacao = new ProdutoPedidoListagemDTO.PersonalizacaoDto.RecheioDto();
-        recheioDtoPersonalizacao.setId(produtoPedido.getPersonalizacao().getRecheio().getIdRecheio());
-        recheioDtoPersonalizacao.setNome(produtoPedido.getPersonalizacao().getRecheio().getNome());
-        recheioDtoPersonalizacao.setPreco(produtoPedido.getPersonalizacao().getRecheio().getPreco());
-        personalizacaoDto.setRecheio(recheioDtoPersonalizacao);
-        ProdutoPedidoListagemDTO.PersonalizacaoDto.MassaDto massaDtoPersonalizacao = new ProdutoPedidoListagemDTO.PersonalizacaoDto.MassaDto();
-        massaDtoPersonalizacao.setId(produtoPedido.getPersonalizacao().getMassa().getIdMassa());
-        massaDtoPersonalizacao.setNome(produtoPedido.getPersonalizacao().getMassa().getNome());
-        personalizacaoDto.setMassa(massaDtoPersonalizacao);
-        ProdutoPedidoListagemDTO.PersonalizacaoDto.CoberturaDto coberturaDtoPersonalizacao = new ProdutoPedidoListagemDTO.PersonalizacaoDto.CoberturaDto();
-        coberturaDtoPersonalizacao.setId(produtoPedido.getPersonalizacao().getCobertura().getIdCobertura());
-        coberturaDtoPersonalizacao.setNome(produtoPedido.getPersonalizacao().getCobertura().getNome());
-        personalizacaoDto.setCobertura(coberturaDtoPersonalizacao);
-        produtoPedidoListagemDTO.setPersonalizacaoDto(personalizacaoDto);
+        if (produtoPedido.getPersonalizacao() == null || produtoPedido.getPersonalizacao().getIdPersonalizacao() == 0) {
+            produtoPedidoListagemDTO.setPersonalizacaoDto(null);
+        }
+        else {
+            ProdutoPedidoListagemDTO.PersonalizacaoDto personalizacaoDto = new ProdutoPedidoListagemDTO.PersonalizacaoDto();
+            personalizacaoDto.setIdPersonalizacao(produtoPedido.getPersonalizacao().getIdPersonalizacao());
+            personalizacaoDto.setTema(produtoPedido.getPersonalizacao().getTema());
+            ProdutoPedidoListagemDTO.PersonalizacaoDto.RecheioDto recheioDtoPersonalizacao = new ProdutoPedidoListagemDTO.PersonalizacaoDto.RecheioDto();
+            recheioDtoPersonalizacao.setId(produtoPedido.getPersonalizacao().getRecheio().getIdRecheio());
+            recheioDtoPersonalizacao.setNome(produtoPedido.getPersonalizacao().getRecheio().getNome());
+            recheioDtoPersonalizacao.setPreco(produtoPedido.getPersonalizacao().getRecheio().getPreco());
+            personalizacaoDto.setRecheio(recheioDtoPersonalizacao);
+            ProdutoPedidoListagemDTO.PersonalizacaoDto.MassaDto massaDtoPersonalizacao = new ProdutoPedidoListagemDTO.PersonalizacaoDto.MassaDto();
+            massaDtoPersonalizacao.setId(produtoPedido.getPersonalizacao().getMassa().getIdMassa());
+            massaDtoPersonalizacao.setNome(produtoPedido.getPersonalizacao().getMassa().getNome());
+            personalizacaoDto.setMassa(massaDtoPersonalizacao);
+            ProdutoPedidoListagemDTO.PersonalizacaoDto.CoberturaDto coberturaDtoPersonalizacao = new ProdutoPedidoListagemDTO.PersonalizacaoDto.CoberturaDto();
+            coberturaDtoPersonalizacao.setId(produtoPedido.getPersonalizacao().getCobertura().getIdCobertura());
+            coberturaDtoPersonalizacao.setNome(produtoPedido.getPersonalizacao().getCobertura().getNome());
+            personalizacaoDto.setCobertura(coberturaDtoPersonalizacao);
+            produtoPedidoListagemDTO.setPersonalizacaoDto(personalizacaoDto);
+        }
 
         ProdutoPedidoListagemDTO.PedidoDto pedidoDto = new ProdutoPedidoListagemDTO.PedidoDto();
         pedidoDto.setIdPedido(produtoPedido.getPedido().getIdPedido());
