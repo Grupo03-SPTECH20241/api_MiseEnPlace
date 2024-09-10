@@ -123,4 +123,10 @@ public class ProdutoPedidoController {
 
         return ResponseEntity.ok(agendaDTO);
     }
+
+    @GetMapping("/visualizar-pedido/{id}")
+    public ResponseEntity<VisualizarPedidoDto> visualizarPedido(@PathVariable Integer id) {
+        VisualizarPedidoDto response = produtoPedidoService.visualizarPedido(id);
+        return ResponseEntity.ok(response);
+    }
 }
