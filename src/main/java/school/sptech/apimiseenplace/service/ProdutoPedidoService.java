@@ -2,6 +2,8 @@ package school.sptech.apimiseenplace.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import school.sptech.apimiseenplace.dto.pedido.PedidoListagemDTO;
+import school.sptech.apimiseenplace.dto.pedido.PedidoMapper;
 import school.sptech.apimiseenplace.dto.personalizacao.PersonalizacaoMapper;
 import school.sptech.apimiseenplace.dto.produto_pedido.*;
 import school.sptech.apimiseenplace.dto.recheio.RecheioListagemDto;
@@ -11,6 +13,7 @@ import school.sptech.apimiseenplace.entity.Produto;
 import school.sptech.apimiseenplace.entity.ProdutoPedido;
 import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
+import school.sptech.apimiseenplace.repository.PedidoRepository;
 import school.sptech.apimiseenplace.repository.ProdutoPedidoRepository;
 
 import java.time.LocalDate;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProdutoPedidoService {
     private final ProdutoPedidoRepository produtoPedidoRepository;
+    private final PedidoRepository pedidoRepository;
     private final ProdutoService produtoService;
     private final PersonalizacaoService personalizacaoService;
     private final PedidoService pedidoService;
@@ -149,6 +153,24 @@ public class ProdutoPedidoService {
     }
     public List<ProdutoPedido> listagemAgenda(LocalDate dataInicio, LocalDate dataFim){
         return produtoPedidoRepository.findByDataInicioAndDataFim(dataInicio, dataFim);
+    }
+
+    public VisualizarPedidoDto visualizarPedido(Integer id) {
+        VisualizarPedidoDto visualizarPedidoDto = new VisualizarPedidoDto();
+
+        Optional<Pedido> pedido = pedidoRepository.findById(id);
+        PedidoListagemDTO pedidoListagemDTO = PedidoMapper.toDto(pedido.get());
+
+        visualizarPedidoDto.setPedidoListagemDTO(pedidoListagemDTO);
+
+        ListagemProdutosDto listagemProdutosDto = listagemProdutos().stream()
+                .filter(x -> x.getIdPedido() == id)
+                .findFirst()
+                .get();
+
+        visualizarPedidoDto.setProdutos(listagemProdutosDto.getProdutos());
+
+        return visualizarPedidoDto;
     }
 
 }

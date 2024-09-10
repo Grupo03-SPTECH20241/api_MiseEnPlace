@@ -22,4 +22,6 @@ public interface ProdutoPedidoRepository extends JpaRepository<ProdutoPedido, In
     @Query("SELECT p FROM ProdutoPedido p WHERE p.pedido.dtPedido BETWEEN :dataInicio AND :dataFim")
     List<ProdutoPedido> findByDataInicioAndDataFim(LocalDate dataInicio, LocalDate dataFim);
 
+
+
 }

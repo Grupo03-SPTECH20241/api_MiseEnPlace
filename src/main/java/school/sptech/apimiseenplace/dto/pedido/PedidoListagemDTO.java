@@ -1,8 +1,10 @@
 package school.sptech.apimiseenplace.dto.pedido;
 
 import lombok.Data;
+import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoPedidoListagemDTO;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class PedidoListagemDTO {
