@@ -10,6 +10,6 @@ import java.util.List;
 public class VisualizarPedidoDto {
 
     private PedidoListagemDTO pedidoListagemDTO;
-    private List<ProdutoPedidoListagemDTO.ProdutoDto> produtos;
+    private List<ProdutoVisualizarPedidoDto> produtos;
 
 }
