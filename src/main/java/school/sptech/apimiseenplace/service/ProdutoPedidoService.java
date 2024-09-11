@@ -163,12 +163,9 @@ public class ProdutoPedidoService {
 
         visualizarPedidoDto.setPedidoListagemDTO(pedidoListagemDTO);
 
-        ListagemProdutosDto listagemProdutosDto = listagemProdutos().stream()
-                .filter(x -> x.getIdPedido() == id)
-                .findFirst()
-                .get();
+        List<ProdutoVisualizarPedidoDto> produtoVisualizarPedidoDtos = produtoPedidoRepository.findProdutoVisualizarPedido(pedido.get());
 
-        visualizarPedidoDto.setProdutos(listagemProdutosDto.getProdutos());
+        visualizarPedidoDto.setProdutos(produtoVisualizarPedidoDtos);
 
         return visualizarPedidoDto;
     }

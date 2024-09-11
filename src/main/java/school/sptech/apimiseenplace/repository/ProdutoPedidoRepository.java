@@ -2,6 +2,8 @@ package school.sptech.apimiseenplace.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import school.sptech.apimiseenplace.dto.produto_pedido.ProdutoVisualizarPedidoDto;
+import school.sptech.apimiseenplace.entity.Pedido;
 import school.sptech.apimiseenplace.entity.Produto;
 import school.sptech.apimiseenplace.entity.ProdutoPedido;
 
@@ -22,6 +24,7 @@ public interface ProdutoPedidoRepository extends JpaRepository<ProdutoPedido, In
     @Query("SELECT p FROM ProdutoPedido p WHERE p.pedido.dtPedido BETWEEN :dataInicio AND :dataFim")
     List<ProdutoPedido> findByDataInicioAndDataFim(LocalDate dataInicio, LocalDate dataFim);
 
-
+    @Query("SELECT new school.sptech.apimiseenplace.dto.produto_pedido.ProdutoVisualizarPedidoDto(pp.qtProduto, pp.produto) FROM ProdutoPedido pp WHERE pp.pedido = :pedido")
+    List<ProdutoVisualizarPedidoDto> findProdutoVisualizarPedido(Pedido pedido);
 
 }
