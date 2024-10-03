@@ -171,7 +171,7 @@ class MetaServiceTest {
             Assertions.assertEquals(metaEncontrada.getDtInicio(), metaAntiga.getDtInicio());
             Mockito.when(metaRepository.save(Mockito.any(Metas.class))).thenReturn(metaAtualizada);
 
-            Metas metaRetornada = metaService.atualizarMeta(Mockito.any(Integer.class),metaAtualizada);
+            Metas metaRetornada = metaService.atualizarMetaInRange(Mockito.any(Integer.class),metaAtualizada);
 
             Assertions.assertEquals(metaRetornada.getIdMeta(), metaAtualizada.getIdMeta());
             Assertions.assertEquals(metaRetornada.getValor(), metaAtualizada.getValor());

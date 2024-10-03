@@ -75,7 +75,7 @@ public class ListaLigada {
         Node currentNode = head.getNext();
 
         while (currentNode != null) {
-            if (currentNode.getInfo().getNome().toLowerCase().contains(nome)) {
+            if (currentNode.getInfo().getNome().toLowerCase().contains(nome.toLowerCase())) {
                 produtoListagemDTOS.add(currentNode.getInfo());
             }
             currentNode = currentNode.getNext();

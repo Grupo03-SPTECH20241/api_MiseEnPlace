@@ -2,9 +2,6 @@ package school.sptech.apimiseenplace.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import school.sptech.apimiseenplace.dto.metas.MetaCriacaoDto;
-import school.sptech.apimiseenplace.dto.metas.MetaMapper;
-import school.sptech.apimiseenplace.dto.vwQuantidadeVendidaValorVendido.vwQuantidadeVendidaValorVendidoMes.QuantidadeVendidaValorVendidoDto;
 import school.sptech.apimiseenplace.entity.Metas;
 import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
@@ -43,10 +40,19 @@ public class MetaService {
                 () -> new NaoEncontradoException("Meta")
         );
     }
-    public Metas atualizarMeta(int id, Metas meta){
+    public Metas atualizarMetaInRange(int id, Metas meta){
         Metas metaEncontrada = encontrarPorId(id);
         if (Objects.isNull(metaEncontrada)) return null;
         metaEncontrada.setValor(meta.getValor());
+        metaEncontrada.setDtTermino(meta.getDtTermino());
+        return repository.save(metaEncontrada);
+    }
+
+    public Metas atualizarMetaNotInRange(int id, Metas meta){
+        Metas metaEncontrada = encontrarPorId(id);
+        if (Objects.isNull(metaEncontrada)) return null;
+        metaEncontrada.setValor(meta.getValor());
+        metaEncontrada.setDtInicio(meta.getDtInicio());
         metaEncontrada.setDtTermino(meta.getDtTermino());
         return repository.save(metaEncontrada);
     }

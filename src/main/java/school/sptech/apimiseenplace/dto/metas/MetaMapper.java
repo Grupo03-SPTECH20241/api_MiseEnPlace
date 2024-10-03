@@ -16,11 +16,11 @@ public class MetaMapper {
     }
 
 
-    public static Metas toEntity(MetaCriacaoDto metaCriacaoDto) {
+    public static Metas toEntity(MetaCriacaoDto metaAtualizacaoDto) {
         Metas meta = new Metas();
-        meta.setValor(metaCriacaoDto.getValor());
+        meta.setValor(metaAtualizacaoDto.getValor());
         meta.setDtInicio(LocalDate.now());
-        meta.setDtTermino(metaCriacaoDto.getDtTermino());
+        meta.setDtTermino(metaAtualizacaoDto.getDtTermino());
         return meta;
     }
 
