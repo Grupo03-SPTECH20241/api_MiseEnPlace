@@ -38,7 +38,6 @@ public class ClienteService {
         clienteEncontrado.setIdCliente(id);
         clienteEncontrado.setNome(cliente.getNome());
         clienteEncontrado.setNumero(cliente.getNumero());
-        clienteEncontrado.setDtAniversario(cliente.getDtAniversario());
 
         return clienteRepository.save(clienteEncontrado);
     }
