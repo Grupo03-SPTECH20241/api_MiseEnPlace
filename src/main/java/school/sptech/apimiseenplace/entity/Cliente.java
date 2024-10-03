@@ -14,11 +14,10 @@ public class Cliente {
 
     public Cliente() {}
 
-    public Cliente(Integer idCliente, String nome, String numero, LocalDate dtAniversario) {
+    public Cliente(Integer idCliente, String nome, String numero) {
         this.idCliente = idCliente;
         this.nome = nome;
         this.numero = numero;
-        this.dtAniversario = dtAniversario;
     }
 
     @Id
@@ -26,7 +25,6 @@ public class Cliente {
     private Integer idCliente;
     private String nome;
     private String numero;
-    private LocalDate dtAniversario;
 
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedido;

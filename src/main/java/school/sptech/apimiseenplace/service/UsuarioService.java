@@ -106,6 +106,12 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
+    public String obterFotoCliente(String email){
+        if(email == null || email.isBlank() || email.isEmpty()) throw new BadRequestException("Email Usuario");
+
+        return usuarioRepository.findLogoByEmail(email);
+    }
+
     public Usuario encontrarPorId(Integer id) {
         return usuarioRepository.findById(id).orElseThrow(
                 () -> new NaoEncontradoException("Usuario")

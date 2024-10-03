@@ -8,5 +8,4 @@ import java.time.LocalDate;
 public class ClienteCriacaoDto {
     private String nome;
     private String numero;
-    private LocalDate dtAniversario;
 }

@@ -9,5 +9,4 @@ public class ClienteListagemDto {
     private Integer idCliente;
     private String nome;
     private String numero;
-    private LocalDate dtAniversario;
 }
