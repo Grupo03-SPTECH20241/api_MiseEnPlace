@@ -107,6 +107,11 @@ public class UsuarioController {
         return ResponseEntity.ok(dtoOrdenado);
     }
 
+    @GetMapping("/obter-foto-cliente")
+    public ResponseEntity<String> obterFotoCliente(@RequestParam String email) {
+        return ResponseEntity.ok(usuarioService.obterFotoCliente(email));
+    }
+
     public Usuario[] ordenarNomeQuicksort(
             Usuario[] v,
             int indInicio,
