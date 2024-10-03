@@ -6,13 +6,13 @@ import java.util.List;
 
 public class UsuarioMapper {
 
-    public static Usuario toEntity(UsuarioCriacaoDto dto){
+    public static Usuario toEntity(UsuarioCriacaoDto dto, String nomeArquivo){
 
         Usuario entity = new Usuario();
         entity.setNome(dto.getNome());
         entity.setEmail(dto.getEmail());
         entity.setSenha(dto.getSenha());
-        entity.setLogo(dto.getLogo());
+        entity.setLogo(nomeArquivo);
         entity.setCnpj(dto.getCnpj());
 
         return entity;
@@ -23,7 +23,7 @@ public class UsuarioMapper {
         entity.setNome(dto.getNome());
         entity.setEmail(dto.getEmail());
         entity.setCnpj(dto.getCnpj());
-        entity.setLogo(dto.getLogo());
+        entity.setLogo(dto.getLogo().toString());
         return entity;
     }
 

@@ -11,7 +11,7 @@ public class UsuarioCriacaoDto {
     private String nome;
     @CNPJ
     private String cnpj;
-    private String logo;
+    private byte[] logo;
     @Email
     @Size(min = 1, max = 45)
     private String email;

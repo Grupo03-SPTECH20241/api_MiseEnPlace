@@ -1,7 +1,7 @@
 package school.sptech.apimiseenplace.service;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.util.Chars;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,8 +16,15 @@ import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.ConflitoException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
 import school.sptech.apimiseenplace.repository.UsuarioRepository;
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.lambda.model.InvokeRequest;
+import software.amazon.awssdk.services.lambda.model.InvokeResponse;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 
@@ -30,6 +37,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final LambdaService lambdaService;
 
     public UsuarioTokenDto autenticar(UsuarioLoginDto usuarioLoginDto){
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
@@ -78,11 +86,21 @@ public class UsuarioService {
                 Equipe QGD Consultoria
                 """.formatted(usuarioEmailDto.getNome(), senha));
 
+
+            byte[] bytes = entity .getLogo();
+             var arquivo = Base64.getEncoder().encodeToString(bytes);
+             var nomeArquivo = "logo-" + LocalDateTime.now();
+            var response = lambdaService.sendToLambda("arn:aws:lambda:us-east-1:942802636108:function:sobeParaS3", "mise-en-place-bucket", arquivo, nomeArquivo);
+        if(response.statusCode() != 200){
+            throw new BadRequestException("Lambda");
+        }
         if(!email){
             throw new BadRequestException("Email");
         }
-        return usuarioRepository.save(UsuarioMapper.toEntity(entity));
+
+        return usuarioRepository.save(UsuarioMapper.toEntity(entity, nomeArquivo));
     }
+
 
     public List<Usuario> listar(){
         return usuarioRepository.findAll();
@@ -114,7 +132,6 @@ public class UsuarioService {
         if(usuarioAtualizacao.getNome() != null && !usuarioAtualizacao.getNome().isBlank() && !usuarioAtualizacao.getNome().isEmpty() ) usuarioAchado.setNome(usuarioAtualizacao.getNome());
         if(usuarioAtualizacao.getEmail() != null && !usuarioAtualizacao.getEmail().isBlank() && !usuarioAtualizacao.getEmail().isEmpty() ) usuarioAchado.setEmail(usuarioAtualizacao.getEmail());
         if(usuarioAtualizacao.getCnpj() != null && !usuarioAtualizacao.getCnpj().isBlank() && !usuarioAtualizacao.getCnpj().isEmpty() ) usuarioAchado.setCnpj(usuarioAtualizacao.getCnpj());
-        if(usuarioAtualizacao.getLogo() != null && !usuarioAtualizacao.getLogo().isBlank() && !usuarioAtualizacao.getLogo().isEmpty() ) usuarioAchado.setLogo(usuarioAtualizacao.getLogo());
 
         return UsuarioMapper.toDto(usuarioRepository.save(usuarioAchado));
     }
@@ -131,6 +148,8 @@ public class UsuarioService {
 
         return "Senha Atualizada com Sucesso!";
     }
+
+
 
     private String generateSenha(int tamanho){
 
@@ -152,4 +171,6 @@ public class UsuarioService {
 
         return password.toString();
     }
+
+
 }
