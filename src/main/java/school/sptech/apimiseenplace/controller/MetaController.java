@@ -10,8 +10,6 @@ import school.sptech.apimiseenplace.dto.metas.MetaMapper;
 import school.sptech.apimiseenplace.entity.Metas;
 import school.sptech.apimiseenplace.service.MetaService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/metas")
 @RequiredArgsConstructor
@@ -35,16 +33,26 @@ public class MetaController {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<MetaListagemDto> atualizarMeta(@PathVariable int id, @RequestBody @Valid MetaCriacaoDto dtoAtualizacao){
+    @PutMapping("/{id}/in-range/{inRange}")
+    public ResponseEntity<MetaListagemDto> atualizarMeta(@PathVariable int id, @PathVariable boolean inRange, @RequestBody @Valid MetaCriacaoDto dtoAtualizacao){
         Metas meta = MetaMapper.toEntity(dtoAtualizacao);
-        Metas metaAtualizada = metaService.atualizarMeta(id, meta);
+
+        Metas metaAtualizada;
+
+        if (inRange) {
+            metaAtualizada = metaService.atualizarMetaInRange(id, meta);
+        } else {
+            metaAtualizada = metaService.atualizarMetaNotInRange(id, meta);
+        }
 
         if (metaAtualizada == null){
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok(MetaMapper.toMetaListagemDto(metaAtualizada));
+        MetaListagemDto metaListagemDto = MetaMapper.toMetaListagemDto(metaAtualizada);
+        metaListagemDto.setValorRealizado(metaService.AcompanhamentoMeta());
+
+        return ResponseEntity.ok(metaListagemDto);
     }
 
     @DeleteMapping("/{id}")
