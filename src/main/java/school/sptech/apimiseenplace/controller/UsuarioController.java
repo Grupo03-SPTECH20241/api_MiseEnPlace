@@ -1,5 +1,6 @@
 package school.sptech.apimiseenplace.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class UsuarioController {
 
     @PostMapping
     @SecurityRequirement(name = "Bearer")
-    public ResponseEntity<UsuarioListagemDto> criar(@RequestBody @Valid UsuarioEmailDto usuarioEmailDto){
+    public ResponseEntity<UsuarioListagemDto> criar(@RequestBody @Valid UsuarioEmailDto usuarioEmailDto) throws JsonProcessingException {
         Usuario usuarioSalvo = usuarioService.criar(usuarioEmailDto);
         return ResponseEntity.created(null).body(UsuarioMapper.toDto(usuarioSalvo));
     }
