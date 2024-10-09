@@ -29,7 +29,6 @@ public class FestaMapper {
         clienteDto.setIdCliente(festa.getPedido().getCliente().getIdCliente());
         clienteDto.setNome(festa.getPedido().getCliente().getNome());
         clienteDto.setNumero(festa.getPedido().getCliente().getNumero());
-        clienteDto.setDtAniversario(festa.getPedido().getCliente().getDtAniversario());
         pedidoDto.setClienteDto(clienteDto);
         FestaListagemDto.PedidoDto.FormaPagamentoDto formaPagamentoDto = new FestaListagemDto.PedidoDto.FormaPagamentoDto();
         formaPagamentoDto.setIdFormaPagamento(festa.getPedido().getFormaPagamento().getIdFormaPagamento());

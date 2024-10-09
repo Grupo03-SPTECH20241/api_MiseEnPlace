@@ -89,7 +89,6 @@ public class ProdutoPedidoMapper {
         clienteDto.setIdCliente(produtoPedido.getPedido().getCliente().getIdCliente());
         clienteDto.setNome(produtoPedido.getPedido().getCliente().getNome());
         clienteDto.setNumero(produtoPedido.getPedido().getCliente().getNumero());
-        clienteDto.setDtAniversario(produtoPedido.getPedido().getCliente().getDtAniversario());
         pedidoDto.setClienteDto(clienteDto);
         ProdutoPedidoListagemDTO.PedidoDto.FormaPagamentoDto formaPagamentoDto = new ProdutoPedidoListagemDTO.PedidoDto.FormaPagamentoDto();
         formaPagamentoDto.setIdFormaPagamento(produtoPedido.getPedido().getFormaPagamento().getIdFormaPagamento());

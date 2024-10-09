@@ -1,5 +1,7 @@
 package school.sptech.apimiseenplace.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.apimiseenplace.api.configuration.security.jwt.GerenciadorTokenJwt;
 import school.sptech.apimiseenplace.dto.usuario.*;
+import school.sptech.apimiseenplace.entity.BodyMessage;
+import school.sptech.apimiseenplace.entity.LogoRecord;
 import school.sptech.apimiseenplace.entity.Usuario;
 import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.ConflitoException;
@@ -55,7 +59,7 @@ public class UsuarioService {
         return UsuarioMapper.of(usuarioAutenticado, token);
     }
 
-    public Usuario criar(UsuarioEmailDto usuarioEmailDto){
+    public Usuario criar(UsuarioEmailDto usuarioEmailDto) throws JsonProcessingException {
         if (usuarioEmailDto == null) throw new BadRequestException("Usuario");
 
         if (usuarioRepository.existsByEmail(usuarioEmailDto.getEmail())) throw new ConflitoException("Usuario");
@@ -90,7 +94,14 @@ public class UsuarioService {
             byte[] bytes = entity .getLogo();
              var arquivo = Base64.getEncoder().encodeToString(bytes);
              var nomeArquivo = "logo-" + LocalDateTime.now();
-            var response = lambdaService.sendToLambda("arn:aws:lambda:us-east-1:942802636108:function:sobeParaS3", "mise-en-place-bucket", arquivo, nomeArquivo);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+            var response = lambdaService.sendToLambda("arn:aws:lambda:us-east-1:942802636108:function:sobeParaS3", "bucket-testee", arquivo, nomeArquivo);
+            var reponseString = response.payload().asUtf8String();
+            LogoRecord logoRecord =objectMapper.readValue(reponseString, LogoRecord.class) ;
+            BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
+
         if(response.statusCode() != 200){
             throw new BadRequestException("Lambda");
         }
@@ -98,7 +109,7 @@ public class UsuarioService {
             throw new BadRequestException("Email");
         }
 
-        return usuarioRepository.save(UsuarioMapper.toEntity(entity, nomeArquivo));
+        return usuarioRepository.save(UsuarioMapper.toEntity(entity, bodyMessage.url()));
     }
 
 
