@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.apimiseenplace.dto.produto.ProdutoCriacaoDTO;
@@ -81,8 +82,15 @@ public class ProdutoController {
     public ResponseEntity<Void> deletarProdutoPorId(
             @PathVariable int idProduto
     ){
-        produtoService.deletarProdutoPorId(idProduto);
-        return ResponseEntity.noContent().build();
+        try {
+            produtoService.deletarProdutoPorId(idProduto);
+            return ResponseEntity.noContent().build();
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity.accepted().build();
+        }
+        catch (Exception ex) {
+            throw ex;
+        }
     }
 
     @GetMapping("/filtrar-nome")
