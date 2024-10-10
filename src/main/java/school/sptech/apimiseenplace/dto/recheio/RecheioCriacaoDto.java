@@ -10,7 +10,7 @@ import lombok.Data;
 public class RecheioCriacaoDto {
 
     @NotBlank
-    @Size(min=11, max = 45)
+    @Size(max = 45)
     private String nome;
     @Positive
     @DecimalMin("0.0")
