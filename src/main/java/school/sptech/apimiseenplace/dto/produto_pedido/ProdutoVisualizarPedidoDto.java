@@ -10,10 +10,12 @@ import java.time.LocalDate;
 @Data
 public class ProdutoVisualizarPedidoDto {
     private Integer qtdProduto;
+    private Integer idProdutoPedido;
     private ProdutoListagemDTO produtoDto;
 
-    public ProdutoVisualizarPedidoDto(Integer qtdProduto, Produto produto) {
+    public ProdutoVisualizarPedidoDto(Integer qtdProduto, Produto produto, Integer idProdutoPedido) {
         this.qtdProduto = qtdProduto;
         this.produtoDto = ProdutoMapper.toListagemDto(produto);
+        this.idProdutoPedido = idProdutoPedido;
     }
 }

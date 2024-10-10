@@ -24,7 +24,7 @@ public interface ProdutoPedidoRepository extends JpaRepository<ProdutoPedido, In
     @Query("SELECT p FROM ProdutoPedido p WHERE p.pedido.dtPedido BETWEEN :dataInicio AND :dataFim")
     List<ProdutoPedido> findByDataInicioAndDataFim(LocalDate dataInicio, LocalDate dataFim);
 
-    @Query("SELECT new school.sptech.apimiseenplace.dto.produto_pedido.ProdutoVisualizarPedidoDto(pp.qtProduto, pp.produto) FROM ProdutoPedido pp WHERE pp.pedido = :pedido")
+    @Query("SELECT new school.sptech.apimiseenplace.dto.produto_pedido.ProdutoVisualizarPedidoDto(pp.qtProduto, pp.produto, pp.idProdutoPedido) FROM ProdutoPedido pp WHERE pp.pedido = :pedido")
     List<ProdutoVisualizarPedidoDto> findProdutoVisualizarPedido(Pedido pedido);
 
 }
