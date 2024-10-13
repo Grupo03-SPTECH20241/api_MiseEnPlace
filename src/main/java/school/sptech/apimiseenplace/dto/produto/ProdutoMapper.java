@@ -6,6 +6,8 @@ import school.sptech.apimiseenplace.entity.Produto;
 import java.util.List;
 
 public class ProdutoMapper {
+
+
     public static Produto toEntity(ProdutoCriacaoDTO produtoCriacaoDTO){
         if (produtoCriacaoDTO == null) return null;
         Produto entity = new Produto();
@@ -13,7 +15,6 @@ public class ProdutoMapper {
         entity.setNome(produtoCriacaoDTO.getNome());
         entity.setPreco(produtoCriacaoDTO.getPreco());
         entity.setDescricao(produtoCriacaoDTO.getDescricao());
-        entity.setFoto(produtoCriacaoDTO.getFoto());
         entity.setQtdDisponivel(produtoCriacaoDTO.getQtdDisponivel());
 
         return entity;
