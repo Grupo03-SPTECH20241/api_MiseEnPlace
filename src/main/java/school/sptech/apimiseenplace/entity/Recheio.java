@@ -16,6 +16,10 @@ public class Recheio {
         this.nome = nome;
         this.preco = preco;
     }
+    public Recheio(String nome, Double preco) {
+        this.nome = nome;
+        this.preco = preco;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

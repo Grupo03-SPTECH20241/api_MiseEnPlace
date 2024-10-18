@@ -19,6 +19,10 @@ public class Cobertura {
         this.nome = nome;
     }
 
+    public Cobertura(String nome) {
+        this.nome = nome;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCobertura;

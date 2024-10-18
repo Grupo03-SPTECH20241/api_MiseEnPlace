@@ -2,20 +2,13 @@ package school.sptech.apimiseenplace.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import school.sptech.apimiseenplace.dto.pedido.PedidoListagemDTO;
 import school.sptech.apimiseenplace.dto.pedido.PedidoMapper;
-import school.sptech.apimiseenplace.dto.personalizacao.PersonalizacaoMapper;
 import school.sptech.apimiseenplace.dto.produto_pedido.*;
-import school.sptech.apimiseenplace.dto.recheio.RecheioListagemDto;
-import school.sptech.apimiseenplace.entity.Pedido;
-import school.sptech.apimiseenplace.entity.Personalizacao;
-import school.sptech.apimiseenplace.entity.Produto;
-import school.sptech.apimiseenplace.entity.ProdutoPedido;
+import school.sptech.apimiseenplace.entity.*;
 import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
-import school.sptech.apimiseenplace.repository.PedidoRepository;
-import school.sptech.apimiseenplace.repository.ProdutoPedidoRepository;
+import school.sptech.apimiseenplace.repository.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -23,9 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Formatter;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -39,6 +31,15 @@ public class ProdutoPedidoService {
     private final ProdutoService produtoService;
     private final PersonalizacaoService personalizacaoService;
     private final PedidoService pedidoService;
+    private final FormaEntregaRepository formaEntregaRepository;
+    private final ClienteRepository clienteRepository;
+    private final RecheioRepository recheioRepository;
+    private final MassaRepository massaRepository;
+    private final CoberturaRepository coberturaRepository;
+    private final UnidadeMedidaRepository unidadeMedidaRepository;
+    private final TipoProdutoRepository tipoProdutoRepository;
+    private final PersonalizacaoRepository personalizacaoRepository;
+    private final FormaPagamentoRepository formaPagamentoRepository;
 
     public ProdutoPedido cadastrar(ProdutoPedido produtoPedido, Integer produtoId, Integer personalizacaoId, Integer pedidoId) {
         if (produtoPedido == null) throw new BadRequestException("Produto Pedido");
@@ -185,27 +186,76 @@ public class ProdutoPedidoService {
             throw new RuntimeException(e);
         }
     }
-    private void byteArrayToCSV(byte[] fileBytes, String fileName) {
+
+    public static void base64ToCSV(String base64, String filePath) {
         try {
-            Path path = Paths.get(fileName);
-            Files.write(path, fileBytes);
+            // Decode the Base64 string into a byte array
+            byte[] decodedBytes = Base64.getDecoder().decode(base64);
+
+            // Convert the byte array into a string
+            String content = new String(decodedBytes, StandardCharsets.UTF_8);
+
+            // Write the string to a .csv file
+            Path path = Paths.get(filePath);
+            Files.write(path, content.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean importarPedidos(byte[] bytes) {
-         file = byteArrayToCSV(bytes, "pedidos.csv");
-        try (Scanner scanner = new Scanner(file.getInputStream(), StandardCharsets.UTF_8.name())) {
+    public boolean importarPedidos(String base64) {
+        base64ToCSV(base64, "pedidos.csv");
+
+        try (Scanner scanner = new Scanner(new File("pedidos.csv"), StandardCharsets.UTF_8.name())) {
             scanner.nextLine();
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] values = line.split(";");
+
+                Pedido pedido = new Pedido();
+                pedido.setDtPedido(LocalDate.parse(values[0], DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                pedido.setVlPedido(Double.parseDouble(values[1]));
+                pedido.setStatus(values[2].charAt(0));
+                pedido.setValorSinal(Double.parseDouble(values[3]));
+                pedido.setDtEntrega(LocalDate.parse(values[4], DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                pedido.setFormaEntrega(formaEntregaRepository.findByFormaEntrega(values[5]));
+                pedido.setCliente(clienteRepository.findByNome(values[6]));
+                pedido.setFormaPagamento(formaPagamentoRepository.findByFormaPagamento(values[7]));
+                Pedido pedidoCadastrado = pedidoRepository.save(pedido);
+
+                Produto produto = new Produto();
+                produto.setNome(values[10]);
+                produto.setPreco(Double.parseDouble(values[11]));
+                produto.setDescricao(values[12]);
+                produto.setQtdDisponivel(Integer.parseInt(values[13]));
+                produto.setRecheio(recheioRepository.findByNome(values[14]));
+                produto.setMassa(massaRepository.findByNome(values[16]));
+                produto.setCobertura(coberturaRepository.findByNome(values[17]));
+                produto.setUnidadeMedida(unidadeMedidaRepository.findByUnidadeMedida(values[18]));
+                produto.setTipoProduto(tipoProdutoRepository.findByTipo(values[19]));
+                Produto produtoCadastrado = produtoService.cadastrarProduto(
+                        produto,
+                        produto.getRecheio().getIdRecheio(),
+                        produto.getMassa().getIdMassa(),
+                        produto.getCobertura().getIdCobertura(),
+                        produto.getUnidadeMedida().getIdUnidadeMedida(),
+                        produto.getTipoProduto().getIdTipoProduto()
+                );
+
+                Personalizacao personalizacao = new Personalizacao();
+                personalizacao.setTema(values[20]);
+                personalizacao.setRecheio(recheioRepository.findByNome(values[21]));
+                personalizacao.setMassa(massaRepository.findByNome(values[22]));
+                personalizacao.setCobertura(coberturaRepository.findByNome(values[23]));
+
+                Personalizacao personalizacaoCadastrada = personalizacaoRepository.save(personalizacao);
+
                 ProdutoPedido produtoPedido = new ProdutoPedido();
-                produtoPedido.setPedido(pedidoService.encontrarPorId(Integer.parseInt(values[0])));
-                produtoPedido.setProduto(produtoService.encontrarPorId(Integer.parseInt(values[1])));
-                produtoPedido.setQtProduto(Integer.parseInt(values[3]));
-                produtoPedido.setObservacoes(values[4]);
+                produtoPedido.setObservacoes(values[8]);
+                produtoPedido.setQtProduto(Integer.parseInt(values[9]));
+                produtoPedido.setPedido(pedidoCadastrado);
+                produtoPedido.setProduto(produtoCadastrado);
+                produtoPedido.setPersonalizacao(personalizacaoCadastrada);
                 produtoPedidoRepository.save(produtoPedido);
             }
             return true;

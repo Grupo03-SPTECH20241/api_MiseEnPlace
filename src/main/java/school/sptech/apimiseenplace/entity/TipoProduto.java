@@ -22,6 +22,11 @@ public class TipoProduto {
         this.produtos = produtos;
     }
 
+    public TipoProduto(String tipo) {
+        this.tipo = tipo;
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTipoProduto;

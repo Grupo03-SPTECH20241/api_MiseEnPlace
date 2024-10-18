@@ -26,4 +26,8 @@ public class UnidadeMedida {
         this.unidadeMedida = unidadeMedida;
         this.produtos = produtos;
     }
+
+    public UnidadeMedida(String unidadeMedida) {
+        this.unidadeMedida = unidadeMedida;
+    }
 }
