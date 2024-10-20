@@ -2,12 +2,18 @@ package school.sptech.apimiseenplace.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import school.sptech.apimiseenplace.dto.produto_pedido.*;
 import school.sptech.apimiseenplace.entity.ProdutoPedido;
 import school.sptech.apimiseenplace.service.ProdutoPedidoService;
 
+import java.io.File;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -122,6 +128,26 @@ public class ProdutoPedidoController {
 
 
         return ResponseEntity.ok(agendaDTO);
+    }
+
+    @GetMapping("/exportar-pedidos")
+    public ResponseEntity<Resource> exportarPedidos(@RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
+        File csv = produtoPedidoService.exportarPedidos(dataInicio, dataFim);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=pedidos.csv");
+
+        Resource resource = new FileSystemResource(csv);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(csv.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+    }
+
+    @PostMapping("/importar-pedidos")
+    public ResponseEntity<Void> importarPedidos(@RequestBody String file){
+        produtoPedidoService.importarPedidos(file);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/visualizar-pedido/{id}")

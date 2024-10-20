@@ -16,6 +16,9 @@ public class Massa {
         this.idMassa = idMassa;
         this.nome = nome;
     }
+    public Massa(String nome) {
+        this.nome = nome;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
