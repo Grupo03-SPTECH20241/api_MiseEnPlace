@@ -1,7 +1,9 @@
 package school.sptech.apimiseenplace.service;
 
-import school.sptech.apimiseenplace.entity.Produto;
-import school.sptech.apimiseenplace.entity.Recheio;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import school.sptech.apimiseenplace.entity.*;
+import school.sptech.apimiseenplace.repository.*;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -9,10 +11,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class ArquivoTxtService {
+    private final ProdutoRepository produtoRepository;
+    private final MassaRepository massaRepository;
+    private final RecheioRepository recheioRepository;
+    private final CoberturaRepository coberturaRepository;
+    private final UnidadeMedidaRepository unidadeMedidaRepository;
+    private final TipoProdutoRepository tipoProdutoRepository;
 
     // Método para gravar o registro no arquivo
-    public static void gravaRegistro(String nomeArq, String registro) {
+    public void gravaRegistro(String nomeArq, String registro) {
         BufferedWriter saida = null;
 
         try {
@@ -32,7 +42,7 @@ public class ArquivoTxtService {
     }
 
     // Método para gravar o arquivo TXT
-    public static void gravaArquivoTxt(List<Produto> lista, String nomeArq) {
+    public void gravaArquivoTxt(List<Produto> lista, String nomeArq) {
         int contaRegDados = 0;
 
         // Grava o header
@@ -64,16 +74,22 @@ public class ArquivoTxtService {
     }
 
     // Método para ler o arquivo TXT
-    public static List<Produto> leArquivoTxt(String nomeArq) {
+    public List<Produto> leArquivoTxt(File file) {
         BufferedReader entrada = null;
         List<Produto> listaProdutos = new ArrayList<>();
         String registro, tipoRegistro;
 
         try {
-            entrada = new BufferedReader(new FileReader(nomeArq));
+            entrada = new BufferedReader(new FileReader(file));
         } catch (IOException erro) {
             System.out.println("Erro ao abrir o arquivo: " + erro.getMessage());
         }
+
+        List<Massa> massas = massaRepository.findAll();
+        List<Cobertura> coberturas = coberturaRepository.findAll();
+        List<Recheio> recheios = recheioRepository.findAll();
+        List<UnidadeMedida> unidadeMedidas = unidadeMedidaRepository.findAll();
+        List<TipoProduto> tipoProdutos = tipoProdutoRepository.findAll();
 
         try {
             if (entrada != null) {
@@ -99,9 +115,81 @@ public class ArquivoTxtService {
                         String tipoProduto = registro.substring(164, 184).trim();
                         String descricao = registro.substring(184, 284).trim();
 
-                        Recheio recheio = new Recheio();
-                        recheio.setNome(recheioNome);
-                        recheio.setPreco(precoRecheio);
+                        Massa massaRegistro = null;
+                        Recheio recheioRegistro = null;
+                        Cobertura coberturaRegistro = null;
+                        UnidadeMedida unidadeMedidaRegistro = null;
+                        TipoProduto tipoProdutoRegistro = null;
+
+                        boolean massaEncontrada = false;
+                        for (Massa massaBanco : massas) {
+                            if (massaBanco.getNome().equalsIgnoreCase(massa)) {
+                                massaRegistro = massaBanco;
+                                massaEncontrada = true;
+                                break;
+                            }
+                        }
+
+                        boolean coberturaEncontrada = false;
+                        for (Cobertura coberturaBanco : coberturas) {
+                            if (coberturaBanco.getNome().equalsIgnoreCase(cobertura)) {
+                                coberturaRegistro = coberturaBanco;
+                                coberturaEncontrada = true;
+                                break;
+                            }
+                        }
+
+                        boolean recheioEncontrado = false;
+                        for (Recheio recheioBanco : recheios) {
+                            if (recheioBanco.getNome().equalsIgnoreCase(recheioNome)) {
+                                recheioRegistro = recheioBanco;
+                                recheioEncontrado = true;
+                                break;
+                            }
+                        }
+
+                        boolean unidadeMedidadaEncontrada = false;
+                        for (UnidadeMedida unidadeMedidaBanco : unidadeMedidas) {
+                            if (unidadeMedidaBanco.getUnidadeMedida().equalsIgnoreCase(unidadeMedida)) {
+                                unidadeMedidaRegistro = unidadeMedidaBanco;
+                                unidadeMedidadaEncontrada = true;
+                                break;
+                            }
+                        }
+
+                        boolean tipoProdutoEncontrado = false;
+                        for (TipoProduto tipoProdutoBanco : tipoProdutos) {
+                            if (tipoProdutoBanco.getTipo().equalsIgnoreCase(tipoProduto)) {
+                                tipoProdutoRegistro = tipoProdutoBanco;
+                                tipoProdutoEncontrado = true;
+                                break;
+                            }
+                        }
+
+                        if (!massaEncontrada) {
+                            Massa massaNova = new Massa(null, massa);
+                            massaRegistro = massaRepository.save(massaNova);
+                        }
+
+                        if (!coberturaEncontrada) {
+                            Cobertura coberturaNova = new Cobertura(null, cobertura);
+                            coberturaRegistro = coberturaRepository.save(coberturaRegistro);
+                        }
+
+                        if (!recheioEncontrado) {
+                            Recheio recheioNovo = new Recheio(null, recheioNome, precoRecheio);
+                            recheioRegistro = recheioRepository.save(recheioNovo);
+                        }
+
+                        if (!unidadeMedidadaEncontrada) {
+                            UnidadeMedida unidadeMedidaNova = new UnidadeMedida(null, unidadeMedida, null);
+                            unidadeMedidaRegistro = unidadeMedidaRepository.save(unidadeMedidaNova);
+                        }
+
+                        if (!tipoProdutoEncontrado) {
+                            TipoProduto tipoProdutoNovo = new TipoProduto(null, tipoProduto, null);
+                            tipoProdutoRegistro = tipoProdutoRepository.save(tipoProdutoNovo);
+                        }
 
                         Produto produto = new Produto(
                                 null,
@@ -110,14 +198,15 @@ public class ArquivoTxtService {
                                 descricao,
                                 null,
                                 1,
-                                recheio, 
-                                massa,
-                                cobertura,
-                                unidadeMedida,
-                                tipoProduto
+                                recheioRegistro,
+                                massaRegistro,
+                                coberturaRegistro,
+                                unidadeMedidaRegistro,
+                                tipoProdutoRegistro
                         );
-                        listaProdutos.add(produto);
 
+                        listaProdutos.add(produto);
+                        produtoRepository.save(produto);
                     }
 
                     registro = entrada.readLine();
