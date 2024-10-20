@@ -173,14 +173,34 @@ public class ProdutoPedidoService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(csv), StandardCharsets.UTF_8))) {
-            writer.println("ID Pedido;ID Produto;Nome Produto;Quantidade;Observações;Data Pedido");
+            writer.println("DataPedido;Valor;Status;ValorSinal;DataEntrega;FormaEntrega;Cliente;FormaPagamento;Observacoes;QuantidadeProduto;NomeProduto;PrecoProduto;DescricaoProduto;QuantidadeDisponivelProduto;NomeRecheio;PrecoRecheio;Massa;Cobertura;UnidadeMedida;TipoProduto;Tema;RecheioPersonalizacao;ValorRecheioPersonalizacao;MassaPersonalizacao;CoberturaPersonalizacao");
             for (ProdutoPedido produtoPedido : listaPedidos) {
-                writer.println(produtoPedido.getPedido().getIdPedido() + ";"
-                        + produtoPedido.getProduto().getIdProduto() + ";"
-                        + produtoPedido.getProduto().getNome() + ";"
-                        + produtoPedido.getQtProduto() + ";"
+                writer.println(
+                        formatter.format(produtoPedido.getPedido().getDtPedido())+ ";"
+                        + produtoPedido.getPedido().getVlPedido() + ";"
+                        + produtoPedido.getPedido().getStatus() + ";"
+                        + produtoPedido.getPedido().getValorSinal() + ";"
+                        + formatter.format(produtoPedido.getPedido().getDtEntrega()) + ";"
+                        + produtoPedido.getPedido().getFormaEntrega().getFormaEntrega() + ";"
+                        + produtoPedido.getPedido().getCliente().getNome() + ";"
+                        + produtoPedido.getPedido().getFormaPagamento().getFormaPagamento() + ";"
                         + produtoPedido.getObservacoes() + ";"
-                        + formatter.format(produtoPedido.getPedido().getDtPedido()));
+                        + produtoPedido.getQtProduto() + ";"
+                        + produtoPedido.getProduto().getNome() + ";"
+                        + produtoPedido.getProduto().getPreco() + ";"
+                        + produtoPedido.getProduto().getDescricao() + ";"
+                        + produtoPedido.getProduto().getQtdDisponivel() + ";"
+                        + produtoPedido.getProduto().getRecheio().getNome() + ";"
+                        + produtoPedido.getProduto().getRecheio().getPreco() + ";"
+                        + produtoPedido.getProduto().getMassa().getNome() + ";"
+                        + produtoPedido.getProduto().getCobertura().getNome() + ";"
+                        + produtoPedido.getProduto().getUnidadeMedida().getUnidadeMedida() + ";"
+                        + produtoPedido.getProduto().getTipoProduto().getTipo() + ";"
+                        + produtoPedido.getPersonalizacao().getTema() + ";"
+                        + produtoPedido.getPersonalizacao().getRecheio().getNome() + ";"
+                        + produtoPedido.getPersonalizacao().getRecheio().getPreco() + ";"
+                        + produtoPedido.getPersonalizacao().getMassa().getNome() + ";"
+                        + produtoPedido.getPersonalizacao().getCobertura().getNome());
             }
             return csv;
         } catch (IOException e) {
