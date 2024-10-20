@@ -40,6 +40,7 @@ public class ProdutoPedidoService {
     private final TipoProdutoRepository tipoProdutoRepository;
     private final PersonalizacaoRepository personalizacaoRepository;
     private final FormaPagamentoRepository formaPagamentoRepository;
+    private final RecheioService recheioService;
 
     public ProdutoPedido cadastrar(ProdutoPedido produtoPedido, Integer produtoId, Integer personalizacaoId, Integer pedidoId) {
         if (produtoPedido == null) throw new BadRequestException("Produto Pedido");
@@ -208,10 +209,11 @@ public class ProdutoPedidoService {
 
         try (Scanner scanner = new Scanner(new File("pedidos.csv"), StandardCharsets.UTF_8.name())) {
             scanner.nextLine();
+            var linha = 0;
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] values = line.split(";");
-
+                linha++;
                 Pedido pedido = new Pedido();
                 pedido.setDtPedido(LocalDate.parse(values[0], DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                 pedido.setVlPedido(Double.parseDouble(values[1]));
@@ -219,8 +221,19 @@ public class ProdutoPedidoService {
                 pedido.setValorSinal(Double.parseDouble(values[3]));
                 pedido.setDtEntrega(LocalDate.parse(values[4], DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                 pedido.setFormaEntrega(formaEntregaRepository.findByFormaEntrega(values[5]));
-                pedido.setCliente(clienteRepository.findByNome(values[6]));
-                pedido.setFormaPagamento(formaPagamentoRepository.findByFormaPagamento(values[7]));
+                var cliente = clienteRepository.findByNome(values[6]);
+                if (cliente == null) {
+                    throw new BadRequestException("Cliente na linha " + linha);
+                } else {
+                    pedido.setCliente(cliente);
+                }
+
+                var formaPagamento = formaPagamentoRepository.findByFormaPagamento(values[7]);
+                if (formaPagamento == null) {
+                    throw new BadRequestException("Forma de Pagamento na linha " + linha);
+                } else {
+                    pedido.setFormaPagamento(formaPagamento);
+                }
                 Pedido pedidoCadastrado = pedidoRepository.save(pedido);
 
                 Produto produto = new Produto();
@@ -228,11 +241,41 @@ public class ProdutoPedidoService {
                 produto.setPreco(Double.parseDouble(values[11]));
                 produto.setDescricao(values[12]);
                 produto.setQtdDisponivel(Integer.parseInt(values[13]));
-                produto.setRecheio(recheioRepository.findByNome(values[14]));
-                produto.setMassa(massaRepository.findByNome(values[16]));
-                produto.setCobertura(coberturaRepository.findByNome(values[17]));
-                produto.setUnidadeMedida(unidadeMedidaRepository.findByUnidadeMedida(values[18]));
-                produto.setTipoProduto(tipoProdutoRepository.findByTipo(values[19]));
+                var recheio = recheioRepository.findByNomeAndPreco(values[14], Double.parseDouble(values[15]));
+                if (recheio == null) {
+                    var recheioCadastrado = recheioService.cadastrarRecheio(new Recheio(values[14], Double.parseDouble(values[15])));
+                    produto.setRecheio(recheioCadastrado);
+                } else {
+                    produto.setRecheio(recheio);
+                }
+                var massa = massaRepository.findByNome(values[16]);
+                if (massa == null) {
+                    throw new BadRequestException("Massa na linha " + linha);
+                } else {
+                    produto.setMassa(massa);
+                }
+
+                var cobertura = coberturaRepository.findByNome(values[17]);
+                if (cobertura == null) {
+                    throw new BadRequestException("Cobertura na linha " + linha);
+                } else {
+                    produto.setCobertura(cobertura);
+                }
+
+                var unidadeMedida = unidadeMedidaRepository.findByUnidadeMedida(values[18]);
+                if (unidadeMedida == null) {
+                    throw new BadRequestException("Unidade de Medida na linha " + linha);
+                } else {
+                    produto.setUnidadeMedida(unidadeMedida);
+                }
+
+                var tipoProduto = tipoProdutoRepository.findByTipo(values[19]);
+                if (tipoProduto == null) {
+                    throw new BadRequestException("Tipo de Produto na linha " + linha);
+                } else {
+                    produto.setTipoProduto(tipoProduto);
+                }
+
                 Produto produtoCadastrado = produtoService.cadastrarProduto(
                         produto,
                         produto.getRecheio().getIdRecheio(),
@@ -244,10 +287,28 @@ public class ProdutoPedidoService {
 
                 Personalizacao personalizacao = new Personalizacao();
                 personalizacao.setTema(values[20]);
-                personalizacao.setRecheio(recheioRepository.findByNome(values[21]));
-                personalizacao.setMassa(massaRepository.findByNome(values[22]));
-                personalizacao.setCobertura(coberturaRepository.findByNome(values[23]));
 
+                var recheioPersonalizacao = recheioRepository.findByNomeAndPreco(values[21], Double.parseDouble(values[22]));
+                if (recheioPersonalizacao == null) {
+                    var recheioCadastrado = recheioService.cadastrarRecheio(new Recheio(values[21], Double.parseDouble(values[22])));
+                    personalizacao.setRecheio(recheioCadastrado);
+                } else {
+                    personalizacao.setRecheio(recheioPersonalizacao);
+                }
+
+                var massaPersonalizacao = massaRepository.findByNome(values[23]);
+                if (massaPersonalizacao == null) {
+                    throw new BadRequestException("Massa na linha " + linha);
+                } else {
+                    personalizacao.setMassa(massaPersonalizacao);
+                }
+
+                var coberturaPersonalizacao = coberturaRepository.findByNome(values[24]);
+                if (coberturaPersonalizacao == null) {
+                    throw new BadRequestException("Cobertura na linha " + linha);
+                } else {
+                    personalizacao.setCobertura(coberturaPersonalizacao);
+                }
                 Personalizacao personalizacaoCadastrada = personalizacaoRepository.save(personalizacao);
 
                 ProdutoPedido produtoPedido = new ProdutoPedido();
