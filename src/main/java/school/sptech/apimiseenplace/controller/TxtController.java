@@ -21,9 +21,9 @@ import java.util.List;
 public class TxtController {
     private final ArquivoTxtService arquivoTxtService;
 
-    @GetMapping("/export/{nomeArq}")
-    public ResponseEntity<Resource> gravarArquivo(@PathVariable String nomeArq) {
-        File file = arquivoTxtService.gravaArquivoTxt(nomeArq);
+    @GetMapping("/export")
+    public ResponseEntity<Resource> gravarArquivo() {
+        File file = arquivoTxtService.gravaArquivoTxt();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=produtos-exportados.txt");

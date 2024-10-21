@@ -45,14 +45,14 @@ public class ArquivoTxtService {
     }
 
     // Método para gravar o arquivo TXT
-    public File gravaArquivoTxt(String nomeArq) {
+    public File gravaArquivoTxt() {
         int contaRegDados = 0;
 
         // Grava o header
         String header = "00PRODUTO";
         header += LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
         header += "01";
-        gravaRegistro(nomeArq, header);
+        gravaRegistro("produtos-exportados", header);
 
         List<Produto> lista = produtoRepository.findAll();
 
@@ -69,13 +69,13 @@ public class ArquivoTxtService {
             corpo += String.format("%-20.20s", p.getTipoProduto().getTipo());
             corpo += String.format("%-100.100s", p.getDescricao());
 
-            gravaRegistro(nomeArq, corpo);
+            gravaRegistro("produtos-exportados", corpo);
             contaRegDados++;
         }
 
         // Grava o trailer
         String trailer = "01" + String.format("%05d", contaRegDados);
-        return gravaRegistro(nomeArq, trailer);
+        return gravaRegistro("produtos-exportados", trailer);
     }
 
     // Método para ler o arquivo TXT
