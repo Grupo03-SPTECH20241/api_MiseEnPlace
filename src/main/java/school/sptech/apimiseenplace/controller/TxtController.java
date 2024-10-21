@@ -1,6 +1,10 @@
 package school.sptech.apimiseenplace.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,10 +21,19 @@ import java.util.List;
 public class TxtController {
     private final ArquivoTxtService arquivoTxtService;
 
-    @PostMapping("/export/{nomeArq}")
-    public ResponseEntity<Void> gravarArquivo(@PathVariable String nomeArq) {
-        arquivoTxtService.gravaArquivoTxt(nomeArq);
-        return ResponseEntity.ok().build();
+    @GetMapping("/export/{nomeArq}")
+    public ResponseEntity<Resource> gravarArquivo(@PathVariable String nomeArq) {
+        File file = arquivoTxtService.gravaArquivoTxt(nomeArq);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=produtos-exportados.txt");
+
+        Resource resource = new FileSystemResource(file);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(resource);
     }
 
     @PostMapping("/import")

@@ -22,11 +22,12 @@ public class ArquivoTxtService {
     private final TipoProdutoRepository tipoProdutoRepository;
 
     // Método para gravar o registro no arquivo
-    public void gravaRegistro(String nomeArq, String registro) {
+    public File gravaRegistro(String nomeArq, String registro) {
         BufferedWriter saida = null;
+        File file = new File(nomeArq);
 
         try {
-            saida = new BufferedWriter(new FileWriter(nomeArq, true));
+            saida = new BufferedWriter(new FileWriter(file, true));
         } catch (IOException erro) {
             System.out.println("Erro ao abrir o arquivo: " + erro.getMessage());
         }
@@ -39,10 +40,12 @@ public class ArquivoTxtService {
         } catch (IOException erro) {
             System.out.println("Erro na gravação do arquivo: " + erro.getMessage());
         }
+
+        return file;
     }
 
     // Método para gravar o arquivo TXT
-    public void gravaArquivoTxt(String nomeArq) {
+    public File gravaArquivoTxt(String nomeArq) {
         int contaRegDados = 0;
 
         // Grava o header
@@ -72,7 +75,7 @@ public class ArquivoTxtService {
 
         // Grava o trailer
         String trailer = "01" + String.format("%05d", contaRegDados);
-        gravaRegistro(nomeArq, trailer);
+        return gravaRegistro(nomeArq, trailer);
     }
 
     // Método para ler o arquivo TXT
