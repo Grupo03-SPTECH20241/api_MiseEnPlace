@@ -42,7 +42,7 @@ public class ArquivoTxtService {
     }
 
     // Método para gravar o arquivo TXT
-    public void gravaArquivoTxt(List<Produto> lista, String nomeArq) {
+    public void gravaArquivoTxt(String nomeArq) {
         int contaRegDados = 0;
 
         // Grava o header
@@ -50,6 +50,8 @@ public class ArquivoTxtService {
         header += LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
         header += "01";
         gravaRegistro(nomeArq, header);
+
+        List<Produto> lista = produtoRepository.findAll();
 
         // Grava cada produto no corpo do arquivo
         for (Produto p : lista) {

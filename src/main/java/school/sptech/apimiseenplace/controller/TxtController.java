@@ -18,8 +18,8 @@ public class TxtController {
     private final ArquivoTxtService arquivoTxtService;
 
     @PostMapping("/export/{nomeArq}")
-    public ResponseEntity<Void> gravarArquivo(@RequestBody List<Produto> produtos, @PathVariable String nomeArq) {
-        arquivoTxtService.gravaArquivoTxt(produtos, nomeArq);
+    public ResponseEntity<Void> gravarArquivo(@PathVariable String nomeArq) {
+        arquivoTxtService.gravaArquivoTxt(nomeArq);
         return ResponseEntity.ok().build();
     }
 
