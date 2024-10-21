@@ -39,7 +39,7 @@ public class TxtController {
     }
 
     @PostMapping("/import")
-    public ResponseEntity<Void> lerArquivo(@RequestBody MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<Void> lerArquivo(@RequestParam MultipartFile multipartFile) throws IOException {
         File file = convertToFile(multipartFile);
         arquivoTxtService.leArquivoTxt(file);
         return ResponseEntity.ok().build();
