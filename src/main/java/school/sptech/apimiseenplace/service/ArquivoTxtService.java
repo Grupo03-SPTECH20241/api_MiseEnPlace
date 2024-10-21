@@ -22,12 +22,12 @@ public class ArquivoTxtService {
     private final TipoProdutoRepository tipoProdutoRepository;
 
     // Método para gravar o registro no arquivo
-    public File gravaRegistro(String nomeArq, String registro) {
+    public File gravaRegistro(String nomeArq, String registro, boolean append) {
         BufferedWriter saida = null;
         File file = new File(String.format("%s", nomeArq));
 
         try {
-            saida = new BufferedWriter(new FileWriter(file));
+            saida = new BufferedWriter(new FileWriter(file, append));
             saida.append(registro).append("\n");
         } catch (IOException erro) {
             System.out.println("Erro ao abrir/gravar o arquivo: " + erro.getMessage());
@@ -52,7 +52,7 @@ public class ArquivoTxtService {
         String header = "00PRODUTO";
         header += LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
         header += "01";
-        gravaRegistro("produtos-exportados", header);
+        gravaRegistro("produtos-exportados.txt", header, false);
 
         List<Produto> lista = produtoRepository.findAll();
 
@@ -64,18 +64,18 @@ public class ArquivoTxtService {
             corpo += String.format("%-10.10s", p.getUnidadeMedida().getUnidadeMedida());
             corpo += String.format("%-30.30s", p.getMassa().getNome());
             corpo += String.format("%-30.30s", p.getRecheio().getNome());
-            corpo += String.format("%06.2f", p.getRecheio().getPreco()); // Pega o preço do recheio diretamente
+            corpo += String.format("%06.2f", p.getRecheio().getPreco());
             corpo += String.format("%-30.30s", p.getCobertura().getNome());
             corpo += String.format("%-20.20s", p.getTipoProduto().getTipo());
             corpo += String.format("%-100.100s", p.getDescricao());
 
-            gravaRegistro("produtos-exportados", corpo);
+            gravaRegistro("produtos-exportados.txt", corpo, true);
             contaRegDados++;
         }
 
         // Grava o trailer
         String trailer = "01" + String.format("%05d", contaRegDados);
-        return gravaRegistro("produtos-exportados", trailer);
+        return gravaRegistro("produtos-exportados.txt", trailer, true);
     }
 
     // Método para ler o arquivo TXT
