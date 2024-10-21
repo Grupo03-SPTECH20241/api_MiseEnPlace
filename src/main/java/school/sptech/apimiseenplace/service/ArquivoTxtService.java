@@ -24,21 +24,21 @@ public class ArquivoTxtService {
     // Método para gravar o registro no arquivo
     public File gravaRegistro(String nomeArq, String registro) {
         BufferedWriter saida = null;
-        File file = new File(nomeArq);
+        File file = new File(String.format("%s", nomeArq));
 
         try {
-            saida = new BufferedWriter(new FileWriter(file, true));
+            saida = new BufferedWriter(new FileWriter(file));
+            saida.append(registro).append("\n");
         } catch (IOException erro) {
-            System.out.println("Erro ao abrir o arquivo: " + erro.getMessage());
-        }
-
-        try {
-            if (saida != null) {
-                saida.append(registro).append("\n");
-                saida.close();
+            System.out.println("Erro ao abrir/gravar o arquivo: " + erro.getMessage());
+        } finally {
+            try {
+                if (saida != null) {
+                    saida.close();
+                }
+            } catch (IOException erro) {
+                System.out.println("Erro ao fechar o arquivo: " + erro.getMessage());
             }
-        } catch (IOException erro) {
-            System.out.println("Erro na gravação do arquivo: " + erro.getMessage());
         }
 
         return file;

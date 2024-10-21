@@ -12,7 +12,9 @@ import school.sptech.apimiseenplace.entity.Produto;
 import school.sptech.apimiseenplace.service.ArquivoTxtService;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -37,15 +39,25 @@ public class TxtController {
     }
 
     @PostMapping("/import")
-    public ResponseEntity<Void> lerArquivo(MultipartFile multipartFile) throws IOException {
-        File file = convertToFile(multipartFile);
+    public ResponseEntity<Void> lerArquivo(@RequestBody Base64 base64) throws IOException {
+        File file = convertToFile(base64);
         arquivoTxtService.leArquivoTxt(file);
         return ResponseEntity.ok().build();
     }
 
-    private File convertToFile(MultipartFile multipartFile) throws IOException {
-        File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + multipartFile.getOriginalFilename());
-        multipartFile.transferTo(convFile);
-        return convFile;
+    private static File convertToFile(Base64 base64) {
+        File file = new File("produtos-exportados");
+
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            byte[] decodedBytes = Base64.getDecoder().decode(base64.toString());
+
+            fos.write(decodedBytes);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return file;
     }
+
 }
