@@ -39,17 +39,17 @@ public class TxtController {
     }
 
     @PostMapping("/import")
-    public ResponseEntity<Void> lerArquivo(@RequestBody Base64 base64) throws IOException {
+    public ResponseEntity<Void> lerArquivo(@RequestBody String base64) throws IOException {
         File file = convertToFile(base64);
         arquivoTxtService.leArquivoTxt(file);
         return ResponseEntity.ok().build();
     }
 
-    private static File convertToFile(Base64 base64) {
+    private static File convertToFile(String base64) {
         File file = new File("produtos-exportados");
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            byte[] decodedBytes = Base64.getDecoder().decode(base64.toString());
+            byte[] decodedBytes = Base64.getDecoder().decode(base64);
 
             fos.write(decodedBytes);
 
