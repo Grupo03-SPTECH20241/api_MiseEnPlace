@@ -39,25 +39,15 @@ public class TxtController {
     }
 
     @PostMapping("/import")
-    public ResponseEntity<Void> lerArquivo(@RequestBody String base64) throws IOException {
-        File file = convertToFile(base64);
+    public ResponseEntity<Void> lerArquivo(@RequestBody MultipartFile multipartFile) throws IOException {
+        File file = convertToFile(multipartFile);
         arquivoTxtService.leArquivoTxt(file);
         return ResponseEntity.ok().build();
     }
 
-    private static File convertToFile(String base64) {
-        File file = new File("produtos-exportados");
-
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            byte[] decodedBytes = Base64.getDecoder().decode(base64);
-
-            fos.write(decodedBytes);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return file;
+    private File convertToFile(MultipartFile multipartFile) throws IOException {
+        File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + multipartFile.getOriginalFilename());
+        multipartFile.transferTo(convFile);
+        return convFile;
     }
-
 }
