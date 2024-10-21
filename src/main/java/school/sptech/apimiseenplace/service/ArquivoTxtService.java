@@ -61,7 +61,7 @@ public class ArquivoTxtService {
             String corpo = "02";
             corpo += String.format("%-50.50s", p.getNome());
             corpo += String.format("%06.2f", p.getPreco());
-            corpo += String.format("%-10.10s", p.getUnidadeMedida());
+            corpo += String.format("%-10.10s", p.getUnidadeMedida().getUnidadeMedida());
             corpo += String.format("%-30.30s", p.getMassa().getNome());
             corpo += String.format("%-30.30s", p.getRecheio().getNome());
             corpo += String.format("%06.2f", p.getRecheio().getPreco()); // Pega o preço do recheio diretamente
