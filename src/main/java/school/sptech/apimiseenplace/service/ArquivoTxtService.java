@@ -22,55 +22,60 @@ public class ArquivoTxtService {
     private final TipoProdutoRepository tipoProdutoRepository;
 
     // Método para gravar o registro no arquivo
-    public void gravaRegistro(String nomeArq, String registro) {
+    public File gravaRegistro(String nomeArq, String registro, boolean append) {
         BufferedWriter saida = null;
+        File file = new File(String.format("%s", nomeArq));
 
         try {
-            saida = new BufferedWriter(new FileWriter(nomeArq, true));
+            saida = new BufferedWriter(new FileWriter(file, append));
+            saida.append(registro).append("\n");
         } catch (IOException erro) {
-            System.out.println("Erro ao abrir o arquivo: " + erro.getMessage());
-        }
-
-        try {
-            if (saida != null) {
-                saida.append(registro).append("\n");
-                saida.close();
+            System.out.println("Erro ao abrir/gravar o arquivo: " + erro.getMessage());
+        } finally {
+            try {
+                if (saida != null) {
+                    saida.close();
+                }
+            } catch (IOException erro) {
+                System.out.println("Erro ao fechar o arquivo: " + erro.getMessage());
             }
-        } catch (IOException erro) {
-            System.out.println("Erro na gravação do arquivo: " + erro.getMessage());
         }
+
+        return file;
     }
 
     // Método para gravar o arquivo TXT
-    public void gravaArquivoTxt(List<Produto> lista, String nomeArq) {
+    public File gravaArquivoTxt() {
         int contaRegDados = 0;
 
         // Grava o header
         String header = "00PRODUTO";
         header += LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
         header += "01";
-        gravaRegistro(nomeArq, header);
+        gravaRegistro("produtos-exportados.txt", header, false);
+
+        List<Produto> lista = produtoRepository.findAll();
 
         // Grava cada produto no corpo do arquivo
         for (Produto p : lista) {
             String corpo = "02";
             corpo += String.format("%-50.50s", p.getNome());
             corpo += String.format("%06.2f", p.getPreco());
-            corpo += String.format("%-10.10s", p.getUnidadeMedida());
+            corpo += String.format("%-10.10s", p.getUnidadeMedida().getUnidadeMedida());
             corpo += String.format("%-30.30s", p.getMassa().getNome());
             corpo += String.format("%-30.30s", p.getRecheio().getNome());
-            corpo += String.format("%06.2f", p.getRecheio().getPreco()); // Pega o preço do recheio diretamente
+            corpo += String.format("%06.2f", p.getRecheio().getPreco());
             corpo += String.format("%-30.30s", p.getCobertura().getNome());
             corpo += String.format("%-20.20s", p.getTipoProduto().getTipo());
             corpo += String.format("%-100.100s", p.getDescricao());
 
-            gravaRegistro(nomeArq, corpo);
+            gravaRegistro("produtos-exportados.txt", corpo, true);
             contaRegDados++;
         }
 
         // Grava o trailer
         String trailer = "01" + String.format("%05d", contaRegDados);
-        gravaRegistro(nomeArq, trailer);
+        return gravaRegistro("produtos-exportados.txt", trailer, true);
     }
 
     // Método para ler o arquivo TXT
