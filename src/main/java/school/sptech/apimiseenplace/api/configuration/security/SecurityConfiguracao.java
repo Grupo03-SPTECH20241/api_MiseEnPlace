@@ -106,6 +106,8 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/quantidade-vendida-valor-vendido-dia"),
             new AntPathRequestMatcher("/hashtable"),
             new AntPathRequestMatcher("/hashtable/**"),
+            new AntPathRequestMatcher("/txt"),
+            new AntPathRequestMatcher("/txt/**"),
     };
 
     @Bean

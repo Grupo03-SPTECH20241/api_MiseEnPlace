@@ -43,7 +43,7 @@ public class UsuarioService {
     private final EmailService emailService;
     private final LambdaService lambdaService;
 
-    public UsuarioTokenDto autenticar(UsuarioLoginDto usuarioLoginDto){
+    public UsuarioTokenDto autenticar(UsuarioLoginDto usuarioLoginDto) {
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
                 usuarioLoginDto.getEmail(), usuarioLoginDto.getSenha());
 
@@ -90,22 +90,21 @@ public class UsuarioService {
                 Equipe QGD Consultoria
                 """.formatted(usuarioEmailDto.getNome(), senha));
 
-
-            byte[] bytes = entity.getLogo();
-             var arquivo = Base64.getEncoder().encodeToString(bytes);
-             var nomeArquivo = "logo-" + LocalDateTime.now();
+        byte[] bytes = entity.getLogo();
+        var arquivo = Base64.getEncoder().encodeToString(bytes);
+        var nomeArquivo = "logo-" + LocalDateTime.now();
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-            var response = lambdaService.sendToLambda("arn:aws:lambda:us-east-1:942802636108:function:sobeParaS3", "bucket-testee", arquivo, nomeArquivo);
-            var reponseString = response.payload().asUtf8String();
-            LogoRecord logoRecord =objectMapper.readValue(reponseString, LogoRecord.class) ;
-            BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
+        var response = lambdaService.sendToLambda("arn:aws:lambda:us-east-1:942802636108:function:sobeParaS3", "bucket-testee", arquivo, nomeArquivo);
+        var reponseString = response.payload().asUtf8String();
+        LogoRecord logoRecord = objectMapper.readValue(reponseString, LogoRecord.class);
+        BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
 
-        if(response.statusCode() != 200){
+        if (response.statusCode() != 200) {
             throw new BadRequestException("Lambda");
         }
-        if(!email){
+        if (!email) {
             throw new BadRequestException("Email");
         }
 
@@ -113,12 +112,12 @@ public class UsuarioService {
     }
 
 
-    public List<Usuario> listar(){
+    public List<Usuario> listar() {
         return usuarioRepository.findAll();
     }
 
-    public String obterFotoCliente(String email){
-        if(email == null || email.isBlank() || email.isEmpty()) throw new BadRequestException("Email Usuario");
+    public String obterFotoCliente(String email) {
+        if (email == null || email.isBlank() || email.isEmpty()) throw new BadRequestException("Email Usuario");
 
         return usuarioRepository.findLogoByEmail(email);
     }
@@ -129,8 +128,8 @@ public class UsuarioService {
         );
     }
 
-    public String deletarUsuarioPorId(Integer id){
-        if(!usuarioRepository.existsById(id)){
+    public String deletarUsuarioPorId(Integer id) {
+        if (!usuarioRepository.existsById(id)) {
             throw new NaoEncontradoException("Usuario");
         }
 
@@ -138,23 +137,26 @@ public class UsuarioService {
         return "Usuario deletado com sucesso!";
     }
 
-    public UsuarioListagemDto atualizar(int id, UsuarioAtualizarDto usuarioAtualizacao){
-        if(!usuarioRepository.existsById(id)){
+    public UsuarioListagemDto atualizar(int id, UsuarioAtualizarDto usuarioAtualizacao) {
+        if (!usuarioRepository.existsById(id)) {
             throw new NaoEncontradoException("Usuario Atualizacao");
         }
 
         Usuario usuarioAchado = encontrarPorId(id);
         usuarioAchado.setIdUsuario(id);
 
-        if(usuarioAtualizacao.getNome() != null && !usuarioAtualizacao.getNome().isBlank() && !usuarioAtualizacao.getNome().isEmpty() ) usuarioAchado.setNome(usuarioAtualizacao.getNome());
-        if(usuarioAtualizacao.getEmail() != null && !usuarioAtualizacao.getEmail().isBlank() && !usuarioAtualizacao.getEmail().isEmpty() ) usuarioAchado.setEmail(usuarioAtualizacao.getEmail());
-        if(usuarioAtualizacao.getCnpj() != null && !usuarioAtualizacao.getCnpj().isBlank() && !usuarioAtualizacao.getCnpj().isEmpty() ) usuarioAchado.setCnpj(usuarioAtualizacao.getCnpj());
+        if (usuarioAtualizacao.getNome() != null && !usuarioAtualizacao.getNome().isBlank() && !usuarioAtualizacao.getNome().isEmpty())
+            usuarioAchado.setNome(usuarioAtualizacao.getNome());
+        if (usuarioAtualizacao.getEmail() != null && !usuarioAtualizacao.getEmail().isBlank() && !usuarioAtualizacao.getEmail().isEmpty())
+            usuarioAchado.setEmail(usuarioAtualizacao.getEmail());
+        if (usuarioAtualizacao.getCnpj() != null && !usuarioAtualizacao.getCnpj().isBlank() && !usuarioAtualizacao.getCnpj().isEmpty())
+            usuarioAchado.setCnpj(usuarioAtualizacao.getCnpj());
 
         return UsuarioMapper.toDto(usuarioRepository.save(usuarioAchado));
     }
 
-    public String atualizarSenha(int id, String senhaNova){
-        if(!usuarioRepository.existsById(id)){
+    public String atualizarSenha(int id, String senhaNova) {
+        if (!usuarioRepository.existsById(id)) {
             throw new NaoEncontradoException("Usuario");
         }
         Usuario usuarioAchado = encontrarPorId(id);
@@ -167,13 +169,12 @@ public class UsuarioService {
     }
 
 
-
-    private String generateSenha(int tamanho){
+    private String generateSenha(int tamanho) {
 
         List<String> CHARS = new ArrayList<>();
         var chars = "!;#;$;%;&;(;);*;+;,;-;.;/;0;1;2;3;4;5;6;7;8;9;:;<;=;>;?;@;A;B;C;D;E;F;G;H;I;J;K;L;M;N;O;P;Q;R;S;T;U;V;W;X;Y;Z;[;];^;_;`;a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;{;|;};~;'".split(";");
 
-        for (var item: chars) {
+        for (var item : chars) {
             CHARS.add(item);
         }
 
@@ -182,7 +183,7 @@ public class UsuarioService {
         Random random = new Random();
         StringBuilder password = new StringBuilder();
 
-        for(int i =0; i < tamanho; i++){
+        for (int i = 0; i < tamanho; i++) {
             password.append(CHARS.get(random.nextInt(0, CHARS.size() - 1)));
         }
 
