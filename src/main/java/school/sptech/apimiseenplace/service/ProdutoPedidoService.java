@@ -323,6 +323,7 @@ public class ProdutoPedidoService {
 
                 Produto produtoCadastrado = produtoService.cadastrarProduto(
                         produto,
+                        null,
                         produto.getRecheio().getIdRecheio(),
                         produto.getMassa().getIdMassa(),
                         produto.getCobertura().getIdCobertura(),
