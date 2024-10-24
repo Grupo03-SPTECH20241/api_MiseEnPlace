@@ -90,7 +90,6 @@ public class UsuarioService {
                 Equipe QGD Consultoria
                 """.formatted(usuarioEmailDto.getNome(), senha));
 
-
         byte[] bytes = entity.getLogo();
         var arquivo = Base64.getEncoder().encodeToString(bytes);
         var nomeArquivo = "logo-" + LocalDateTime.now();

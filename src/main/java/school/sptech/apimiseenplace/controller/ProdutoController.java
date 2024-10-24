@@ -1,5 +1,6 @@
 package school.sptech.apimiseenplace.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,10 +32,11 @@ public class ProdutoController {
     @PostMapping
     public ResponseEntity<ProdutoListagemDTO> cadastrarProduto(
             @RequestBody @Valid ProdutoCriacaoDTO produtoCriacaoDTO
-    ){
+    ) throws JsonProcessingException {
         Produto produto = ProdutoMapper.toEntity(produtoCriacaoDTO);
         produto = produtoService.cadastrarProduto(
                 produto,
+                produtoCriacaoDTO.getFoto(),
                 produtoCriacaoDTO.getRecheioId(),
                 produtoCriacaoDTO.getMassaId(),
                 produtoCriacaoDTO.getCoberturaId(),
