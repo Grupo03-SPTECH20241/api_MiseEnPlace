@@ -210,6 +210,14 @@ public class ProdutoPedidoService {
 
     public static void base64ToCSV(String base64, String filePath) {
         try {
+            // Remover quebras de linha ou espaços em branco, se existirem
+            base64 = base64.replaceAll("\\s+", "");
+
+            // Validar a string Base64
+            if (!isValidBase64(base64)) {
+                throw new IllegalArgumentException("Invalid Base64 input");
+            }
+
             // Decode the Base64 string into a byte array
             byte[] decodedBytes = Base64.getDecoder().decode(base64);
 
@@ -219,10 +227,27 @@ public class ProdutoPedidoService {
             // Write the string to a .csv file
             Path path = Paths.get(filePath);
             Files.write(path, content.getBytes(StandardCharsets.UTF_8));
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+    private static boolean isValidBase64(String base64) {
+        String base64Pattern = "^[A-Za-z0-9+/=]+$";
+        if (!base64.matches(base64Pattern)) {
+            return false;
+        }
+        try {
+            Base64.getDecoder().decode(base64);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
 
     public boolean importarPedidos(String base64) {
         base64ToCSV(base64, "pedidos.csv");
