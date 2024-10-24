@@ -60,7 +60,7 @@ class ProdutoServiceTest {
             Mockito.when(tipoProdutoService.buscarPorId(1)).thenReturn(tipoProdutoInsertion);
             Mockito.when(produtoRepository.save(Mockito.any(Produto.class))).thenReturn(produtoEsperado);
 
-            Produto produtoSalvo = produtoService.cadastrarProduto(produtoInsertion, 1, 1, 1, 1, 1);
+            Produto produtoSalvo = produtoService.cadastrarProduto(produtoInsertion, null, 1, 1, 1, 1, 1);
 
             Assertions.assertEquals(produtoEsperado.getIdProduto(), produtoSalvo.getIdProduto());
             Assertions.assertEquals(produtoEsperado.getNome(), produtoSalvo.getNome());
@@ -82,7 +82,7 @@ class ProdutoServiceTest {
         void deveThrowlarException(){
 
             BadRequestException exception = Assertions.assertThrows(BadRequestException.class,
-                    () -> produtoService.cadastrarProduto(null, null, null, null, null, null));
+                    () -> produtoService.cadastrarProduto(null, null, null, null, null, null, null));
 
             Assertions.assertEquals("Produto enviado de forma incorreta!", exception.getLocalizedMessage());
 
