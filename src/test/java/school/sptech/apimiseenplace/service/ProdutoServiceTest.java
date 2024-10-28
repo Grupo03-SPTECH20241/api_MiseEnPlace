@@ -1,5 +1,6 @@
 package school.sptech.apimiseenplace.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -43,7 +44,7 @@ class ProdutoServiceTest {
 
         @Test
         @DisplayName("1.1 - Deve Retornar produto cadastrado, quando nome passado corretamento")
-        void deveRetornarProduto(){
+        void deveRetornarProduto() throws JsonProcessingException {
 
             Recheio recheioInsertion = new Recheio(1, "Chocolate", 3.50);
             Massa massaInsertion = new Massa(1, "Massa Chocolate");
@@ -201,7 +202,7 @@ class ProdutoServiceTest {
 
         @Test
         @DisplayName("3.1 - Deve retornar o Objeto Atualizado, quando passado o produto de atualização correto")
-        void retornaObjetoAtualizado(){
+        void retornaObjetoAtualizado() throws JsonProcessingException {
 
             Recheio recheioAntigo = new Recheio(1, "Chocolate", 3.50);
             Massa massaAntigo = new Massa(1, "Massa Chocolate");
@@ -240,7 +241,9 @@ class ProdutoServiceTest {
             Mockito.when(tipoProdutoService.buscarPorId(2)).thenReturn(tipoProdutoAtualizado);
             Mockito.when(produtoRepository.save(Mockito.any(Produto.class))).thenReturn(produtoAtualizado);
 
-            Produto produtoRetornado = produtoService.atualizarProduto(Mockito.any(Integer.class),produtoAtualizado,2, 2, 2, 2, 2);
+            byte[] foto = new byte[1];
+
+            Produto produtoRetornado = produtoService.atualizarProduto(Mockito.any(Integer.class),produtoAtualizado, foto,2, 2, 2, 2, 2);
 
             Assertions.assertEquals(produtoRetornado.getIdProduto(), produtoAtualizado.getIdProduto());
             Assertions.assertEquals(produtoRetornado.getNome(), produtoAtualizado.getNome());

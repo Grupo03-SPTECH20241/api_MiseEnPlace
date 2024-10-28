@@ -62,11 +62,12 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoListagemDTO> atualizarProduto(@PathVariable int id, @RequestBody @Valid ProdutoCriacaoDTO produtoCriacaoDTO) {
+    public ResponseEntity<ProdutoListagemDTO> atualizarProduto(@PathVariable int id, @RequestBody @Valid ProdutoCriacaoDTO produtoCriacaoDTO) throws JsonProcessingException {
         Produto produto = ProdutoMapper.toEntity(produtoCriacaoDTO);
         produto = produtoService.atualizarProduto(
                 id,
                 produto,
+                produtoCriacaoDTO.getFoto(),
                 produtoCriacaoDTO.getRecheioId(),
                 produtoCriacaoDTO.getMassaId(),
                 produtoCriacaoDTO.getCoberturaId(),

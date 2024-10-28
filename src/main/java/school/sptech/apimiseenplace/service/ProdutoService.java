@@ -51,23 +51,30 @@ public class ProdutoService {
         UnidadeMedida unidadeMedida = unidadeMedidaService.buscarPorId(unidadeMedidaId);
         TipoProduto tipoProduto = tipoProdutoService.buscarPorId(tipoProdutoId);
 
+        String arquivo = null;
 
-        var arquivo = Base64.getEncoder().encodeToString(foto);
+        if (foto != null) {
+            arquivo = Base64.getEncoder().encodeToString(foto);
+        }
+
         var nomeArquivo = produto.getNome().replace(" ", "_");
         ObjectMapper objectMapper = new ObjectMapper();
 
-        var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
-        var responseString = response.payload().asUtf8String();
-        LogoRecord logoRecord =objectMapper.readValue(responseString, LogoRecord.class) ;
-        BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
-        if(response.statusCode() != 200){
-            throw new BadRequestException("Lambda");
+        BodyMessage bodyMessage = null;
+        if (arquivo != null) {
+            var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
+            var responseString = response.payload().asUtf8String();
+            LogoRecord logoRecord =objectMapper.readValue(responseString, LogoRecord.class) ;
+            bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
+            if(response.statusCode() != 200){
+                throw new BadRequestException("Lambda");
+            }
         }
 
 
         produto.setRecheio(recheio);
         produto.setMassa(massa);
-        produto.setFoto(bodyMessage.url());
+        produto.setFoto(bodyMessage!= null ? bodyMessage.url() : null);
         produto.setCobertura(cobertura);
         produto.setUnidadeMedida(unidadeMedida);
         produto.setTipoProduto(tipoProduto);
@@ -80,7 +87,16 @@ public class ProdutoService {
         return produtos;
     }
 
-    public Produto atualizarProduto(int id, Produto produto, Integer recheioId, Integer massaId, Integer coberturaId, Integer unidadeMedidaId, Integer tipoProdutoId) {
+    public Produto atualizarProduto(
+            int id,
+            Produto produto,
+            byte[] foto,
+            Integer recheioId,
+            Integer massaId,
+            Integer coberturaId,
+            Integer unidadeMedidaId,
+            Integer tipoProdutoId
+    ) throws JsonProcessingException {
         Produto produtoEncontrado = encontrarPorId(id);
 
         produtoEncontrado.setIdProduto(id);
@@ -96,8 +112,29 @@ public class ProdutoService {
         UnidadeMedida unidadeMedida = unidadeMedidaService.buscarPorId(unidadeMedidaId);
         TipoProduto tipoProduto = tipoProdutoService.buscarPorId(tipoProdutoId);
 
+        String arquivo = null;
+
+        if (foto != null) {
+            arquivo = Base64.getEncoder().encodeToString(foto);
+        }
+
+        var nomeArquivo = produto.getNome().replace(" ", "_");
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        BodyMessage bodyMessage = null;
+        if (arquivo != null) {
+            var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
+            var responseString = response.payload().asUtf8String();
+            LogoRecord logoRecord =objectMapper.readValue(responseString, LogoRecord.class) ;
+            bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
+            if(response.statusCode() != 200){
+                throw new BadRequestException("Lambda");
+            }
+        }
+
         produtoEncontrado.setRecheio(recheio);
         produtoEncontrado.setMassa(massa);
+        produtoEncontrado.setFoto(bodyMessage!= null ? bodyMessage.url() : null);
         produtoEncontrado.setCobertura(cobertura);
         produtoEncontrado.setUnidadeMedida(unidadeMedida);
         produtoEncontrado.setTipoProduto(tipoProduto);
