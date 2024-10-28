@@ -16,6 +16,7 @@ import school.sptech.apimiseenplace.dto.usuario.*;
 import school.sptech.apimiseenplace.entity.BodyMessage;
 import school.sptech.apimiseenplace.entity.LogoRecord;
 import school.sptech.apimiseenplace.entity.Usuario;
+import school.sptech.apimiseenplace.enums.ELambdaFunction;
 import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.ConflitoException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
@@ -96,7 +97,7 @@ public class UsuarioService {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        var response = lambdaService.sendToLambda("arn:aws:lambda:us-east-1:942802636108:function:sobeParaS3", "bucket-testee", arquivo, nomeArquivo);
+        var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
         var reponseString = response.payload().asUtf8String();
         LogoRecord logoRecord = objectMapper.readValue(reponseString, LogoRecord.class);
         BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
