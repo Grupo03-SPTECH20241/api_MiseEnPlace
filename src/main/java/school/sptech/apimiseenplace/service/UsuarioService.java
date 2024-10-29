@@ -70,6 +70,26 @@ public class UsuarioService {
         var senha = generateSenha(random.nextInt(10));
         var entity = UsuarioMapper.fromEmailToCriacao(usuarioEmailDto);
         entity.setSenha(passwordEncoder.encode(senha));
+
+
+        byte[] bytes = entity.getLogo();
+        var arquivo = Base64.getEncoder().encodeToString(bytes);
+        var nomeArquivo = "logo-" + LocalDateTime.now();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
+        var reponseString = response.payload().asUtf8String();
+        LogoRecord logoRecord = objectMapper.readValue(reponseString, LogoRecord.class);
+        BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
+
+        if (response.statusCode() != 200) {
+            throw new BadRequestException("Lambda");
+        }
+
+
+        var usuarioSalvo = usuarioRepository.save(UsuarioMapper.toEntity(entity, bodyMessage.url()));
+
         var email = emailService.sendTextEmail(usuarioEmailDto.getEmail(), "Senha de Acesso", """
                 Olá %s,
                                 
@@ -91,25 +111,11 @@ public class UsuarioService {
                 Equipe QGD Consultoria
                 """.formatted(usuarioEmailDto.getNome(), senha));
 
-        byte[] bytes = entity.getLogo();
-        var arquivo = Base64.getEncoder().encodeToString(bytes);
-        var nomeArquivo = "logo-" + LocalDateTime.now();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
-        var reponseString = response.payload().asUtf8String();
-        LogoRecord logoRecord = objectMapper.readValue(reponseString, LogoRecord.class);
-        BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
-
-        if (response.statusCode() != 200) {
-            throw new BadRequestException("Lambda");
-        }
         if (!email) {
             throw new BadRequestException("Email");
         }
 
-        return usuarioRepository.save(UsuarioMapper.toEntity(entity, bodyMessage.url()));
+        return usuarioSalvo;
     }
 
 
