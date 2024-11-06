@@ -145,8 +145,8 @@ public class ProdutoPedidoController {
     }
 
     @PostMapping("/importar-pedidos")
-    public ResponseEntity<Void> importarPedidos(@RequestBody String file){
-        produtoPedidoService.importarPedidos(file);
+    public ResponseEntity<Void> importarPedidos(@RequestParam MultipartFile multipartFile){
+        produtoPedidoService.importarPedidos(multipartFile);
         return ResponseEntity.ok().build();
     }
 
