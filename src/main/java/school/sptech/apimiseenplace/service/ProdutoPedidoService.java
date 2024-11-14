@@ -2,6 +2,7 @@ package school.sptech.apimiseenplace.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import school.sptech.apimiseenplace.dto.pedido.PedidoListagemDTO;
 import school.sptech.apimiseenplace.dto.pedido.PedidoMapper;
 import school.sptech.apimiseenplace.dto.produto_pedido.*;
@@ -208,51 +209,26 @@ public class ProdutoPedidoService {
         }
     }
 
-    public static void base64ToCSV(String base64, String filePath) {
+    private File convertToFile(MultipartFile multipartFile, String filePath) {
         try {
-            // Remover quebras de linha ou espaços em branco, se existirem
-            base64 = base64.replaceAll("\\s+", "");
-
-            // Validar a string Base64
-            if (!isValidBase64(base64)) {
-                throw new IllegalArgumentException("Invalid Base64 input");
-            }
-
-            // Decode the Base64 string into a byte array
-            byte[] decodedBytes = Base64.getDecoder().decode(base64);
-
-            // Convert the byte array into a string
-            String content = new String(decodedBytes, StandardCharsets.UTF_8);
-
-            // Write the string to a .csv file
-            Path path = Paths.get(filePath);
-            Files.write(path, content.getBytes(StandardCharsets.UTF_8));
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error: " + e.getMessage());
+            File convFile = new File(filePath);
+            multipartFile.transferTo(convFile);
+            return convFile;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error converting MultipartFile to File", e);
         }
     }
 
 
-    private static boolean isValidBase64(String base64) {
-        String base64Pattern = "^[A-Za-z0-9+/=]+$";
-        if (!base64.matches(base64Pattern)) {
-            return false;
+    public boolean importarPedidos(MultipartFile mFile) {
+        String filePath = System.getProperty("java.io.tmpdir") + "/" + mFile.getOriginalFilename();
+        File file = convertToFile(mFile, filePath);
+
+        if (!file.exists()) {
+            throw new RuntimeException("File not found: " + filePath);
         }
-        try {
-            Base64.getDecoder().decode(base64);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
 
-
-    public boolean importarPedidos(String base64) {
-        base64ToCSV(base64, "pedidos.csv");
-
-        try (Scanner scanner = new Scanner(new File("pedidos.csv"), StandardCharsets.UTF_8.name())) {
+        try (Scanner scanner = new Scanner(file, StandardCharsets.UTF_8.name())) {
             scanner.nextLine();
             var linha = 0;
             while (scanner.hasNextLine()) {
@@ -260,7 +236,7 @@ public class ProdutoPedidoService {
                 String[] values = line.split(";");
                 linha++;
                 Pedido pedido = new Pedido();
-                pedido.setDtPedido(LocalDate.parse(values[0], DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                    pedido.setDtPedido(LocalDate.parse(values[0], DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                 pedido.setVlPedido(Double.parseDouble(values[1]));
                 pedido.setStatus(values[2].charAt(0));
                 pedido.setValorSinal(Double.parseDouble(values[3]));

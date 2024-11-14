@@ -18,6 +18,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -88,19 +89,18 @@ public class ProdutoPedidoController {
         List<ProdutoPedido> produtoPedido = produtoPedidoService.listagemAgenda(
                 dataInicio, dataFim);
         AgendaDTO agendaDTO = new AgendaDTO();
-
         Map<LocalDate, List<ProdutoPedido>> produtoPedidoGroupedByDate = produtoPedido.stream()
                 .collect(Collectors.groupingBy(produto -> produto.getPedido().getDtPedido()));
 
         for (var entry : produtoPedidoGroupedByDate.entrySet()) {
             var listagemAgenda = new ListagemAgenda();
-            if(entry.getKey() == LocalDate.now()){
+            if (entry.getKey() == LocalDate.now()) {
                 listagemAgenda.setTitle(entry.getKey().getDayOfWeek().getDisplayName(java.time.format.TextStyle.FULL,
                         new Locale("pt", "BR")).toUpperCase()
                         + ", "
                         + entry.getKey().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                         + " | Hoje");
-            } else if(entry.getKey() == LocalDate.now().plusDays(1)){
+            } else if (entry.getKey() == LocalDate.now().plusDays(1)) {
                 listagemAgenda.setTitle(entry.getKey().getDayOfWeek().getDisplayName(java.time.format.TextStyle.FULL,
                         new Locale("pt", "BR")).toUpperCase()
                         + ", "
@@ -126,6 +126,11 @@ public class ProdutoPedidoController {
             agendaDTO.getItemsAgenda().add(listagemAgenda);
         }
 
+        agendaDTO.getItemsAgenda().sort(Comparator.comparing(listagemAgenda -> {
+            String title = listagemAgenda.getTitle();
+            String dateString = title.split(", ")[1];
+            return LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }));
 
         return ResponseEntity.ok(agendaDTO);
     }
@@ -145,8 +150,8 @@ public class ProdutoPedidoController {
     }
 
     @PostMapping("/importar-pedidos")
-    public ResponseEntity<Void> importarPedidos(@RequestBody String file){
-        produtoPedidoService.importarPedidos(file);
+    public ResponseEntity<Void> importarPedidos(@RequestParam MultipartFile multipartFile) {
+        produtoPedidoService.importarPedidos(multipartFile);
         return ResponseEntity.ok().build();
     }
 
