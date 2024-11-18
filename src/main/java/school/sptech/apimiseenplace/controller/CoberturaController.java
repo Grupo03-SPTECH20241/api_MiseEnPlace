@@ -8,6 +8,8 @@ import school.sptech.apimiseenplace.dto.cobertura.CoberturaCriacaoDto;
 import school.sptech.apimiseenplace.dto.cobertura.CoberturaListagemDto;
 import school.sptech.apimiseenplace.dto.cobertura.CoberturaMapper;
 import school.sptech.apimiseenplace.dto.cobertura.CoberturaSemPersonalizacaoDto;
+import school.sptech.apimiseenplace.dto.massa.MassaMapper;
+import school.sptech.apimiseenplace.dto.massa.MassaSemPersonalizacaoDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioCriacaoDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioListagemDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioMapper;
@@ -40,6 +42,12 @@ public class CoberturaController {
         List<Cobertura> coberturas = service.listar();
         if (coberturas.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(CoberturaMapper.toSemPersonalizacaoDto(coberturas));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CoberturaSemPersonalizacaoDto> findById(@PathVariable Integer id){
+        Cobertura cobertura = service.encontrarPorId(id);
+        return ResponseEntity.ok(CoberturaMapper.toSemPersonalizacaoDto(cobertura));
     }
 
     @PutMapping("/{id}")
