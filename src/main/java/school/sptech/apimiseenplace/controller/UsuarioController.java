@@ -113,6 +113,12 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.obterFotoCliente(email));
     }
 
+    @PutMapping("/atualizar-foto-cliente")
+    public ResponseEntity<Void> atualizarFotoCliente(@RequestBody UsuarioAtualizarFotoDto request) throws JsonProcessingException {
+        usuarioService.atualizarFotoCliente(request);
+        return ResponseEntity.ok().build();
+    }
+
     public Usuario[] ordenarNomeQuicksort(
             Usuario[] v,
             int indInicio,

@@ -129,6 +129,28 @@ public class UsuarioService {
         return usuarioRepository.findLogoByEmail(email);
     }
 
+    public void atualizarFotoCliente(UsuarioAtualizarFotoDto request) throws JsonProcessingException {
+        if (request.getEmail() == null || request.getEmail().isBlank() || request.getEmail().isEmpty()) throw new BadRequestException("Email Usuario");
+
+        var arquivo = Base64.getEncoder().encodeToString(request.getLogo());
+        var nomeArquivo = "logo-" + LocalDateTime.now();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
+        var reponseString = response.payload().asUtf8String();
+        LogoRecord logoRecord = objectMapper.readValue(reponseString, LogoRecord.class);
+        BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
+
+        if (response.statusCode() != 200) {
+            throw new BadRequestException("Lambda");
+        }
+
+        Usuario usuario = usuarioRepository.findByEmail(request.getEmail()).get();
+        usuario.setLogo(bodyMessage.url());
+        usuarioRepository.save(usuario);
+    }
+
     public Usuario encontrarPorId(Integer id) {
         return usuarioRepository.findById(id).orElseThrow(
                 () -> new NaoEncontradoException("Usuario")
