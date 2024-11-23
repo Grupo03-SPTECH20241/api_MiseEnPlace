@@ -57,9 +57,9 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> atualizarSenha(@PathVariable int id, @RequestParam String senhaNova){
-        return ResponseEntity.ok(usuarioService.atualizarSenha(id, senhaNova));
+    @PatchMapping
+    public ResponseEntity<String> atualizarSenha(@RequestBody UsuarioLoginDto usuario){
+        return ResponseEntity.ok(usuarioService.atualizarSenha(usuario.getEmail(), usuario.getSenha()));
     }
 
     @PostMapping("/login")
