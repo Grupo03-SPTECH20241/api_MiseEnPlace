@@ -4,10 +4,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.apimiseenplace.dto.cobertura.CoberturaMapper;
+import school.sptech.apimiseenplace.dto.cobertura.CoberturaSemPersonalizacaoDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioCriacaoDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioListagemDto;
 import school.sptech.apimiseenplace.dto.recheio.RecheioMapper;
 import school.sptech.apimiseenplace.dto.recheio.RecheioSemPersonalizacaoDto;
+import school.sptech.apimiseenplace.entity.Cobertura;
 import school.sptech.apimiseenplace.entity.Recheio;
 import school.sptech.apimiseenplace.service.PersonalizacaoService;
 import school.sptech.apimiseenplace.service.RecheioService;
@@ -34,6 +37,12 @@ public class RecheioController {
         List<Recheio> recheios = service.listarRecheios();
         if (recheios.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(RecheioMapper.toSemPersonalizacaoDto(recheios));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RecheioSemPersonalizacaoDto> findById(@PathVariable Integer id){
+        Recheio recheio = service.encontrarPorId(id);
+        return ResponseEntity.ok(RecheioMapper.toSemPersonalizacaoDto(recheio));
     }
 
     @PutMapping("/{id}")
