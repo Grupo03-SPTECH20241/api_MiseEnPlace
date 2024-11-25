@@ -40,6 +40,21 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+    @GetMapping("/obter-por-email/{email}")
+    public ResponseEntity<UsuarioListagemDto> obterPorEmail(@PathVariable String email){
+        List<UsuarioListagemDto> usuarios = UsuarioMapper.toDto(usuarioService.listar());
+        if (usuarios.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        UsuarioListagemDto usuario = usuarios.stream()
+                .filter(p -> p.getEmail().equals(email))
+                .findFirst()
+                .get();
+
+        return ResponseEntity.ok(usuario);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioListagemDto> listarPorId(@PathVariable int id){
         return ResponseEntity.ok(UsuarioMapper.toDto( usuarioService.encontrarPorId(id)));
