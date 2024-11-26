@@ -13,7 +13,7 @@ on:
 
 jobs: # cada 'job' é um agrupamento de steps
   build: # primeiro grupo de steps
-    runs-on: self-hosted # aqui apenas indicamos onde o workflow será executado (em qual tipo de VM). No caso indicamos que será num ubuntu. Isso NÃO tem relação com o SO de sua EC2!
+    runs-on: ubuntu-latest # aqui apenas indicamos onde o workflow será executado (em qual tipo de VM). No caso indicamos que será num ubuntu. Isso NÃO tem relação com o SO de sua EC2!
 
     steps: # cada 'step' é uma ação dentro de um grupo de steps
     - name: Atualização do código
@@ -45,7 +45,7 @@ jobs: # cada 'job' é um agrupamento de steps
 
   deploy:
     needs: build # segundo grupo de steps
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Recuperar jars
