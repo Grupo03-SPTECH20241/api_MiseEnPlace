@@ -45,7 +45,7 @@ jobs: # cada 'job' é um agrupamento de steps
 
   deploy:
     needs: build # segundo grupo de steps
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - name: Recuperar jars
