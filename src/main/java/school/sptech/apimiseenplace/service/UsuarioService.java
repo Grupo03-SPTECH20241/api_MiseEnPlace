@@ -2,7 +2,6 @@ package school.sptech.apimiseenplace.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,11 +20,6 @@ import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.ConflitoException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
 import school.sptech.apimiseenplace.repository.UsuarioRepository;
-import software.amazon.awssdk.core.SdkBytes;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.lambda.LambdaClient;
-import software.amazon.awssdk.services.lambda.model.InvokeRequest;
-import software.amazon.awssdk.services.lambda.model.InvokeResponse;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -184,17 +178,22 @@ public class UsuarioService {
         return UsuarioMapper.toDto(usuarioRepository.save(usuarioAchado));
     }
 
-    public String atualizarSenha(int id, String senhaNova) {
-        if (!usuarioRepository.existsById(id)) {
-            throw new NaoEncontradoException("Usuario");
-        }
-        Usuario usuarioAchado = encontrarPorId(id);
+    public String atualizarSenha(String email, String senhaNova) {
 
-        usuarioAchado.setIdUsuario(id);
-        usuarioAchado.setSenha(senhaNova);
-        usuarioRepository.save(usuarioAchado);
+        if(email == null || email.isBlank() || email.isEmpty()) throw new BadRequestException("Email Usuario");
 
-        return "Senha Atualizada com Sucesso!";
+        Usuario usuarioAchado = usuarioRepository.findByEmail(email).orElseThrow(
+                () -> new NaoEncontradoException("Usuario")
+        );
+
+
+        usuarioAchado.setSenha(passwordEncoder.encode(senhaNova));
+
+        var result = usuarioRepository.save(usuarioAchado);
+
+
+
+        return  result.equals(usuarioAchado) ? "Senha Atualizada com Sucesso!" : "Erro ao Atualizar Senha!";
     }
 
 
