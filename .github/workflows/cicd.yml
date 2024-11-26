@@ -26,7 +26,7 @@ jobs: # cada 'job' é um agrupamento de steps
         java-version: '17'
 
     - name: Build com Maven
-      run: mvn -f api_MiseEnPlace/pom.xml clean package
+      run: mvn -X -e -f api_MiseEnPlace/pom.xml clean package
       # com 'run' podemos executar qualquer comando de SO na VM de execução do workflow.
       # nesse caso, pedimos para gerar o .jar de uma aplicação Java
       # tivemos que fazer -f <caminho do pom> porque o projeto Java não está na raiz do repositório
