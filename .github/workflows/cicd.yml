@@ -30,21 +30,33 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipRepositoryChecks
 
-      - name: Gerar artefatos
+      - name: Gerar artefatos do JAR
         uses: actions/upload-artifact@v4
         with:
           name: aplicacao
           path: api_MiseEnPlace/target/*.jar
+
+      - name: Gerar artefatos dos scripts
+        uses: actions/upload-artifact@v4
+        with:
+          name: scripts
+          path: .github/scripts/*.sh
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Recuperar artefatos
+      - name: Recuperar JARs
         uses: actions/download-artifact@v4
         with:
           name: aplicacao
+          path: ./
+
+      - name: Recuperar scripts
+        uses: actions/download-artifact@v4
+        with:
+          name: scripts
           path: ./
 
       - name: Gerar arquivo .pem
@@ -52,7 +64,7 @@ jobs:
           echo "${{ secrets.DEPLOY_KEY }}" > $HOME/${{ secrets.NOME_ARQUIVO_PEM }}
           chmod 400 $HOME/${{ secrets.NOME_ARQUIVO_PEM }}
 
-      - name: Enviar arquivos para EC2
+      - name: Enviar o JAR para a EC2 pública
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -61,7 +73,19 @@ jobs:
           source: "./*.jar"
           target: "/home/ubuntu/deploy-api/"
 
-      - name: Implantar na EC2 privada
+      - name: Enviar scripts para a EC2 pública
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ubuntu
+          key: ${{ secrets.DEPLOY_KEY }}
+          source: "./*.sh"
+          target: "/home/ubuntu/deploy-api/"
+
+      - name: Conectar via SSH e implantar na EC2 privada
         run: |
           ssh -o StrictHostKeyChecking=no -i $HOME/${{ secrets.NOME_ARQUIVO_PEM }} ubuntu@${{ secrets.DEPLOY_HOST }} "
-            bash /home/ubuntu/deploy-api/deploy-to-private-ec2.sh"
+            scp -i $HOME/${{ secrets.NOME_ARQUIVO_PEM }} /home/ubuntu/deploy-api/${{ secrets.NOME_ARQUIVO_JAR }} ubuntu@${{ secrets.IP_PRIVADO_EC2 }}:/home/ubuntu/deploy-api/ &&
+            scp -i $HOME/${{ secrets.NOME_ARQUIVO_PEM }} /home/ubuntu/deploy-api/*.sh ubuntu@${{ secrets.IP_PRIVADO_EC2 }}:/home/ubuntu/deploy-api/ &&
+            ssh -i $HOME/${{ secrets.NOME_ARQUIVO_PEM }} ubuntu@${{ secrets.IP_PRIVADO_EC2 }} 'bash /home/ubuntu/deploy-api/api-restart.sh'
+          "
