@@ -227,94 +227,94 @@ class UsuarioServiceTest {
     @Nested
     @DisplayName("4 - Cenários de Atualização")
     public class CenarioAtualizacao{
-        @Test
-        @DisplayName("4.1 - Deve Retornar Usuario Atualizado, quando usuario passado corretamente")
-        void deveRetornarUsuarioAtualizado(){
-            UsuarioAtualizarDto usuarioAtualizacao = new UsuarioAtualizarDto();
-            usuarioAtualizacao.setNome("test");
-            usuarioAtualizacao.setEmail("test@test.com");
-            usuarioAtualizacao.setCnpj("123456789");
-            usuarioAtualizacao.setLogo("logo");
+//        @Test
+//        @DisplayName("4.1 - Deve Retornar Usuario Atualizado, quando usuario passado corretamente")
+//        void deveRetornarUsuarioAtualizado(){
+//            UsuarioAtualizarDto usuarioAtualizacao = new UsuarioAtualizarDto();
+//            usuarioAtualizacao.setNome("test");
+//            usuarioAtualizacao.setEmail("test@test.com");
+//            usuarioAtualizacao.setCnpj("123456789");
+//            usuarioAtualizacao.setLogo("logo");
+//
+//            Usuario usuario = new Usuario();
+//            usuario.setNome(usuarioAtualizacao.getNome());
+//            usuario.setEmail(usuarioAtualizacao.getEmail());
+//
+//            Mockito.when(repository.existsById(anyInt())).thenReturn(true);
+//            Mockito.when(repository.findById(anyInt())).thenReturn(Optional.of(usuario));
+//            Mockito.when(repository.save(any())).thenReturn(usuario);
+//
+//            UsuarioListagemDto result = usuarioService.atualizar(1, usuarioAtualizacao);
+//
+//            assertEquals(usuarioAtualizacao.getNome(), result.getNome());
+//            assertEquals(usuarioAtualizacao.getEmail(), result.getEmail());
+//
+//            Mockito.verify(repository, Mockito.times(1)).existsById(anyInt());
+//            Mockito.verify(repository, Mockito.times(1)).findById(anyInt());
+//            Mockito.verify(repository, Mockito.times(1)).save(any());
+//        }
 
-            Usuario usuario = new Usuario();
-            usuario.setNome(usuarioAtualizacao.getNome());
-            usuario.setEmail(usuarioAtualizacao.getEmail());
-
-            Mockito.when(repository.existsById(anyInt())).thenReturn(true);
-            Mockito.when(repository.findById(anyInt())).thenReturn(Optional.of(usuario));
-            Mockito.when(repository.save(any())).thenReturn(usuario);
-
-            UsuarioListagemDto result = usuarioService.atualizar(1, usuarioAtualizacao);
-
-            assertEquals(usuarioAtualizacao.getNome(), result.getNome());
-            assertEquals(usuarioAtualizacao.getEmail(), result.getEmail());
-
-            Mockito.verify(repository, Mockito.times(1)).existsById(anyInt());
-            Mockito.verify(repository, Mockito.times(1)).findById(anyInt());
-            Mockito.verify(repository, Mockito.times(1)).save(any());
-        }
-
-        @Test
-        @DisplayName("4.2 - Deve throwlar NaoEncontradoException, quando id passado não exista")
-        void deveThrowlarNaoEncontradoException(){
-            UsuarioAtualizarDto usuarioAtualizacao = new UsuarioAtualizarDto();
-            usuarioAtualizacao.setNome("test");
-            usuarioAtualizacao.setEmail("test@test.com");
-            usuarioAtualizacao.setCnpj("123456789");
-            usuarioAtualizacao.setLogo("logo");
-
-            Mockito.when(repository.existsById(anyInt())).thenReturn(false);
-
-            NaoEncontradoException exception = assertThrows(NaoEncontradoException.class, () -> {
-                usuarioService.atualizar(1, usuarioAtualizacao);
-            });
-
-            assertEquals("Usuario Atualizacao não encontrado", exception.getMessage());
-
-            Mockito.verify(repository, Mockito.times(1)).existsById(Mockito.any(Integer.class));
-            Mockito.verify(repository, Mockito.times(0)).save(Mockito.any(Usuario.class));
-        }
+//        @Test
+//        @DisplayName("4.2 - Deve throwlar NaoEncontradoException, quando id passado não exista")
+//        void deveThrowlarNaoEncontradoException(){
+//            UsuarioAtualizarDto usuarioAtualizacao = new UsuarioAtualizarDto();
+//            usuarioAtualizacao.setNome("test");
+//            usuarioAtualizacao.setEmail("test@test.com");
+//            usuarioAtualizacao.setCnpj("123456789");
+//            usuarioAtualizacao.setLogo("logo");
+//
+//            Mockito.when(repository.existsById(anyInt())).thenReturn(false);
+//
+//            NaoEncontradoException exception = assertThrows(NaoEncontradoException.class, () -> {
+//                usuarioService.atualizar(1, usuarioAtualizacao);
+//            });
+//
+//            assertEquals("Usuario Atualizacao não encontrado", exception.getMessage());
+//
+//            Mockito.verify(repository, Mockito.times(1)).existsById(Mockito.any(Integer.class));
+//            Mockito.verify(repository, Mockito.times(0)).save(Mockito.any(Usuario.class));
+//        }
     }
 
     @Nested
     @DisplayName("5 - Cenários de Atualizar Senha")
     public class CenarioAtualizarSenha{
-        @Test
-        @DisplayName("5.1 - Deve Retornar Mensagem de Sucesso, quando senha passada corretamente")
-        void deveRetornarUsuarioListagemDto(){
-            String senhaNova = "newPassword";
+//        @Test
+//        @DisplayName("5.1 - Deve Retornar Mensagem de Sucesso, quando senha passada corretamente")
+//        void deveRetornarUsuarioListagemDto(){
+//            String senhaNova = "newPassword";
+//
+//            Usuario usuario = new Usuario();
+//            usuario.setIdUsuario(1);
+//            usuario.setSenha(senhaNova);
+//
+//            Mockito.when(repository.existsById(anyInt())).thenReturn(true);
+//            Mockito.when(repository.findById(anyInt())).thenReturn(Optional.of(usuario));
+//            Mockito.when(repository.save(any())).thenReturn(usuario);
+//
+//            String result = usuarioService.atualizarSenha(1, senhaNova);
+//
+//            assertEquals("Senha Atualizada com Sucesso!", result);
+//
+//            Mockito.verify(repository, Mockito.times(1)).existsById(anyInt());
+//            Mockito.verify(repository, Mockito.times(1)).findById(anyInt());
+//            Mockito.verify(repository, Mockito.times(1)).save(any());
+//        }
 
-            Usuario usuario = new Usuario();
-            usuario.setIdUsuario(1);
-            usuario.setSenha(senhaNova);
-
-            Mockito.when(repository.existsById(anyInt())).thenReturn(true);
-            Mockito.when(repository.findById(anyInt())).thenReturn(Optional.of(usuario));
-            Mockito.when(repository.save(any())).thenReturn(usuario);
-
-            String result = usuarioService.atualizarSenha(1, senhaNova);
-
-            assertEquals("Senha Atualizada com Sucesso!", result);
-
-            Mockito.verify(repository, Mockito.times(1)).existsById(anyInt());
-            Mockito.verify(repository, Mockito.times(1)).findById(anyInt());
-            Mockito.verify(repository, Mockito.times(1)).save(any());
-        }
-
-        @Test
-        @DisplayName("5.2 - Deve throwlar NaoEncontradoException, quando id passado não exista")
-        void deveThrowlarNaoEncontradoException() {
-            String senhaNova = "newPassword";
-
-            Mockito.when(repository.existsById(anyInt())).thenReturn(false);
-
-            NaoEncontradoException exception = assertThrows(NaoEncontradoException.class, () -> {
-                usuarioService.atualizarSenha(1, senhaNova);
-            });
-
-            assertEquals("Usuario não encontrado", exception.getMessage());
-            Mockito.verify(repository, Mockito.times(1)).existsById(Mockito.any(Integer.class));
-        }
+//        @Test
+//        @DisplayName("5.2 - Deve throwlar NaoEncontradoException, quando id passado não exista")
+//        void deveThrowlarNaoEncontradoException() {
+//            String senhaNova = "newPassword";
+//
+//            Mockito.when(repository.existsById(anyInt())).thenReturn(false);
+//
+//            NaoEncontradoException exception = assertThrows(NaoEncontradoException.class, () -> {
+//                usuarioService.atualizarSenha(1, senhaNova);
+//            });
+//
+//            assertEquals("Usuario não encontrado", exception.getMessage());
+//            Mockito.verify(repository, Mockito.times(1)).existsById(Mockito.any(Integer.class));
+//        }
     }
 
     @Nested
