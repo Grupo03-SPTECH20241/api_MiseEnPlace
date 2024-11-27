@@ -31,9 +31,6 @@ jobs:
     needs: build
 
     steps:
-    - name: Docker login
-      run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USER }} --password-stdin
-
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
 
