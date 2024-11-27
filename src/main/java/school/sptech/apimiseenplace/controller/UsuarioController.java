@@ -67,14 +67,25 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid UsuarioAtualizarDto usuarioAtualizacao){
+    public ResponseEntity<UsuarioListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid UsuarioAtualizarDto usuarioAtualizacao) throws JsonProcessingException {
        UsuarioListagemDto usuarioAtualizado = usuarioService.atualizar(id, usuarioAtualizacao);
+        return ResponseEntity.ok(usuarioAtualizado);
+    }
+
+    @PutMapping("/atualizar-por-email/{email}")
+    public ResponseEntity<UsuarioListagemDto> atualizarPorEmail(@PathVariable String email, @RequestBody @Valid UsuarioEmailDto usuarioAtualizacao) throws JsonProcessingException {
+        UsuarioListagemDto usuarioAtualizado = usuarioService.atualizarPorEmail(email, usuarioAtualizacao);
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<String> atualizarSenha(@PathVariable int id, @RequestParam String senhaNova){
         return ResponseEntity.ok(usuarioService.atualizarSenha(id, senhaNova));
+    }
+
+    @PatchMapping("/atualizar-senha-por-email/{email}")
+    public ResponseEntity<String> atualizarSenhaPorEmail(@PathVariable String email, @RequestParam String senhaNova){
+        return ResponseEntity.ok(usuarioService.atualizarSenhaPorEmail(email, senhaNova));
     }
 
     @PostMapping("/login")

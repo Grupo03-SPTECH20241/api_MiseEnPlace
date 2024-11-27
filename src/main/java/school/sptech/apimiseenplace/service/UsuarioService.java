@@ -162,6 +162,38 @@ public class UsuarioService {
         return UsuarioMapper.toDto(usuarioRepository.save(usuarioAchado));
     }
 
+    public UsuarioListagemDto atualizarPorEmail(String email, UsuarioEmailDto usuarioAtualizacao) throws JsonProcessingException {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        Usuario usuario = usuarios.stream()
+                .filter(p -> p.getEmail().equals(email))
+                .findFirst()
+                .get();
+
+        byte[] bytes = usuarioAtualizacao.getLogo();
+        var arquivo = Base64.getEncoder().encodeToString(bytes);
+        var nomeArquivo = "logo-" + LocalDateTime.now();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
+        var reponseString = response.payload().asUtf8String();
+        LogoRecord logoRecord = objectMapper.readValue(reponseString, LogoRecord.class);
+        BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
+
+        if (response.statusCode() != 200) {
+            throw new BadRequestException("Lambda");
+        }
+
+        if (usuarioAtualizacao.getNome() != null && !usuarioAtualizacao.getNome().isBlank() && !usuarioAtualizacao.getNome().isEmpty())
+            usuario.setNome(usuarioAtualizacao.getNome());
+        if (usuarioAtualizacao.getEmail() != null && !usuarioAtualizacao.getEmail().isBlank() && !usuarioAtualizacao.getEmail().isEmpty())
+            usuario.setEmail(usuarioAtualizacao.getEmail());
+        if (usuarioAtualizacao.getLogo() != null)
+            usuario.setLogo(bodyMessage.url());
+
+        return UsuarioMapper.toDto(usuarioRepository.save(usuario));
+    }
+
     public String atualizarSenha(int id, String senhaNova) {
         if (!usuarioRepository.existsById(id)) {
             throw new NaoEncontradoException("Usuario");
@@ -175,6 +207,18 @@ public class UsuarioService {
         return "Senha Atualizada com Sucesso!";
     }
 
+    public String atualizarSenhaPorEmail(String email, String senhaNova) {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        Usuario usuario = usuarios.stream()
+                .filter(p -> p.getEmail().equals(email))
+                .findFirst()
+                .get();
+
+        usuario.setSenha(senhaNova);
+        usuarioRepository.save(usuario);
+
+        return "Senha Atualizada com Sucesso!";
+    }
 
     private String generateSenha(int tamanho) {
 
