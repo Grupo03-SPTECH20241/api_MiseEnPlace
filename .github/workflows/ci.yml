@@ -3,10 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - hml
   pull_request:
     branches:
-      - main
+      - hml
 
 jobs:
   build-and-test:
