@@ -68,6 +68,11 @@ jobs:
           path: "target/"
 
       # 3. Transferir artefato para a EC2 pública
+      - name: Verify JAR Generation
+        run: |
+          ls -la target
+          find target -name "*.jar"
+
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
         with:
@@ -77,7 +82,15 @@ jobs:
           source: "target/*.jar"
           target: "/tmp/"
 
-      # 4. Transferir artefato para a EC2 privada via EC2 pública
+      - name: List files in /tmp on Public EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            ls -la /tmp
+
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
@@ -86,15 +99,3 @@ jobs:
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
             scp -i private_ec2_key.pem /tmp/*.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
-
-      # 5. Reiniciar a aplicação na EC2 privada
-      - name: Restart Application on Private EC2
-        uses: appleboy/ssh-action@v0.1.9
-        with:
-          host: ${{ secrets.PUBLIC_EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.PUBLIC_EC2_KEY }}
-          script: |
-            ssh -i private_ec2_key.pem ubuntu@${{ secrets.PRIVATE_EC2_HOST }} << EOF
-            sudo systemctl restart springboot-app.service
-            EOF
