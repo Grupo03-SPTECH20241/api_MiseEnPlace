@@ -169,27 +169,30 @@ public class UsuarioService {
                 .findFirst()
                 .get();
 
-        byte[] bytes = usuarioAtualizacao.getLogo();
-        var arquivo = Base64.getEncoder().encodeToString(bytes);
-        var nomeArquivo = "logo-" + LocalDateTime.now();
+        if (usuarioAtualizacao.getLogo() != null) {
+            byte[] bytes = usuarioAtualizacao.getLogo();
+            var arquivo = Base64.getEncoder().encodeToString(bytes);
+            var nomeArquivo = "logo-" + LocalDateTime.now();
 
-        ObjectMapper objectMapper = new ObjectMapper();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-        var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
-        var reponseString = response.payload().asUtf8String();
-        LogoRecord logoRecord = objectMapper.readValue(reponseString, LogoRecord.class);
-        BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
+            var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
+            var reponseString = response.payload().asUtf8String();
+            LogoRecord logoRecord = objectMapper.readValue(reponseString, LogoRecord.class);
+            BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
 
-        if (response.statusCode() != 200) {
-            throw new BadRequestException("Lambda");
+            if (response.statusCode() != 200) {
+                throw new BadRequestException("Lambda");
+            }
+
+            usuario.setLogo(bodyMessage.url());
         }
+
 
         if (usuarioAtualizacao.getNome() != null && !usuarioAtualizacao.getNome().isBlank() && !usuarioAtualizacao.getNome().isEmpty())
             usuario.setNome(usuarioAtualizacao.getNome());
         if (usuarioAtualizacao.getEmail() != null && !usuarioAtualizacao.getEmail().isBlank() && !usuarioAtualizacao.getEmail().isEmpty())
             usuario.setEmail(usuarioAtualizacao.getEmail());
-        if (usuarioAtualizacao.getLogo() != null)
-            usuario.setLogo(bodyMessage.url());
 
         return UsuarioMapper.toDto(usuarioRepository.save(usuario));
     }
