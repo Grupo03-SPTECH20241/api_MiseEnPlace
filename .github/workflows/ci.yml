@@ -38,9 +38,7 @@ jobs:
 
       # 4. Debug target directory
       - name: List target directory
-        run: |
-          ls -la target
-          find target -name "*.jar"
+        run: ls -la target
 
   deploy:
     needs: build-and-test
@@ -56,6 +54,12 @@ jobs:
         run: |
           echo "${{ secrets.PRIVATE_EC2_PEM }}" > private_ec2_key.pem
           chmod 600 private_ec2_key.pem
+
+      - name: Recuperar artefatos do build
+        uses: actions/download-artifact@v4
+        with:
+          name: build-frontend
+          path: "target/"
 
       # 3. Transferir artefato para a EC2 pública
       - name: Transfer JAR to Public EC2
