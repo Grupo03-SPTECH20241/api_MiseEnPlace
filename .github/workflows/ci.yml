@@ -69,8 +69,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.6
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
           source: "/tmp/target/*.jar"
           target: "/home/ubuntu/app/"
           port: 22
