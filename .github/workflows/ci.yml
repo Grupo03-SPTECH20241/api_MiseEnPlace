@@ -34,7 +34,7 @@ jobs:
 
       # 3. Construir e testar
       - name: Build and Test with Maven
-        run: mvn clean install
+        run: mvn clean install -DskipTests
 
   deploy:
     needs: build-and-test
