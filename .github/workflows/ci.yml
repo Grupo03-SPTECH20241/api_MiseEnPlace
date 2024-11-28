@@ -13,11 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Configuração do repositório
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Instalar Java JDK e configurar Maven
       - name: Setup JDK 17
         uses: actions/setup-java@v3
         with:
@@ -32,46 +30,44 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 3. Construir e testar
       - name: Build and Test with Maven
         run: mvn clean install -DskipTests
 
-      # 4. Debug target directory
       - name: List target directory
-        run: ls -la target
+        run: |
+          ls -la target
+          find target -name "*.jar"
 
-      - name: Gerar artefato Github com os arquivos do build
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-backend
-          path:  "target/"
+          path: target/
 
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Configuração do repositório
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Criar arquivo de chave PEM para a EC2 privada
       - name: Create PEM key for Private EC2
         run: |
           echo "${{ secrets.PRIVATE_EC2_PEM }}" > private_ec2_key.pem
           chmod 600 private_ec2_key.pem
 
-      - name: Recuperar artefatos do build
+      - name: Verify PEM key creation
+        run: ls -la private_ec2_key.pem
+
+      - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: build-backend
-          path: "target/"
+          path: target/
 
-      # 3. Transferir artefato para a EC2 pública
-      - name: Verify JAR Generation
-        run: |
-          ls -la target
-          find target -name "*.jar"
+      - name: List downloaded artifacts
+        run: ls -la target
 
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
@@ -98,4 +94,15 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i private_ec2_key.pem /tmp/target/*.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
+            scp -i private_ec2_key.pem /tmp/*.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
+
+      - name: Restart Application on Private EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            ssh -i private_ec2_key.pem ubuntu@${{ secrets.PRIVATE_EC2_HOST }} << EOF
+            sudo systemctl restart springboot-app.service
+            EOF
