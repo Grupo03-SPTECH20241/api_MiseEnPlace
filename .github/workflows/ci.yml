@@ -36,9 +36,11 @@ jobs:
       - name: Build and Test with Maven
         run: mvn clean install -DskipTests
 
-      # 4. Debug target directory
-      - name: List target directory
-        run: ls -la target
+      - name: Debug target directory
+        run: |
+          ls -la target
+          find target -name "*.jar"
+  
 
   deploy:
     needs: build-and-test
