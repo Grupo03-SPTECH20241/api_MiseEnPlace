@@ -9,7 +9,7 @@ on:
       - hml
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,6 +35,10 @@ jobs:
       # 3. Construir e testar
       - name: Build and Test with Maven
         run: mvn clean install -DskipTests
+
+      # 4. Debug target directory
+      - name: List target directory
+        run: ls -la target
 
   deploy:
     needs: build-and-test
