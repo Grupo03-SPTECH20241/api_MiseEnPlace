@@ -40,6 +40,12 @@ jobs:
       - name: List target directory
         run: ls -la target
 
+      - name: Gerar artefato Github com os arquivos do build
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-backend
+          path:  "target/"
+
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -58,7 +64,7 @@ jobs:
       - name: Recuperar artefatos do build
         uses: actions/download-artifact@v4
         with:
-          name: build-frontend
+          name: build-backend
           path: "target/"
 
       # 3. Transferir artefato para a EC2 pública
