@@ -68,7 +68,7 @@ jobs:
       - name: SCP to EC2
         uses: appleboy/scp-action@v0.1.6
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           source: "/tmp/target/*.jar"
           target: "/home/ubuntu/app/"
