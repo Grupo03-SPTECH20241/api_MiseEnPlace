@@ -65,18 +65,23 @@ jobs:
       - name: List downloaded artifacts
         run: ls -la target
 
-      - name: SCP to EC2
+      - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
         with:
           host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
-          source: "/tmp/target/*.jar"
-          target: "/home/ubuntu/app/"
-          port: 22
+          source: "target/*.jar"
+          target: "/tmp/"
 
-      - name: List files in target
-        run: |
-          ls -la /tmp/target
+      - name: List files in /tmp on Public EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            ls -la /tmp/
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
