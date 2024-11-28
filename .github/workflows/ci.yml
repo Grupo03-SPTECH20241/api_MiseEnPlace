@@ -89,7 +89,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            ls -la /tmp
+            ls -la /target
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
@@ -98,4 +98,4 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i private_ec2_key.pem /tmp/*.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
+            scp -i private_ec2_key.pem /tmp/target/*.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
