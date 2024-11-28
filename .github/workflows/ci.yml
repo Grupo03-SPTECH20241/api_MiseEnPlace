@@ -9,7 +9,7 @@ on:
       - hml
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,11 +36,11 @@ jobs:
       - name: Build and Test with Maven
         run: mvn clean install -DskipTests
 
-      - name: Debug target directory
+      # 4. Debug target directory
+      - name: List target directory
         run: |
           ls -la target
           find target -name "*.jar"
-  
 
   deploy:
     needs: build-and-test
