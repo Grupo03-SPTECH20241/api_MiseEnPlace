@@ -1,94 +1,104 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - hml
+  pull_request:
+    branches:
+      - hml
+
 jobs:
-build-and-test:
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup JDK 17
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-    - name: Cache Maven dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-    - name: Build and Test with Maven
-      run: mvn clean install -DskipTests
+      - name: Build and Test with Maven
+        run: mvn clean install -DskipTests
 
-    - name: List target directory
-      run: |
-        ls -la target
-        find target -name "*.jar"
+      - name: List target directory
+        run: |
+          ls -la target
+          find target -name "*.jar"
 
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-backend
-        path: target/*.jar
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-backend
+          path: target/*.jar
 
-deploy:
-  needs: build-and-test
-  runs-on: ubuntu-latest
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Create PEM key for Private EC2
-      run: |
-        echo "${{ secrets.PRIVATE_EC2_PEM }}" > private_ec2_key.pem
-        chmod 600 private_ec2_key.pem
+      - name: Create PEM key for Private EC2
+        run: |
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" > private_ec2_key.pem
+          chmod 600 private_ec2_key.pem
 
-    - name: Download build artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: build-backend
-        path: target/
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-backend
+          path: target/
 
-    - name: List downloaded artifacts
-      run: ls -la target
+      - name: List downloaded artifacts
+        run: ls -la target
 
-    - name: Transfer JAR to Public EC2
-      uses: appleboy/scp-action@v0.1.6
-      with:
-        host: ${{ secrets.PUBLIC_EC2_HOST }}
-        username: ubuntu
-        key: ${{ secrets.PUBLIC_EC2_KEY }}
-        source: "target/*.jar"
-        target: "/tmp/"
+      - name: Transfer JAR to Public EC2
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          source: "target/*.jar"
+          target: "/tmp/"
 
-    - name: List files in /tmp on Public EC2
-      uses: appleboy/ssh-action@v0.1.9
-      with:
-        host: ${{ secrets.PUBLIC_EC2_HOST }}
-        username: ubuntu
-        key: ${{ secrets.PUBLIC_EC2_KEY }}
-        script: |
-          ls -la /tmp/
+      - name: List files in /tmp on Public EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            ls -la /tmp/
 
-    - name: Transfer JAR to Private EC2
-      uses: appleboy/ssh-action@v0.1.9
-      with:
-        host: ${{ secrets.PUBLIC_EC2_HOST }}
-        username: ubuntu
-        key: ${{ secrets.PUBLIC_EC2_KEY }}
-        script: |
-          scp -i private_ec2_key.pem /tmp/*.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
+      - name: Transfer JAR to Private EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            scp -i private_ec2_key.pem /tmp/*.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
 
-    - name: Restart Application on Private EC2
-      uses: appleboy/ssh-action@v0.1.9
-      with:
-        host: ${{ secrets.PUBLIC_EC2_HOST }}
-        username: ubuntu
-        key: ${{ secrets.PUBLIC_EC2_KEY }}
-        script: |
-          ssh -i private_ec2_key.pem ubuntu@${{ secrets.PRIVATE_EC2_HOST }} << EOF
-          sudo systemctl restart springboot-app.service
-          EOF
+      - name: Restart Application on Private EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            ssh -i private_ec2_key.pem ubuntu@${{ secrets.PRIVATE_EC2_HOST }} << EOF
+            sudo systemctl restart springboot-app.service
+            EOF
