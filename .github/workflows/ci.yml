@@ -65,14 +65,17 @@ jobs:
       - name: List downloaded artifacts
         run: ls -la target
 
+      - name: Criando pasta
+        run: mkdir temporaria
+
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
         with:
           host: ${{ secrets.PUBLIC_EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
-          source: "target/*.jar"
-          target: "/tmp/"
+          source: "target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
+          target: "temporaria/"
 
       - name: List files in /tmp on Public EC2
         uses: appleboy/ssh-action@v0.1.9
@@ -81,7 +84,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            ls -la /tmp/
+            ls -la temporaria/
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
@@ -90,7 +93,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i private_ec2_key.pem /tmp/*.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
+            scp -i private_ec2_key.pem temporaria/api-mise-en-place-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
 
       - name: Restart Application on Private EC2
         uses: appleboy/ssh-action@v0.1.9
