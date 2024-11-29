@@ -53,7 +53,7 @@ jobs:
 
       - name: Create PEM key for Private EC2
         run: |
-          echo "${{ secrets.PRIVATE_EC2_PEM }}" > private_ec2_key.pem || exit 1
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" > private_ec2_key.pem
           chmod 600 private_ec2_key.pem
 
       - name: Download build artifact
@@ -71,9 +71,9 @@ jobs:
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
         with:
-          host: ${{ secrets.PUBLIC_EC2_HOST }} || exit 1
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.PUBLIC_EC2_KEY }} || exit 1
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
           source: "target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
           target: "temporaria/"
 
@@ -93,7 +93,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i private_ec2_key.pem temporaria/api-mise-en-place-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/ || exit 1
+            scp -i private_ec2_key.pem temporaria/api-mise-en-place-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
 
       - name: Restart Application on Private EC2
         uses: appleboy/ssh-action@v0.1.9
@@ -102,6 +102,6 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            ssh -i private_ec2_key.pem ubuntu@${{ secrets.PRIVATE_EC2_HOST }} << EOF || exit 1
+            ssh -i private_ec2_key.pem ubuntu@${{ secrets.PRIVATE_EC2_HOST }} << EOF
             sudo systemctl restart springboot-app.service
             EOF
