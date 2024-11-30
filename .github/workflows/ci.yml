@@ -51,10 +51,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create PEM key for Private EC2
-        run: |
-          echo "${{ secrets.PRIVATE_EC2_PEM }}" > private_ec2_key.pem
-          chmod 400 private_ec2_key.pem
+      
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
@@ -88,6 +85,11 @@ jobs:
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
             ls -la temporaria/
+
+      - name: Create PEM key for Private EC2
+        run: |
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" > temporaria/target/private_ec2_key.pem
+          chmod 400 private_ec2_key.pem
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
