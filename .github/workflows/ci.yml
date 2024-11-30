@@ -71,25 +71,11 @@ jobs:
       - name: Copy private key to temporaria/target
         run: cp private_ec2_key.pem temporaria/target/
 
-      # SSH Setup with Bastion Host
-      - name: Configure SSH with Bastion Host
-        run: |
-          echo "Setting up SSH configuration for Bastion Host..."
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          echo "
-            Host ${PRIVATE_EC2_HOST}
-            User ubuntu
-            ProxyJump ${PUBLIC_EC2_HOST}
-            IdentityFile ${PWD}/private_ec2_key.pem
-          " >> ~/.ssh/config
-          chmod 644 ~/.ssh/config
-
-      # Test SSH Connectivity using Bastion Host
+      # Test SSH Connectivity through Bastion Host with -J (ProxyJump)
       - name: Test SSH Connectivity through Bastion
         run: |
           echo "Testing SSH connection to Private EC2 through Bastion Host..."
-          ssh -o StrictHostKeyChecking=no ${PRIVATE_EC2_HOST} exit || {
+          ssh -o StrictHostKeyChecking=no -i private_ec2_key.pem -J ubuntu@${{ secrets.PUBLIC_EC2_HOST }} ubuntu@${{ secrets.PRIVATE_EC2_HOST }} exit || {
             echo "SSH connection failed!";
             exit 1;
           }
@@ -99,7 +85,7 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           echo "Adding Private EC2 Host to known_hosts..."
-          ssh-keyscan -H ${PRIVATE_EC2_HOST} >> ~/.ssh/known_hosts || {
+          ssh-keyscan -H ${{ secrets.PRIVATE_EC2_HOST }} >> ~/.ssh/known_hosts || {
             echo "Failed to add host to known_hosts. Exiting...";
             exit 1;
           }
@@ -123,7 +109,7 @@ jobs:
           script: |
             ls -la temporaria/
 
-      # Transfer JAR to Private EC2 through Bastion
+      # Transfer JAR to Private EC2 through Bastion using -J (ProxyJump)
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
@@ -131,7 +117,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i temporaria/target/private_ec2_key.pem \
+            scp -i temporaria/target/private_ec2_key.pem -o ProxyJump=ubuntu@${{ secrets.PUBLIC_EC2_HOST }} \
                 temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
                 ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
 
