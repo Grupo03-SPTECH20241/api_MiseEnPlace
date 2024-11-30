@@ -77,9 +77,6 @@ jobs:
           source: "target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
           target: "temporaria/"
 
-      - name: Copiando key privada
-        run: cp private_ec2_key.pem /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/
-
       - name: List files in temporaria on Public EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
@@ -99,7 +96,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i private_ec2_key.pem \
+            scp -i /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private_ec2_key.pem \
                 temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
                 ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
 
