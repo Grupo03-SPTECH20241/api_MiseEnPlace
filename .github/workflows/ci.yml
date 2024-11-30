@@ -86,11 +86,10 @@ jobs:
           script: |
             ls -la temporaria/
 
-      - name: pwd
-        run: pwd
-
-      - name: chmod 400
-        run: chmod 400 /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private_ec2_key.pem
+      - name: Create PEM key for Private EC2
+        run: |
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" > temporaria/target/private_ec2_key.pem
+          chmod 400 temporaria/target/private_ec2_key.pem
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
@@ -99,7 +98,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private_ec2_key.pem \
+            scp -i temporaria/target/private_ec2_key.pem \
                 temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
                 ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
 
