@@ -85,8 +85,8 @@ jobs:
 
       - name: Create PEM key for Private EC2
         run: |
-          cat "${{ secrets.PRIVATE_EC2_PEM }}" > temporaria/target/private_ec2_key.pem
-          chmod 400 private_ec2_key.pem
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" > temporaria/target/private_ec2_key.pem
+          chmod 400 temporaria/target/private_ec2_key.pem
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
