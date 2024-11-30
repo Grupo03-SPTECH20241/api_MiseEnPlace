@@ -66,7 +66,10 @@ jobs:
         run: ls -la target
 
       - name: Criando pasta
-        run: mkdir temporaria
+        run: mkdir -p temporaria/target
+
+      - name: Copy private key to temporaria/target
+        run: cp private_ec2_key.pem temporaria/target/
 
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
@@ -89,7 +92,6 @@ jobs:
       - name : Listando arquivos do target
         run: ls -la target/
         
-
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
