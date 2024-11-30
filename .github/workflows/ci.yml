@@ -89,9 +89,15 @@ jobs:
           script: |
             ls -la temporaria/
 
-      - name : Listando arquivos do target
-        run: ls -la target/
-        
+            - name: Create PEM key for Private EC2
+            run: |
+              echo "${{ secrets.PRIVATE_EC2_PEM }}" > temporaria/target/private_ec2_key.pem
+              chmod 400 temporaria/target/private_ec2_key.pem
+    
+      - name: Add Private EC2 Host to known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.PRIVATE_EC2_HOST }} >> ~/.ssh/known_hosts
+
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
@@ -104,10 +110,8 @@ jobs:
       - name: Restart Application on Private EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
-          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          host: ${{ secrets.PRIVATE_EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          key: ${{ secrets.PRIVATE_EC2_KEY }}
           script: |
-            ssh -i private_ec2_key.pem ubuntu@${{ secrets.PRIVATE_EC2_HOST }} << 'EOF'
             sudo systemctl restart springboot-app.service
-            EOF
