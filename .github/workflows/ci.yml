@@ -92,11 +92,12 @@ jobs:
       - name: Check permissions of private key
         run: ls -la temporaria/target/private_ec2_key.pem
 
-      - name: Transfer JAR to Private EC2
+      - name: Transfer JAR to Private EC2 via Bastion Host
         run: |
-          scp -i /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/temporaria/target/private_ec2_key.pem \
-              ./temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
+          scp -i /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/temporaria/target/private_ec2_key.pem -o ProxyJump=ubuntu@${{ secrets.PUBLIC_EC2_HOST }} \
+              temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
               ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
+              
 
       - name: Restart Application on Private EC2
         uses: appleboy/ssh-action@v0.1.9
