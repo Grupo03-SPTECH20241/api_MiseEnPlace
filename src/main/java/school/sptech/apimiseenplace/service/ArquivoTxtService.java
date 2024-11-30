@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -120,98 +121,121 @@ public class ArquivoTxtService {
                         String tipoProduto = registro.substring(164, 184).trim();
                         String descricao = registro.substring(184, 284).trim();
 
-                        Massa massaRegistro = null;
-                        Recheio recheioRegistro = null;
-                        Cobertura coberturaRegistro = null;
-                        UnidadeMedida unidadeMedidaRegistro = null;
-                        TipoProduto tipoProdutoRegistro = null;
+                        Boolean produtoExiste = false;
+                        List<Produto> produtos = produtoRepository.findAll();
 
-                        boolean massaEncontrada = false;
-                        for (Massa massaBanco : massas) {
-                            if (massaBanco.getNome().equalsIgnoreCase(massa)) {
-                                massaRegistro = massaBanco;
-                                massaEncontrada = true;
-                                break;
+                         Optional<Produto> produtoEncontrado = produtos.stream()
+                                .filter(produto -> produto.getNome().equalsIgnoreCase(nome))
+                                .findFirst();
+
+                         if (produtoEncontrado.isPresent()) {
+                             Boolean massaEncontrado = false;
+                             Boolean recheioEncontrado = false;
+                             Boolean precoRecheioEncontrado = false;
+                             Boolean coberturaEncontrado = false;
+
+                             if (produtoEncontrado.get().getMassa().getNome().equalsIgnoreCase(massa)) massaEncontrado = true;
+                             if (produtoEncontrado.get().getRecheio().getNome().equalsIgnoreCase(recheioNome)) recheioEncontrado = true;
+                             if (produtoEncontrado.get().getRecheio().getPreco() == precoRecheio) precoRecheioEncontrado = true;
+                             if (produtoEncontrado.get().getCobertura().getNome().equalsIgnoreCase(cobertura)) coberturaEncontrado = true;
+
+                             if (massaEncontrado && recheioEncontrado && precoRecheioEncontrado && coberturaEncontrado) produtoExiste = true;
+                         }
+
+                        if (produtoExiste) {
+                            Massa massaRegistro = null;
+                            Recheio recheioRegistro = null;
+                            Cobertura coberturaRegistro = null;
+                            UnidadeMedida unidadeMedidaRegistro = null;
+                            TipoProduto tipoProdutoRegistro = null;
+
+                            boolean massaEncontrada = false;
+                            for (Massa massaBanco : massas) {
+                                if (massaBanco.getNome().equalsIgnoreCase(massa)) {
+                                    massaRegistro = massaBanco;
+                                    massaEncontrada = true;
+                                    break;
+                                }
                             }
-                        }
 
-                        boolean coberturaEncontrada = false;
-                        for (Cobertura coberturaBanco : coberturas) {
-                            if (coberturaBanco.getNome().equalsIgnoreCase(cobertura)) {
-                                coberturaRegistro = coberturaBanco;
-                                coberturaEncontrada = true;
-                                break;
+                            boolean coberturaEncontrada = false;
+                            for (Cobertura coberturaBanco : coberturas) {
+                                if (coberturaBanco.getNome().equalsIgnoreCase(cobertura)) {
+                                    coberturaRegistro = coberturaBanco;
+                                    coberturaEncontrada = true;
+                                    break;
+                                }
                             }
-                        }
 
-                        boolean recheioEncontrado = false;
-                        for (Recheio recheioBanco : recheios) {
-                            if (recheioBanco.getNome().equalsIgnoreCase(recheioNome)) {
-                                recheioRegistro = recheioBanco;
-                                recheioEncontrado = true;
-                                break;
+                            boolean recheioEncontrado = false;
+                            for (Recheio recheioBanco : recheios) {
+                                if (recheioBanco.getNome().equalsIgnoreCase(recheioNome)) {
+                                    recheioRegistro = recheioBanco;
+                                    recheioEncontrado = true;
+                                    break;
+                                }
                             }
-                        }
 
-                        boolean unidadeMedidadaEncontrada = false;
-                        for (UnidadeMedida unidadeMedidaBanco : unidadeMedidas) {
-                            if (unidadeMedidaBanco.getUnidadeMedida().equalsIgnoreCase(unidadeMedida)) {
-                                unidadeMedidaRegistro = unidadeMedidaBanco;
-                                unidadeMedidadaEncontrada = true;
-                                break;
+                            boolean unidadeMedidadaEncontrada = false;
+                            for (UnidadeMedida unidadeMedidaBanco : unidadeMedidas) {
+                                if (unidadeMedidaBanco.getUnidadeMedida().equalsIgnoreCase(unidadeMedida)) {
+                                    unidadeMedidaRegistro = unidadeMedidaBanco;
+                                    unidadeMedidadaEncontrada = true;
+                                    break;
+                                }
                             }
-                        }
 
-                        boolean tipoProdutoEncontrado = false;
-                        for (TipoProduto tipoProdutoBanco : tipoProdutos) {
-                            if (tipoProdutoBanco.getTipo().equalsIgnoreCase(tipoProduto)) {
-                                tipoProdutoRegistro = tipoProdutoBanco;
-                                tipoProdutoEncontrado = true;
-                                break;
+                            boolean tipoProdutoEncontrado = false;
+                            for (TipoProduto tipoProdutoBanco : tipoProdutos) {
+                                if (tipoProdutoBanco.getTipo().equalsIgnoreCase(tipoProduto)) {
+                                    tipoProdutoRegistro = tipoProdutoBanco;
+                                    tipoProdutoEncontrado = true;
+                                    break;
+                                }
                             }
+
+                            if (!massaEncontrada) {
+                                Massa massaNova = new Massa(null, massa);
+                                massaRegistro = massaRepository.save(massaNova);
+                            }
+
+                            if (!coberturaEncontrada) {
+                                Cobertura coberturaNova = new Cobertura(null, cobertura);
+                                coberturaRegistro = coberturaRepository.save(coberturaRegistro);
+                            }
+
+                            if (!recheioEncontrado) {
+                                Recheio recheioNovo = new Recheio(null, recheioNome, precoRecheio);
+                                recheioRegistro = recheioRepository.save(recheioNovo);
+                            }
+
+                            if (!unidadeMedidadaEncontrada) {
+                                UnidadeMedida unidadeMedidaNova = new UnidadeMedida(null, unidadeMedida, null);
+                                unidadeMedidaRegistro = unidadeMedidaRepository.save(unidadeMedidaNova);
+                            }
+
+                            if (!tipoProdutoEncontrado) {
+                                TipoProduto tipoProdutoNovo = new TipoProduto(null, tipoProduto, null);
+                                tipoProdutoRegistro = tipoProdutoRepository.save(tipoProdutoNovo);
+                            }
+
+                            Produto produto = new Produto(
+                                    null,
+                                    nome,
+                                    preco,
+                                    descricao,
+                                    null,
+                                    1,
+                                    recheioRegistro,
+                                    massaRegistro,
+                                    coberturaRegistro,
+                                    unidadeMedidaRegistro,
+                                    tipoProdutoRegistro
+                            );
+
+                            listaProdutos.add(produto);
+                            produtoRepository.save(produto);
                         }
-
-                        if (!massaEncontrada) {
-                            Massa massaNova = new Massa(null, massa);
-                            massaRegistro = massaRepository.save(massaNova);
-                        }
-
-                        if (!coberturaEncontrada) {
-                            Cobertura coberturaNova = new Cobertura(null, cobertura);
-                            coberturaRegistro = coberturaRepository.save(coberturaRegistro);
-                        }
-
-                        if (!recheioEncontrado) {
-                            Recheio recheioNovo = new Recheio(null, recheioNome, precoRecheio);
-                            recheioRegistro = recheioRepository.save(recheioNovo);
-                        }
-
-                        if (!unidadeMedidadaEncontrada) {
-                            UnidadeMedida unidadeMedidaNova = new UnidadeMedida(null, unidadeMedida, null);
-                            unidadeMedidaRegistro = unidadeMedidaRepository.save(unidadeMedidaNova);
-                        }
-
-                        if (!tipoProdutoEncontrado) {
-                            TipoProduto tipoProdutoNovo = new TipoProduto(null, tipoProduto, null);
-                            tipoProdutoRegistro = tipoProdutoRepository.save(tipoProdutoNovo);
-                        }
-
-                        Produto produto = new Produto(
-                                null,
-                                nome,
-                                preco,
-                                descricao,
-                                null,
-                                1,
-                                recheioRegistro,
-                                massaRegistro,
-                                coberturaRegistro,
-                                unidadeMedidaRegistro,
-                                tipoProdutoRegistro
-                        );
-
-                        listaProdutos.add(produto);
-                        produtoRepository.save(produto);
                     }
 
                     registro = entrada.readLine();

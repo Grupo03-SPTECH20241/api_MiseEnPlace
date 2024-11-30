@@ -292,7 +292,7 @@ class UsuarioServiceTest {
             Mockito.when(repository.findById(anyInt())).thenReturn(Optional.of(usuario));
             Mockito.when(repository.save(any())).thenReturn(usuario);
 
-            String result = usuarioService.atualizarSenha(1, senhaNova);
+            String result = usuarioService.atualizarSenha("email", senhaNova);
 
             assertEquals("Senha Atualizada com Sucesso!", result);
 
@@ -309,7 +309,7 @@ class UsuarioServiceTest {
             Mockito.when(repository.existsById(anyInt())).thenReturn(false);
 
             NaoEncontradoException exception = assertThrows(NaoEncontradoException.class, () -> {
-                usuarioService.atualizarSenha(1, senhaNova);
+                usuarioService.atualizarSenha("email", senhaNova);
             });
 
             assertEquals("Usuario não encontrado", exception.getMessage());

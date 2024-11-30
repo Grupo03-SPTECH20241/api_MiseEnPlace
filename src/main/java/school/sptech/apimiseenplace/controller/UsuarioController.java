@@ -78,14 +78,9 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> atualizarSenha(@PathVariable int id, @RequestParam String senhaNova){
-        return ResponseEntity.ok(usuarioService.atualizarSenha(id, senhaNova));
-    }
-
-    @PatchMapping("/atualizar-senha-por-email/{email}")
-    public ResponseEntity<String> atualizarSenhaPorEmail(@PathVariable String email, @RequestParam String senhaNova){
-        return ResponseEntity.ok(usuarioService.atualizarSenhaPorEmail(email, senhaNova));
+    @PatchMapping
+    public ResponseEntity<String> atualizarSenha(@RequestBody UsuarioLoginDto usuario){
+        return ResponseEntity.ok(usuarioService.atualizarSenha(usuario.getEmail(), usuario.getSenha()));
     }
 
     @PostMapping("/login")
@@ -137,6 +132,12 @@ public class UsuarioController {
     @GetMapping("/obter-foto-cliente")
     public ResponseEntity<String> obterFotoCliente(@RequestParam String email) {
         return ResponseEntity.ok(usuarioService.obterFotoCliente(email));
+    }
+
+    @PutMapping("/atualizar-foto-cliente")
+    public ResponseEntity<Void> atualizarFotoCliente(@RequestBody UsuarioAtualizarFotoDto request) throws JsonProcessingException {
+        usuarioService.atualizarFotoCliente(request);
+        return ResponseEntity.ok().build();
     }
 
     public Usuario[] ordenarNomeQuicksort(
