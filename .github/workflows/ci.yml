@@ -100,11 +100,12 @@ jobs:
                 temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
                 ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
 
-      - name: Restart Application on Private EC2
+      - name: Restart Application on Private EC2 through Bastion Host
         uses: appleboy/ssh-action@v0.1.9
         with:
-          host: ${{ secrets.PRIVATE_EC2_HOST }}
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.PRIVATE_EC2_KEY }}
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            sudo systemctl restart springboot-app.service
+            ssh -o StrictHostKeyChecking=no -i private_ec2_key.pem -J ubuntu@${{ secrets.PUBLIC_EC2_HOST }} ubuntu@${{ secrets.PRIVATE_EC2_HOST }} "sudo systemctl restart springboot-app.service"
+              
