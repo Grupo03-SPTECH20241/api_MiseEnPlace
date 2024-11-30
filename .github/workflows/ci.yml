@@ -73,8 +73,9 @@ jobs:
 
       - name: Test SSH Connectivity
         run: |
-          ping -c 4 ${{ secrets.PRIVATE_EC2_HOST }} || {
-            echo "Host ${{ secrets.PRIVATE_EC2_HOST }} is unreachable.";
+          echo "Testing SSH connection..."
+          ssh -o StrictHostKeyChecking=no -i private_ec2_key.pem ubuntu@${{ secrets.PRIVATE_EC2_HOST }} exit || {
+            echo "SSH connection failed!";
             exit 1;
           }
 
