@@ -71,16 +71,6 @@ jobs:
       - name: Copy private key to temporaria/target
         run: cp private_ec2_key.pem temporaria/target/
 
-      - name: Test SSH Connectivity
-        run: |
-          echo "Testing SSH connection..."
-          ssh -o StrictHostKeyChecking=no -i private_ec2_key.pem ubuntu@${{ secrets.PRIVATE_EC2_HOST }} exit || {
-            echo "SSH connection failed!";
-            exit 1;
-          }
-
-
-
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
         with:
