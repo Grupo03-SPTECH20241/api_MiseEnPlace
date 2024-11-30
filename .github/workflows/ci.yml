@@ -76,7 +76,7 @@ jobs:
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           source: "target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
           target: "temporaria/"
-
+          
       - name: List files in /tmp on Public EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
@@ -85,6 +85,13 @@ jobs:
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
             ls -la temporaria/
+
+      - name: Entrando na pasta criada
+        run: cd temporaria/target
+
+      - name : Listando arquivos do target
+        run: ls -la target
+        
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
