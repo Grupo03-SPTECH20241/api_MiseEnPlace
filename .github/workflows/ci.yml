@@ -18,8 +18,8 @@ jobs:
       - name: Setup JDK 17
         uses: actions/setup-java@v3
         with:
-          distribution: "temurin"
-          java-version: "17"
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
@@ -50,11 +50,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Create PEM key for Private EC2
-        run: |
-          echo "${{ secrets.PRIVATE_EC2_PEM }}" > private_ec2_key.pem
-          chmod 400 private_ec2_key.pem
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
@@ -91,16 +86,17 @@ jobs:
           echo "${{ secrets.PRIVATE_EC2_PEM }}" > temporaria/target/private_ec2_key.pem
           chmod 400 temporaria/target/private_ec2_key.pem
 
+      - name: List files in temporaria/target
+        run: ls -la temporaria/target/
+
+      - name: Check permissions of private key
+        run: ls -la temporaria/target/private_ec2_key.pem
+
       - name: Transfer JAR to Private EC2
-        uses: appleboy/ssh-action@v0.1.9
-        with:
-          host: ${{ secrets.PUBLIC_EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.PUBLIC_EC2_KEY }}
-          script: |
-            scp -i private_ec2_key.pem \
-                temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
-                ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
+        run: |
+          scp -i /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/temporaria/target/private_ec2_key.pem \
+              ./temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
+              ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
 
       - name: Restart Application on Private EC2
         uses: appleboy/ssh-action@v0.1.9
