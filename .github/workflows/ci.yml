@@ -86,11 +86,8 @@ jobs:
           script: |
             ls -la temporaria/
 
-      - name: Entrando na pasta criada
-        run: cd temporaria/target
-
       - name : Listando arquivos do target
-        run: ls -la target
+        run: ls -la target/
         
 
       - name: Transfer JAR to Private EC2
