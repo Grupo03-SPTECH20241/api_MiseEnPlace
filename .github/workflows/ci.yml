@@ -98,7 +98,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i "${{secrets.PRIVATE_EC2_PEM}}" \
+            scp -i private_ec2_key.pem \
                 temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
                 ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
 
