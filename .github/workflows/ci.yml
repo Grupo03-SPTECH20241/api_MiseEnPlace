@@ -71,10 +71,25 @@ jobs:
       - name: Copy private key to temporaria/target
         run: cp private_ec2_key.pem temporaria/target/
 
-      - name: Test SSH Connectivity
+      # SSH Setup with Bastion Host
+      - name: Configure SSH with Bastion Host
         run: |
-          echo "Testing SSH connection..."
-          ssh -o StrictHostKeyChecking=no -i private_ec2_key.pem ubuntu@${{ secrets.PRIVATE_EC2_HOST }} exit || {
+          echo "Setting up SSH configuration for Bastion Host..."
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "
+            Host ${PRIVATE_EC2_HOST}
+            User ubuntu
+            ProxyJump ${PUBLIC_EC2_HOST}
+            IdentityFile ${PWD}/private_ec2_key.pem
+          " >> ~/.ssh/config
+          chmod 644 ~/.ssh/config
+
+      # Test SSH Connectivity using Bastion Host
+      - name: Test SSH Connectivity through Bastion
+        run: |
+          echo "Testing SSH connection to Private EC2 through Bastion Host..."
+          ssh -o StrictHostKeyChecking=no ${PRIVATE_EC2_HOST} exit || {
             echo "SSH connection failed!";
             exit 1;
           }
@@ -84,7 +99,7 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           echo "Adding Private EC2 Host to known_hosts..."
-          ssh-keyscan -H ${{ secrets.PRIVATE_EC2_HOST }} >> ~/.ssh/known_hosts || {
+          ssh-keyscan -H ${PRIVATE_EC2_HOST} >> ~/.ssh/known_hosts || {
             echo "Failed to add host to known_hosts. Exiting...";
             exit 1;
           }
@@ -108,6 +123,7 @@ jobs:
           script: |
             ls -la temporaria/
 
+      # Transfer JAR to Private EC2 through Bastion
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
