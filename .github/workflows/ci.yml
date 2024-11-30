@@ -65,6 +65,9 @@ jobs:
       - name: List downloaded artifacts
         run: ls -la target
 
+      - name: Add EC2 host key to known_hosts
+        run: ssh-keyscan -H ${{ secrets.PRIVATE_EC2_HOST }} >> ~/.ssh/known_hosts
+
       - name: Prepare Temporary Directory
         run: mkdir -p temporaria/target
 
@@ -90,15 +93,10 @@ jobs:
             ls -la temporaria/
 
       - name: Transfer JAR to Private EC2
-        uses: appleboy/ssh-action@v0.1.9
-        with:
-          host: ${{ secrets.PUBLIC_EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.PUBLIC_EC2_KEY }}
-          script: |
-            scp -i temporaria/target/private_ec2_key.pem \
-                temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
-                ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
+        run: |
+          scp -o StrictHostKeyChecking=no -i temporaria/target/private_ec2_key.pem \
+              temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
+              ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
 
       - name: Restart Application on Private EC2 through Bastion Host
         uses: appleboy/ssh-action@v0.1.9
