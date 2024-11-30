@@ -71,6 +71,24 @@ jobs:
       - name: Copy private key to temporaria/target
         run: cp private_ec2_key.pem temporaria/target/
 
+      - name: Test SSH Connectivity
+        run: |
+          ping -c 4 ${{ secrets.PRIVATE_EC2_HOST }} || {
+            echo "Host ${{ secrets.PRIVATE_EC2_HOST }} is unreachable.";
+            exit 1;
+          }
+
+      - name: Add Private EC2 Host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "Adding Private EC2 Host to known_hosts..."
+          ssh-keyscan -H ${{ secrets.PRIVATE_EC2_HOST }} >> ~/.ssh/known_hosts || {
+            echo "Failed to add host to known_hosts. Exiting...";
+            exit 1;
+          }
+          chmod 644 ~/.ssh/known_hosts
+
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
         with:
@@ -89,13 +107,6 @@ jobs:
           script: |
             ls -la temporaria/
 
-      - name: Add Private EC2 Host to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan -H ${{ secrets.PRIVATE_EC2_HOST }} >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
@@ -103,7 +114,9 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i temporaria/target/private_ec2_key.pem temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
+            scp -i temporaria/target/private_ec2_key.pem \
+                temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
+                ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/app/
 
       - name: Restart Application on Private EC2
         uses: appleboy/ssh-action@v0.1.9
