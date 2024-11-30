@@ -94,9 +94,13 @@ jobs:
 
       - name: Transfer JAR to Private EC2 via Bastion Host
         run: |
-          scp -i /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/temporaria/target/private_ec2_key.pem -o ProxyJump=ubuntu@${{ secrets.PUBLIC_EC2_HOST }} \
-              temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
-              ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
+         scp -i /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/temporaria/target/private_ec2_key.pem \
+          -o StrictHostKeyChecking=no \
+          -o UserKnownHostsFile=/dev/null \
+          -o ProxyJump=ubuntu@${{ secrets.PUBLIC_EC2_HOST }} \
+          temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
+          ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/temporaria/
+
               
 
       - name: Restart Application on Private EC2
