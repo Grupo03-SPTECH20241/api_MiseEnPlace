@@ -89,6 +89,9 @@ jobs:
           script: |
             ls -la temporaria/
 
+      - name: pwd
+        run: pwd
+
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
