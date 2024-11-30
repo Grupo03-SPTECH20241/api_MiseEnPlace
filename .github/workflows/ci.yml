@@ -78,7 +78,7 @@ jobs:
           target: "temporaria/"
 
       - name: Copiando key privada
-        run: cp private_ec2_key.pem temporaria/target/
+        run: cp private_ec2_key.pem /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/
 
       - name: List files in temporaria on Public EC2
         uses: appleboy/ssh-action@v0.1.9
