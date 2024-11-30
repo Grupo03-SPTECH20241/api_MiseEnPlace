@@ -89,6 +89,9 @@ jobs:
       - name: pwd
         run: pwd
 
+      - name: chmod 400
+        run: chmod 400 /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private_ec2_key.pem
+
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
