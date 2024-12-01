@@ -62,11 +62,9 @@ jobs:
 
       - name: Prepare Temporary Directory and Create PEM key for Private EC2
         run: |
-          mkdir -p temporaria/  # Garante que o diretório existe
-          
-
-      - name: List files in temporaria (before SCP to Private EC2)
-        run: ls -la temporaria/
+          mkdir -p temporaria/  # Ensure the directory exists
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" > /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
+          chmod 400 /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
 
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
@@ -84,32 +82,22 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            ls -la temporaria/target/
+            ls -la temporaria/
 
-      - name: Criando chave pem private
-        run: |
-          echo "${{ secrets.PRIVATE_EC2_PEM }}" > /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
-          chmod 400 /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
-
-      - name: List files in temporaria (after SCP to Private EC2)
-        run: ls -la /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/target/
-        
       - name: Transfer JAR to Private EC2
-        uses: appleboy/ssh-action@v0.1.9
+        uses: appleboy/scp-action@v0.1.6
         with:
-          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          host: ${{ secrets.PRIVATE_EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.PUBLIC_EC2_KEY }}
-          script: |
-            scp -i /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem \
-                temporaria/*.jar \
-                ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
+          key: /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
+          source: "temporaria/*.jar"
+          target: "/home/ubuntu/"
 
       - name: Restart Application on Private EC2
         uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.PRIVATE_EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.PRIVATE_EC2_PEM }}
+          key: /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
           script: |
             sudo systemctl restart springboot-app.service
