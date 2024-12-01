@@ -18,6 +18,17 @@ public class UsuarioMapper {
         return entity;
     }
 
+    public static Usuario toEntity(UsuarioEmailDto dto, String nomeArquivo){
+
+        Usuario entity = new Usuario();
+        entity.setNome(dto.getNome());
+        entity.setEmail(dto.getEmail());
+        entity.setLogo(nomeArquivo);
+        entity.setCnpj(dto.getCnpj());
+
+        return entity;
+    }
+
     public static Usuario toEntityFromEmail(UsuarioEmailDto dto){
         Usuario entity = new Usuario();
         entity.setNome(dto.getNome());
