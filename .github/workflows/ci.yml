@@ -88,8 +88,8 @@ jobs:
 
       - name: Criando chave pem private
         run: |
-          echo "${{ secrets.PRIVATE_EC2_KEY }}" > temporaria/target/private_ec2_key.pem
-          chmod 400 temporaria/private_ec2_key.pem
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" > temporaria/target/PRIVATE_EC2_PEM.pem
+          chmod 400 temporaria/PRIVATE_EC2_PEM.pem
 
       - name: List files in temporaria (after SCP to Private EC2)
         run: ls -la temporaria/target/
@@ -101,7 +101,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i temporaria/private_ec2_key.pem \
+            scp -i temporaria/PRIVATE_EC2_PEM.pem \
                 temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
                 ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
 
@@ -110,6 +110,6 @@ jobs:
         with:
           host: ${{ secrets.PRIVATE_EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.PRIVATE_EC2_KEY }}
+          key: ${{ secrets.PRIVATE_EC2_PEM }}
           script: |
             sudo systemctl restart springboot-app.service
