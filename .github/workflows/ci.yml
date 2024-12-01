@@ -73,8 +73,8 @@ jobs:
           echo "${{ secrets.PRIVATE_EC2_PEM }}" > /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
           chmod 400 /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
 
-      - name: List files in temporaria before transfer
-        run: ls -la temporaria/
+      - name: List files in /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/ before transfer
+        run: ls -la /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/
 
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
