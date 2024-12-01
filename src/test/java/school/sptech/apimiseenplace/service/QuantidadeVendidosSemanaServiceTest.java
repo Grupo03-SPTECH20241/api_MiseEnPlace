@@ -9,7 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.apimiseenplace.repository.QuantidadeVendidosSemanaRepository;
+import school.sptech.apimiseenplace.repository.quantidadeVendidos.QuantidadeVendidosSemanaRepository;
+import school.sptech.apimiseenplace.service.quantidadeVendidos.QuantidadeVendidosSemanaService;
 import school.sptech.apimiseenplace.view.graficoQuantidadeMaisVendidos.VwQuantidadeVendidosSemana;
 
 import java.time.LocalDate;
