@@ -73,6 +73,9 @@ jobs:
           echo "${{ secrets.PRIVATE_EC2_PEM }}" > /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
           chmod 400 /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
 
+      - name: List files in temporaria before transfer
+        run: ls -la temporaria/
+
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
         with:
@@ -89,7 +92,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            ls -la temporaria/target/
+            ls -la temporaria/
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/scp-action@v0.1.6
@@ -97,7 +100,7 @@ jobs:
           host: ${{ secrets.PRIVATE_EC2_HOST }}
           username: ubuntu
           key: /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
-          source: "/home/runner/work/api_MiseEnPlace/api_MiseEnPlace/temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
+          source: "/home/runner/work/api_MiseEnPlace/api_MiseEnPlace/target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
           target: "/home/ubuntu/"
 
       - name: Restart Application on Private EC2
