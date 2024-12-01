@@ -63,8 +63,7 @@ jobs:
       - name: Prepare Temporary Directory and Create PEM key for Private EC2
         run: |
           mkdir -p temporaria/  # Garante que o diretório existe
-          echo "${{ secrets.PRIVATE_EC2_PEM }}" >> temporaria/private_ec2_key.pem
-          chmod 400 temporaria/private_ec2_key.pem
+          
 
       - name: List files in temporaria (before SCP to Private EC2)
         run: ls -la temporaria/
@@ -86,6 +85,14 @@ jobs:
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
             ls -la temporaria/
+
+      - name: Criando chave pem private
+        run: |
+          echo "${{ secrets.PRIVATE_EC2_KEY }}" > temporaria/private_ec2_key.pem
+          chmod 400 temporaria/private_ec2_key.pem
+
+      - name: List files in temporaria (after SCP to Private EC2)
+        run: ls -la temporaria/
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
