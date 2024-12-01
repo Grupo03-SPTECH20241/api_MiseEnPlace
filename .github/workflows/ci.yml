@@ -74,7 +74,7 @@ jobs:
           host: ${{ secrets.PUBLIC_EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
-          source: "target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
+          source: "target/*.jar"
           target: "temporaria/"
 
       - name: List files in temporaria on Public EC2
@@ -88,7 +88,7 @@ jobs:
 
       - name: Criando chave pem private
         run: |
-          echo "${{ secrets.PRIVATE_EC2_PEM }}" >> /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" > /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
           chmod 400 /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
 
       - name: List files in temporaria (after SCP to Private EC2)
@@ -102,7 +102,7 @@ jobs:
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
             scp -i /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem \
-                /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/target/*.jar \
+                temporaria/*.jar \
                 ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
 
       - name: Restart Application on Private EC2
