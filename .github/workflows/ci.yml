@@ -66,6 +66,9 @@ jobs:
           echo "${{ secrets.PRIVATE_EC2_PEM }}" >> temporaria/private_ec2_key.pem
           chmod 400 temporaria/private_ec2_key.pem
 
+      - name: List files in temporaria (before SCP to Private EC2)
+        run: ls -la temporaria/
+
       - name: Transfer JAR to Public EC2
         uses: appleboy/scp-action@v0.1.6
         with:
