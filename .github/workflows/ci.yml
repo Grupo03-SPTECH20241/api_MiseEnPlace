@@ -89,7 +89,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            ls -la temporaria/
+            ls -la temporaria/target/
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/scp-action@v0.1.6
@@ -97,7 +97,7 @@ jobs:
           host: ${{ secrets.PRIVATE_EC2_HOST }}
           username: ubuntu
           key: /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
-          source: "temporaria/*.jar"
+          source: "temporaria/target/*.jar"
           target: "/home/ubuntu/"
 
       - name: Restart Application on Private EC2
