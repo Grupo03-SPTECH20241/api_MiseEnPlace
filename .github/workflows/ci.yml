@@ -88,11 +88,11 @@ jobs:
 
       - name: Criando chave pem private
         run: |
-          echo "${{ secrets.PRIVATE_EC2_PEM }}" > temporaria/target/PRIVATE_EC2_PEM.pem
-          chmod 400 temporaria/PRIVATE_EC2_PEM.pem
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" >> temporaria/private-key.pem
+          chmod 400 temporaria/private-key.pem
 
       - name: List files in temporaria (after SCP to Private EC2)
-        run: ls -la temporaria/target/
+        run: ls -la temporaria/
 
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
@@ -101,7 +101,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PUBLIC_EC2_KEY }}
           script: |
-            scp -i temporaria/PRIVATE_EC2_PEM.pem \
+            scp -i temporaria/private-key.pem \
                 temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar \
                 ubuntu@${{ secrets.PRIVATE_EC2_HOST }}:/home/ubuntu/
 
