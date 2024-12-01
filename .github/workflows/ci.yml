@@ -83,7 +83,7 @@ jobs:
 
       - name: Create PEM key for Private EC2
         run: |
-          echo "${{ secrets.PRIVATE_EC2_PEM }}" > temporaria/target/private_ec2_key.pem
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" >> temporaria/target/private_ec2_key.pem
           chmod 400 temporaria/target/private_ec2_key.pem
 
       - name: List files in temporaria/target
@@ -94,7 +94,7 @@ jobs:
 
       - name: Transfer JAR to Private EC2 via Bastion Host
         run: |
-         scp -i /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/temporaria/target/private_ec2_key.pem \
+         scp -i  temporaria/target/private_ec2_key.pem \
           -o StrictHostKeyChecking=no \
           -o UserKnownHostsFile=/dev/null \
           -o ProxyJump=ubuntu@${{ secrets.PUBLIC_EC2_HOST }} \
