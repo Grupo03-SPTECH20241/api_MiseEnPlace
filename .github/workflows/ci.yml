@@ -92,7 +92,7 @@ jobs:
           chmod 400 /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
 
       - name: List files in temporaria (after SCP to Private EC2)
-        run: ls -la /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/
+        run: ls -la /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/target/
         
       - name: Transfer JAR to Private EC2
         uses: appleboy/ssh-action@v0.1.9
