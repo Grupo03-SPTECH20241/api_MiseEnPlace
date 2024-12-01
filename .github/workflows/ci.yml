@@ -60,6 +60,13 @@ jobs:
       - name: List downloaded artifacts
         run: ls -la target
 
+      - name: Verify JAR file exists
+        run: |
+          if [ ! -f target/*.jar ]; then
+            echo "JAR file not found!"
+            exit 1
+          fi
+
       - name: Prepare Temporary Directory and Create PEM key for Private EC2
         run: |
           mkdir -p temporaria/  # Ensure the directory exists
