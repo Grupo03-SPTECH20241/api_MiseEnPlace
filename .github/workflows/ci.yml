@@ -97,7 +97,7 @@ jobs:
           host: ${{ secrets.PRIVATE_EC2_HOST }}
           username: ubuntu
           key: /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
-          source: "temporaria/target/*.jar"
+          source: "/home/runner/work/api_MiseEnPlace/api_MiseEnPlace/temporaria/target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
           target: "/home/ubuntu/"
 
       - name: Restart Application on Private EC2
