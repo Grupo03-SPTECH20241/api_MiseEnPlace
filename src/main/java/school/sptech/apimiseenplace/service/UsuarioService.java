@@ -178,6 +178,41 @@ public class UsuarioService {
         return UsuarioMapper.toDto(usuarioRepository.save(usuarioAchado));
     }
 
+    public UsuarioListagemDto atualizarPorEmail(String email, UsuarioEmailDto usuarioAtualizacao) throws JsonProcessingException {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        Usuario usuario = usuarios.stream()
+                .filter(p -> p.getEmail().equals(email))
+                .findFirst()
+                .get();
+
+        if (usuarioAtualizacao.getLogo() != null) {
+            byte[] bytes = usuarioAtualizacao.getLogo();
+            var arquivo = Base64.getEncoder().encodeToString(bytes);
+            var nomeArquivo = "logo-" + LocalDateTime.now();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            var response = lambdaService.sendToLambda(ELambdaFunction.LAMBDA_FUNCTION_NAME.getValue(), ELambdaFunction.BUCKET_NAME.getValue(), arquivo, nomeArquivo);
+            var reponseString = response.payload().asUtf8String();
+            LogoRecord logoRecord = objectMapper.readValue(reponseString, LogoRecord.class);
+            BodyMessage bodyMessage = objectMapper.readValue(logoRecord.body(), BodyMessage.class);
+
+            if (response.statusCode() != 200) {
+                throw new BadRequestException("Lambda");
+            }
+
+            usuario.setLogo(bodyMessage.url());
+        }
+
+
+        if (usuarioAtualizacao.getNome() != null && !usuarioAtualizacao.getNome().isBlank() && !usuarioAtualizacao.getNome().isEmpty())
+            usuario.setNome(usuarioAtualizacao.getNome());
+        if (usuarioAtualizacao.getEmail() != null && !usuarioAtualizacao.getEmail().isBlank() && !usuarioAtualizacao.getEmail().isEmpty())
+            usuario.setEmail(usuarioAtualizacao.getEmail());
+
+        return UsuarioMapper.toDto(usuarioRepository.save(usuario));
+    }
+
     public String atualizarSenha(String email, String senhaNova) {
 
         if(email == null || email.isBlank() || email.isEmpty()) throw new BadRequestException("Email Usuario");
@@ -186,16 +221,12 @@ public class UsuarioService {
                 () -> new NaoEncontradoException("Usuario")
         );
 
-
         usuarioAchado.setSenha(passwordEncoder.encode(senhaNova));
 
         var result = usuarioRepository.save(usuarioAchado);
 
-
-
         return  result.equals(usuarioAchado) ? "Senha Atualizada com Sucesso!" : "Erro ao Atualizar Senha!";
     }
-
 
     private String generateSenha(int tamanho) {
 
