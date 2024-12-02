@@ -97,16 +97,17 @@ jobs:
       - name: Transfer JAR to Private EC2 via Bastion Host
         uses: appleboy/scp-action@v0.1.6
         with:
-          host: ${{ secrets.PRIVATE_EC2_HOST }} # Private EC2's IP or hostname
+          host: ${{ secrets.PRIVATE_EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.PRIVATE_EC2_PEM }}
           source: "target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
           target: "/home/ubuntu/"
           port: 22
-          proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}  # Public EC2's IP or hostname
-          proxy_port: 22                          # Port for SSH on the public EC2
-          proxy_username: ubuntu                  # Username for the public EC2 (bastion host)
-          proxy_key: ${{ secrets.PRIVATE_EC2_PEM }}  # Same private key or a specific one for the public EC2
+          proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+          proxy_port: 22
+          proxy_username: ubuntu
+          proxy_key: ${{ secrets.PRIVATE_EC2_PEM }}
+          ssh_options: "-o StrictHostKeyChecking=no"
           
 
       - name: Restart Application on Private EC2
