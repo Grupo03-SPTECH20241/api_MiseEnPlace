@@ -94,14 +94,16 @@ jobs:
           script: |
             ls -la temporaria/
 
-      - name: Transfer JAR to Private EC2
+      - name: Transfer JAR to Private EC2 via Bastion Host
         uses: appleboy/scp-action@v0.1.6
         with:
-          host: ${{ secrets.PRIVATE_EC2_HOST }}
+          host: ${{ secrets.PRIVATE_EC2_HOST }} # IP or DNS of the private EC2
           username: ubuntu
           key: ${{ secrets.PRIVATE_EC2_PEM }}
           source: "target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
           target: "/home/ubuntu/"
+          port: 22
+          ssh_options: "-o ProxyJump=ubuntu@${{ secrets.PUBLIC_EC2_HOST }} -o StrictHostKeyChecking=no"
 
       - name: Restart Application on Private EC2
         uses: appleboy/ssh-action@v0.1.9
