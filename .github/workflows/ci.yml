@@ -107,7 +107,6 @@ jobs:
           proxy_port: 22
           proxy_username: ubuntu
           proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
-          ssh_options: "-o StrictHostKeyChecking=no"
           
 
       - name: Restart Application on Private EC2
