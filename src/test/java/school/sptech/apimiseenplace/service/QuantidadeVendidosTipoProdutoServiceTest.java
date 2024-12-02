@@ -9,7 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.apimiseenplace.repository.QuantidadeVendidosTipoProdutoRepository;
+import school.sptech.apimiseenplace.repository.quantidadeVendidosTipoProduto.QuantidadeVendidosTipoProdutoRepository;
+import school.sptech.apimiseenplace.service.quantidadeVendidosTipoProduto.QuantidadeVendidosTipoProdutoService;
 import school.sptech.apimiseenplace.view.graficoTipoProduto.VwTipoProduto;
 
 import java.util.Collections;
