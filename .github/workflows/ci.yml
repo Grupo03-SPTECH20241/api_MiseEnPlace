@@ -108,16 +108,31 @@ jobs:
           proxy_username: ubuntu
           proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
 
-      - name: List 
-        run: ls -R   
-
-      - name: Enviar os Scripts p/ a EC2
+      - name: Transfer .sh to Public EC2
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          source: ".github/scripts/api-restart.sh"
+          target: "temporaria/scripts/"
+  
+      - name: List files in temporaria/scripts on Public EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            ls -la temporaria/scripts/
+  
+      - name: Transfer .sh to Private EC2 via Bastion Host
         uses: appleboy/scp-action@v0.1.6
         with:
           host: ${{ secrets.PRIVATE_EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.PRIVATE_EC2_PEM }}
-          source: "./*.sh"
+          source: "github/scripts/api-restart.sh"
           target: "/home/ubuntu/"
           port: 22
           proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
