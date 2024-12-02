@@ -6,7 +6,7 @@ import school.sptech.apimiseenplace.entity.Metas;
 import school.sptech.apimiseenplace.exception.BadRequestException;
 import school.sptech.apimiseenplace.exception.NaoEncontradoException;
 import school.sptech.apimiseenplace.repository.MetaRepository;
-import school.sptech.apimiseenplace.repository.QuantidadeVendidaValorVendidoRepository;
+import school.sptech.apimiseenplace.repository.quantidadeVendidaValorVendido.QuantidadeVendidaValorVendidoRepository;
 import school.sptech.apimiseenplace.view.graficoQuantidadeVendidaValorVendido.VwQuantidadeVendidaValorVendido;
 
 import java.util.List;

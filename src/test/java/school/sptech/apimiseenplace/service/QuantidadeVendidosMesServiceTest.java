@@ -9,7 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.apimiseenplace.repository.QuantidadeVendidosRepository;
+import school.sptech.apimiseenplace.repository.quantidadeVendidos.QuantidadeVendidosRepository;
+import school.sptech.apimiseenplace.service.quantidadeVendidos.QuantidadeVendidosMesService;
 import school.sptech.apimiseenplace.view.graficoQuantidadeMaisVendidos.VwQuantidadeVendidosMes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

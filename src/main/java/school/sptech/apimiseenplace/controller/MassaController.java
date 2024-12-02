@@ -38,6 +38,12 @@ public class MassaController {
         return ResponseEntity.ok(MassaMapper.toSemPersonalizacaoDto(massas));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MassaSemPersonalizacaoDto> findById(@PathVariable Integer id){
+        Massa massa = service.encontrarPorId(id);
+        return ResponseEntity.ok(MassaMapper.toSemPersonalizacaoDto(massa));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<MassaListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid MassaCriacaoDto massaCriacaoDto){
         Massa massaAtualizada = service.atualizar(MassaMapper.toEntity(massaCriacaoDto), id);

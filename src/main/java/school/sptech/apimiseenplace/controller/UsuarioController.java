@@ -40,6 +40,21 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+    @GetMapping("/obter-por-email/{email}")
+    public ResponseEntity<UsuarioListagemDto> obterPorEmail(@PathVariable String email){
+        List<UsuarioListagemDto> usuarios = UsuarioMapper.toDto(usuarioService.listar());
+        if (usuarios.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        UsuarioListagemDto usuario = usuarios.stream()
+                .filter(p -> p.getEmail().equals(email))
+                .findFirst()
+                .get();
+
+        return ResponseEntity.ok(usuario);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioListagemDto> listarPorId(@PathVariable int id){
         return ResponseEntity.ok(UsuarioMapper.toDto( usuarioService.encontrarPorId(id)));
@@ -52,14 +67,20 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid UsuarioAtualizarDto usuarioAtualizacao){
+    public ResponseEntity<UsuarioListagemDto> atualizar(@PathVariable int id, @RequestBody @Valid UsuarioAtualizarDto usuarioAtualizacao) throws JsonProcessingException {
        UsuarioListagemDto usuarioAtualizado = usuarioService.atualizar(id, usuarioAtualizacao);
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> atualizarSenha(@PathVariable int id, @RequestParam String senhaNova){
-        return ResponseEntity.ok(usuarioService.atualizarSenha(id, senhaNova));
+    @PutMapping("/atualizar-por-email/{email}")
+    public ResponseEntity<UsuarioListagemDto> atualizarPorEmail(@PathVariable String email, @RequestBody @Valid UsuarioEmailDto usuarioAtualizacao) throws JsonProcessingException {
+        UsuarioListagemDto usuarioAtualizado = usuarioService.atualizarPorEmail(email, usuarioAtualizacao);
+        return ResponseEntity.ok(usuarioAtualizado);
+    }
+
+    @PatchMapping
+    public ResponseEntity<String> atualizarSenha(@RequestBody UsuarioLoginDto usuario){
+        return ResponseEntity.ok(usuarioService.atualizarSenha(usuario.getEmail(), usuario.getSenha()));
     }
 
     @PostMapping("/login")
@@ -111,6 +132,12 @@ public class UsuarioController {
     @GetMapping("/obter-foto-cliente")
     public ResponseEntity<String> obterFotoCliente(@RequestParam String email) {
         return ResponseEntity.ok(usuarioService.obterFotoCliente(email));
+    }
+
+    @PutMapping("/atualizar-foto-cliente")
+    public ResponseEntity<Void> atualizarFotoCliente(@RequestBody UsuarioAtualizarFotoDto request) throws JsonProcessingException {
+        usuarioService.atualizarFotoCliente(request);
+        return ResponseEntity.ok().build();
     }
 
     public Usuario[] ordenarNomeQuicksort(
