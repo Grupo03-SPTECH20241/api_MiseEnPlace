@@ -106,7 +106,7 @@ jobs:
           proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
           proxy_port: 22
           proxy_username: ubuntu
-          proxy_key: ${{ secrets.PRIVATE_EC2_PEM }}
+          proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
           ssh_options: "-o StrictHostKeyChecking=no"
           
 
