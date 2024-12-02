@@ -3,8 +3,8 @@ package school.sptech.apimiseenplace.enums;
 public enum ELambdaFunction {
 
 
-    LAMBDA_FUNCTION_NAME("arn:aws:lambda:us-east-1:532779703639:function:sobeParaS3"),
-    BUCKET_NAME("leandro-bucket-01");
+    LAMBDA_FUNCTION_NAME("arn:aws:lambda:us-east-1:701215625772:function:sobeParaS3"),
+    BUCKET_NAME("bucket-teste-mise");
 
 
     private final String value;
