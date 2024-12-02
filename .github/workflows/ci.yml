@@ -132,7 +132,7 @@ jobs:
           host: ${{ secrets.PRIVATE_EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.PRIVATE_EC2_PEM }}
-          source: "github/scripts/api-restart.sh"
+          source: "temporaria/scripts/api-restart.sh"
           target: "/home/ubuntu/"
           port: 22
           proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
