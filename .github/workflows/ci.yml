@@ -108,6 +108,9 @@ jobs:
           proxy_username: ubuntu
           proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
 
+      - name: List 
+        run: ls -R   
+
       - name: Enviar os Scripts p/ a EC2
         uses: appleboy/scp-action@v0.1.6
         with:
