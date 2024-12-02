@@ -1,0 +1,155 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - hml
+  pull_request:
+    branches:
+      - hml
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build and Test with Maven
+        run: mvn clean install -DskipTests
+
+      - name: List target directory
+        run: |
+          ls -la target
+          find target -name "*.jar"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-backend
+          path: target/*.jar
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-backend
+          path: target/
+
+      - name: List downloaded artifacts
+        run: ls -la target
+
+      - name: Verify JAR file exists
+        run: |
+          if [ ! -f target/*.jar ]; then
+            echo "JAR file not found!"
+            exit 1
+          fi
+
+      - name: Prepare Temporary Directory and Create PEM key for Private EC2
+        run: |
+          mkdir -p temporaria/  # Ensure the directory exists
+          echo "${{ secrets.PRIVATE_EC2_PEM }}" > /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
+          chmod 400 /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/private-key.pem
+
+      - name: List files in /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/ before transfer
+        run: ls -la /home/runner/work/api_MiseEnPlace/api_MiseEnPlace/
+
+      - name: Transfer JAR to Public EC2
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          source: "target/*.jar"
+          target: "temporaria/"
+
+      - name: List files in temporaria on Public EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            ls -la temporaria/
+
+      - name: Transfer JAR to Private EC2 via Bastion Host
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.PRIVATE_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_EC2_PEM }}
+          source: "target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
+          target: "/home/ubuntu/"
+          port: 22
+          proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+          proxy_port: 22
+          proxy_username: ubuntu
+          proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+
+      # - name: Transfer .sh to Public EC2
+      #   uses: appleboy/scp-action@v0.1.6
+      #   with:
+      #     host: ${{ secrets.PUBLIC_EC2_HOST }}
+      #     username: ubuntu
+      #     key: ${{ secrets.PUBLIC_EC2_KEY }}
+      #     source: ".github/scripts/api-restart.sh"
+      #     target: "temporaria/scripts/"
+  
+      # - name: List files in temporaria/scripts on Public EC2
+      #   uses: appleboy/ssh-action@v0.1.9
+      #   with:
+      #     host: ${{ secrets.PUBLIC_EC2_HOST }}
+      #     username: ubuntu
+      #     key: ${{ secrets.PUBLIC_EC2_KEY }}
+      #     script: |
+      #       ls -la temporaria/scripts/
+  
+      # - name: Transfer .sh to Private EC2 via Bastion Host
+      #   uses: appleboy/scp-action@v0.1.6
+      #   with:
+      #     host: ${{ secrets.PRIVATE_EC2_HOST }}
+      #     username: ubuntu
+      #     key: ${{ secrets.PRIVATE_EC2_PEM }}
+      #     source: "temporaria/scripts/api-restart.sh"
+      #     target: "/home/ubuntu/"
+      #     port: 22
+      #     proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+      #     proxy_port: 22
+      #     proxy_username: ubuntu
+      #     proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+
+      # - name: Conectar via SSH à EC2 privada para implantar e reiniciar a API
+      #   uses: appleboy/ssh-action@v0.1.9
+      #   with:
+      #     host: ${{ secrets.PRIVATE_EC2_HOST }}
+      #     username: ubuntu
+      #     key: ${{ secrets.PRIVATE_EC2_PEM }}
+      #     port: 22
+      #     proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+      #     proxy_port: 22
+      #     proxy_username: ubuntu
+      #     proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+      #     script: |
+      #       sh /home/ubuntu/api-restart.sh
