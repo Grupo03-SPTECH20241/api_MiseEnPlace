@@ -108,6 +108,83 @@ jobs:
           proxy_username: ubuntu
           proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
 
+      - name: Create update-credentials.sh script
+        run: |
+          cat << 'EOF' > update-credentials.sh
+          #!/bin/bash
+          CREDENTIALS_FILE="/home/ubuntu/.aws/credentials"
+          AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}"
+          AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          AWS_SESSION_TOKEN="${{ secrets.AWS_SESSION_TOKEN }}"
+          sed -i "s/aws_access_key_id = .*/aws_access_key_id = $AWS_ACCESS_KEY_ID/" $CREDENTIALS_FILE
+          sed -i "s/aws_secret_access_key = .*/aws_secret_access_key = $AWS_SECRET_ACCESS_KEY/" $CREDENTIALS_FILE
+          sed -i "s/aws_session_token = .*/aws_session_token = $AWS_SESSION_TOKEN/" $CREDENTIALS_FILE
+          echo "Credenciais atualizadas com sucesso."
+          EOF
+        shell: bash
+
+      - name: Transfer update-credentials.sh to Private EC2 via Bastion Host
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.PRIVATE_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_EC2_PEM }}
+          source: "update-credentials.sh"
+          target: "/home/ubuntu/"
+          port: 22
+          proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+          proxy_port: 22
+          proxy_username: ubuntu
+          proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+
+      - name: Execute update-credentials.sh on Private EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PRIVATE_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_EC2_PEM }}
+          port: 22
+          proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+          proxy_port: 22
+          proxy_username: ubuntu
+          proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            chmod +x /home/ubuntu/update-credentials.sh
+            /home/ubuntu/update-credentials.sh
+
+      - name: Restart or Start Java Service
+        if: env.status == 'running'
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+            host: ${{ secrets.PRIVATE_EC2_HOST }}
+            username: ubuntu
+            key: ${{ secrets.PRIVATE_EC2_PEM }}
+            port: 22
+            proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+            proxy_port: 22
+            proxy_username: ubuntu
+            proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+            script: |
+              echo "Restarting Java service..."
+              pkill -f 'java -jar'
+              nohup java -jar /home/ubuntu/target/api-mise-en-place-0.0.1-SNAPSHOT.jar &
+
+      - name: Start Java Service
+        if: env.status == 'stopped'
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PRIVATE_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_EC2_PEM }}
+          port: 22
+          proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+          proxy_port: 22
+          proxy_username: ubuntu
+          proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            echo "Starting Java service..."
+            nohup java -jar /home/ubuntu/api-mise-en-place-0.0.1-SNAPSHOT.jar &
+
       # - name: Transfer .sh to Public EC2
       #   uses: appleboy/scp-action@v0.1.6
       #   with:
@@ -116,7 +193,7 @@ jobs:
       #     key: ${{ secrets.PUBLIC_EC2_KEY }}
       #     source: ".github/scripts/api-restart.sh"
       #     target: "temporaria/scripts/"
-  
+
       # - name: List files in temporaria/scripts on Public EC2
       #   uses: appleboy/ssh-action@v0.1.9
       #   with:
@@ -125,7 +202,7 @@ jobs:
       #     key: ${{ secrets.PUBLIC_EC2_KEY }}
       #     script: |
       #       ls -la temporaria/scripts/
-  
+
       # - name: Transfer .sh to Private EC2 via Bastion Host
       #   uses: appleboy/scp-action@v0.1.6
       #   with:
