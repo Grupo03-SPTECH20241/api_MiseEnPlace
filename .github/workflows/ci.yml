@@ -172,6 +172,7 @@ jobs:
               echo "Java is not running on port 8080"
               echo "status=stopped" >> $GITHUB_ENV
             fi
+
       - name: Restart Java Service
         if: env.status == 'running'
         uses: appleboy/ssh-action@v0.1.9
