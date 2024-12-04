@@ -115,9 +115,9 @@ jobs:
           mkdir -p /home/ubuntu/.aws
           cat << EOC > /home/ubuntu/.aws/credentials
           [default]
-          aws_access_key_id = ${AWS_ACCESS_KEY_ID}
-          aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}
-          aws_session_token = ${AWS_SESSION_TOKEN}
+          aws_access_key_id = ${{AWS_ACCESS_KEY_ID}}
+          aws_secret_access_key = ${{AWS_SECRET_ACCESS_KEY}}
+          aws_session_token = ${{AWS_SESSION_TOKEN}}
           EOC
           echo "Credenciais atualizadas com sucesso."
           EOF
@@ -168,14 +168,12 @@ jobs:
             JAR_PATH="/home/ubuntu/target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
             
             # Verifica se algo está rodando na porta 8080
-            if lsof -Pi :8080 -sTCP:LISTEN -t >/dev/null; then
-              echo "Java está rodando na porta 8080. Reiniciando..."
-              # Mata o processo do Java
-              PID=$(lsof -Pi :8080 -sTCP:LISTEN -t)
-              kill -9 $PID
-              echo "Processo $PID terminado."
+            if lsof -Pi :8080 -sTCP:LISTEN -t >/dev/null ; then
+              echo "Java is running on port 8080"
+              echo "status=running" >> "$GITHUB_ENV"
             else
-              echo "Java não está rodando na porta 8080. Iniciando..."
+              echo "Java is not running on port 8080"
+              echo "status=stopped" >> "$GITHUB_ENV"
             fi
             
             # Reinicia ou inicia o Java
