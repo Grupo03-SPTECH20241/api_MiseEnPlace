@@ -22,10 +22,7 @@ import school.sptech.apimiseenplace.exception.NaoEncontradoException;
 import school.sptech.apimiseenplace.repository.UsuarioRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +58,7 @@ public class UsuarioService {
 
         Random random = new Random();
 
-        var senha = generateSenha(random.nextInt(10));
+        var senha = generateSenha(random.nextInt(10, 20));
         var entity = UsuarioMapper.fromEmailToCriacao(usuarioEmailDto);
         entity.setSenha(passwordEncoder.encode(senha));
 
@@ -84,24 +81,24 @@ public class UsuarioService {
 
         var usuarioSalvo = usuarioRepository.save(UsuarioMapper.toEntity(entity, bodyMessage.url()));
 
-        var email = emailService.sendTextEmail(usuarioEmailDto.getEmail(), "Senha de Acesso", """
+        var email = emailService.sendTextEmail(usuarioEmailDto.getEmail(), "Senha de Acesso - Plataforma Mise En Place", """
                 Olá %s,
-                                
+                
                 Esperamos que você esteja bem.
-                                
+                
                 Conforme solicitado, aqui está a sua nova senha para acessar o Mise En Place:
-                                
+                
                 Senha: %s
-                                
+                
                 Por favor, siga as instruções abaixo para garantir a segurança da sua conta:
                 1. Faça login no Mise En Place usando a nova senha fornecida.
                 2. Após o login, recomendamos que você altere esta senha para uma de sua preferência.
                 3. Certifique-se de escolher uma senha forte, combinando letras maiúsculas e minúsculas, números e caracteres especiais.
-                                
-                Se você não solicitou esta alteração de senha, por favor, entre em contato conosco imediatamente.
-                                
+                
+                Se você não solicitou esse cadastro, por favor, entre em contato conosco imediatamente.
+                
                 Atenciosamente,
-                                
+                
                 Equipe QGD Consultoria
                 """.formatted(usuarioEmailDto.getNome(), senha));
 
@@ -124,7 +121,8 @@ public class UsuarioService {
     }
 
     public void atualizarFotoCliente(UsuarioAtualizarFotoDto request) throws JsonProcessingException {
-        if (request.getEmail() == null || request.getEmail().isBlank() || request.getEmail().isEmpty()) throw new BadRequestException("Email Usuario");
+        if (request.getEmail() == null || request.getEmail().isBlank() || request.getEmail().isEmpty())
+            throw new BadRequestException("Email Usuario");
 
         var arquivo = Base64.getEncoder().encodeToString(request.getLogo());
         var nomeArquivo = "logo-" + LocalDateTime.now();
@@ -215,7 +213,7 @@ public class UsuarioService {
 
     public String atualizarSenha(String email, String senhaNova) {
 
-        if(email == null || email.isBlank() || email.isEmpty()) throw new BadRequestException("Email Usuario");
+        if (email == null || email.isBlank() || email.isEmpty()) throw new BadRequestException("Email Usuario");
 
         Usuario usuarioAchado = usuarioRepository.findByEmail(email).orElseThrow(
                 () -> new NaoEncontradoException("Usuario")
@@ -225,7 +223,7 @@ public class UsuarioService {
 
         var result = usuarioRepository.save(usuarioAchado);
 
-        return  result.equals(usuarioAchado) ? "Senha Atualizada com Sucesso!" : "Erro ao Atualizar Senha!";
+        return result.equals(usuarioAchado) ? "Senha Atualizada com Sucesso!" : "Erro ao Atualizar Senha!";
     }
 
     private String generateSenha(int tamanho) {
@@ -233,10 +231,7 @@ public class UsuarioService {
         List<String> CHARS = new ArrayList<>();
         var chars = "!;#;$;%;&;(;);*;+;,;-;.;/;0;1;2;3;4;5;6;7;8;9;:;<;=;>;?;@;A;B;C;D;E;F;G;H;I;J;K;L;M;N;O;P;Q;R;S;T;U;V;W;X;Y;Z;[;];^;_;`;a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;{;|;};~;'".split(";");
 
-        for (var item : chars) {
-            CHARS.add(item);
-        }
-
+        Arrays.stream(chars).spliterator().trySplit().forEachRemaining(CHARS::add);
         CHARS.remove(CHARS.size() - 1);
 
         Random random = new Random();
