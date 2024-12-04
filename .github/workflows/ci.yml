@@ -108,48 +108,74 @@ jobs:
           proxy_username: ubuntu
           proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
 
-      # - name: Transfer .sh to Public EC2
-      #   uses: appleboy/scp-action@v0.1.6
-      #   with:
-      #     host: ${{ secrets.PUBLIC_EC2_HOST }}
-      #     username: ubuntu
-      #     key: ${{ secrets.PUBLIC_EC2_KEY }}
-      #     source: ".github/scripts/api-restart.sh"
-      #     target: "temporaria/scripts/"
-  
-      # - name: List files in temporaria/scripts on Public EC2
-      #   uses: appleboy/ssh-action@v0.1.9
-      #   with:
-      #     host: ${{ secrets.PUBLIC_EC2_HOST }}
-      #     username: ubuntu
-      #     key: ${{ secrets.PUBLIC_EC2_KEY }}
-      #     script: |
-      #       ls -la temporaria/scripts/
-  
-      # - name: Transfer .sh to Private EC2 via Bastion Host
-      #   uses: appleboy/scp-action@v0.1.6
-      #   with:
-      #     host: ${{ secrets.PRIVATE_EC2_HOST }}
-      #     username: ubuntu
-      #     key: ${{ secrets.PRIVATE_EC2_PEM }}
-      #     source: "temporaria/scripts/api-restart.sh"
-      #     target: "/home/ubuntu/"
-      #     port: 22
-      #     proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
-      #     proxy_port: 22
-      #     proxy_username: ubuntu
-      #     proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+      - name: Create update-credentials.sh script
+        run: |
+          cat << EOF > update-credentials.sh
+          #!/bin/bash
+          mkdir -p /home/ubuntu/.aws
+          cat << EOC > /home/ubuntu/.aws/credentials
+          [default]
+          aws_access_key_id = ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws_secret_access_key = ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_session_token = ${{secrets.AWS_SESSION_TOKEN}}
+          EOC
+          echo "Credenciais atualizadas com sucesso."
+          EOF
+        shell: bash
 
-      # - name: Conectar via SSH à EC2 privada para implantar e reiniciar a API
-      #   uses: appleboy/ssh-action@v0.1.9
-      #   with:
-      #     host: ${{ secrets.PRIVATE_EC2_HOST }}
-      #     username: ubuntu
-      #     key: ${{ secrets.PRIVATE_EC2_PEM }}
-      #     port: 22
-      #     proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
-      #     proxy_port: 22
-      #     proxy_username: ubuntu
-      #     proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
-      #     script: |
-      #       sh /home/ubuntu/api-restart.sh
+      - name: Transfer update-credentials.sh to Private EC2 via Bastion Host
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.PRIVATE_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_EC2_PEM }}
+          source: "update-credentials.sh"
+          target: "/home/ubuntu/"
+          port: 22
+          proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+          proxy_port: 22
+          proxy_username: ubuntu
+          proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+
+      - name: Execute update-credentials.sh on Private EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.PRIVATE_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_EC2_PEM }}
+          port: 22
+          proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+          proxy_port: 22
+          proxy_username: ubuntu
+          proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            chmod +x /home/ubuntu/update-credentials.sh
+            /home/ubuntu/update-credentials.sh
+
+      - name: Validar e Gerenciar Processo Java
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.PRIVATE_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_EC2_PEM }}
+          port: 22
+          proxy_host: ${{ secrets.PUBLIC_EC2_HOST }}
+          proxy_port: 22
+          proxy_username: ubuntu
+          proxy_key: ${{ secrets.PUBLIC_EC2_KEY }}
+          script: |
+            # Caminho do JAR
+            JAR_PATH="/home/ubuntu/target/api-mise-en-place-0.0.1-SNAPSHOT.jar"
+            
+            # Verifica se algo está rodando na porta 8080
+            if lsof -Pi :8080 -sTCP:LISTEN -t >/dev/null ; then
+              echo "Java is running on port 8080"
+              echo "status=running" >> "$GITHUB_ENV"
+            else
+              echo "Java is not running on port 8080"
+              echo "status=stopped" >> "$GITHUB_ENV"
+            fi
+            
+            # Reinicia ou inicia o Java
+            nohup java -jar $JAR_PATH > /home/ubuntu/java-app.log 2>&1 &
+            echo "Java iniciado com sucesso."
