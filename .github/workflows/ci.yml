@@ -115,9 +115,9 @@ jobs:
           mkdir -p /home/ubuntu/.aws
           cat << EOC > /home/ubuntu/.aws/credentials
           [default]
-          aws_access_key_id = ${{AWS_ACCESS_KEY_ID}}
-          aws_secret_access_key = ${{AWS_SECRET_ACCESS_KEY}}
-          aws_session_token = ${{AWS_SESSION_TOKEN}}
+          aws_access_key_id = ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws_secret_access_key = ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_session_token = ${{secrets.AWS_SESSION_TOKEN}}
           EOC
           echo "Credenciais atualizadas com sucesso."
           EOF
